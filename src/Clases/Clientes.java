@@ -9,13 +9,16 @@ public class Clientes {
     private String profesion;
     private String estado;
 
-    public Clientes(String dni, String nombre, String apellidos, String fechaNacimiento, String profesion, String estado) {
+    private Visitas[] visitas;
+
+    public Clientes(String dni, String nombre, String apellidos, String fechaNacimiento, String profesion, String estado, Visitas[] visitas) {
         this.dni = dni;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.fechaNacimiento = fechaNacimiento;
         this.profesion = profesion;
         this.estado = estado;
+        this.visitas = visitas;
     }
 
     public String getDni() {
