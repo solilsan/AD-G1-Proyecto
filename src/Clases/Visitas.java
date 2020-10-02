@@ -13,9 +13,11 @@ public class Visitas {
     private float coste;
     private String estado;
 
+    private Clientes[] clientes;
+
     private Empleado empleado;
 
-    public Visitas(int id, String nombre, int nmaxCli, String puntoPartida, String cursoAcademico, String tematica, float coste, String estado, Empleado empleado) {
+    public Visitas(int id, String nombre, int nmaxCli, String puntoPartida, String cursoAcademico, String tematica, float coste, String estado, Clientes[] clientes, Empleado empleado) {
         this.id = id;
         this.nombre = nombre;
         this.nmaxCli = nmaxCli;
@@ -24,8 +26,10 @@ public class Visitas {
         this.tematica = tematica;
         this.coste = coste;
         this.estado = estado;
+        this.clientes = clientes;
         this.empleado = empleado;
     }
+
 
     public int getId() {
         return id;
