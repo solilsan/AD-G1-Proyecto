@@ -18,7 +18,8 @@ public class ControladorCliente {
     ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), BD);
 
     //se obtienen todos los clientes que coincidan con los datos del objeto (deberia haber solo 1)
-    ObjectSet<Cliente> resultado = db.queryByExample(c);
+    ObjectSet<Cliente> resultado = db.queryByExample(new Cliente(c.getDni(),
+        null,null,null,null,null,null));
 
 
     //Se busca el cliente a guardar, si existe marcamos atributo "alta" y lo volvemos a guardar
@@ -36,17 +37,20 @@ public class ControladorCliente {
 
   public static String eliminaCliente(Cliente c) {
 
+    String mensaje = c.getNombre() + " " + c.getApellidos() + " Eliminado!";
+
     //Conexion con la base de datos
     ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), BD);
 
     //se obtienen todos los clientes que coincidan con los datos del objeto (deberia haber solo 1)
-    ObjectSet<Cliente> resultado = db.queryByExample(c);
+    ObjectSet<Cliente> resultado = db.queryByExample(new Cliente(c.getDni(),
+        null,null,null,null,null,null));
 
     //Se busca el cliente a eliminar, si existe marcamos atributo "baja" y lo volvemos a guardar
     if (resultado.size() < 1)
-      return "Error " + c.getNombre() + " " + c.getApellidos() + " No está en la base de datos";
+      mensaje =  "Error " + c.getNombre() + " " + c.getApellidos() + " No está en la base de datos";
     else if (resultado.size() > 1)//Por si acaso
-      return "Error " + c.getNombre() + " " + c.getApellidos() + " está Repetido en la base de datos";
+      mensaje = "Error " + c.getNombre() + " " + c.getApellidos() + " está Repetido en la base de datos";
     else {
       if (resultado.hasNext()) {
         Cliente cliente = resultado.next();
@@ -55,7 +59,7 @@ public class ControladorCliente {
       }
     }
     db.close();
-    return c.getNombre() + " " + c.getApellidos() + " Eliminado!";
+    return mensaje;
   }
 
   public static List<Cliente> mostrarClientes() {
@@ -69,12 +73,13 @@ public class ControladorCliente {
     ObjectSet<Cliente> resultado = db.queryByExample(new Cliente(null,
         null, null, null, null, null, null));
 
-    //Se recorren todos los clientes de la base de datos
-    while (resultado.hasNext()) {
-      Cliente cliente = resultado.next();
-      System.out.println(cliente.getNombre() + " " + cliente.getEstado());
-      if (cliente.getEstado().equals("alta"))
-        listaClientes.add(cliente);
+    if (resultado.size() > 0 ) {
+      //Se recorren todos los clientes de la base de datos
+      while (resultado.hasNext()) {
+        Cliente cliente = resultado.next();
+        if (cliente.getEstado().equals("alta"))
+          listaClientes.add(cliente);
+      }
     }
 
     db.close();

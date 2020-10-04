@@ -45,9 +45,13 @@ public class DB4OITest {
 
     List<Cliente> clientes = ModeloCliente.mostrar();
 
-    for (Cliente cliente : clientes) {
-      System.out.println(cliente.getNombre() + " " + cliente.getApellidos() + " " + cliente.getEstado());
+    if (clientes.size() > 0) {
+      for (Cliente cliente : clientes) {
+        System.out.println(cliente.getNombre() + " " + cliente.getApellidos() + " " + cliente.getEstado());
+      }
     }
+    else
+      System.out.println("No hay clientes que mostrar");
 
   }
 }
