@@ -5,6 +5,8 @@ import Clases.Empleado;
 import Clases.Visita;
 import DB4O.ModeloCliente;
 
+import java.util.List;
+
 public class DB4OITest {
   public static void main(String[] args) {
 
@@ -35,11 +37,17 @@ public class DB4OITest {
         "Gonszalez",
         "03/11/1984",
         "informatico",
-        "activo", v1);
+        "alta", v1);
     /////////////////////////////////////////////////////////////////////////////////////////////
 
-    ModeloCliente.guardar(c1);
-    ModeloCliente.eliminar(c1);
+    System.out.println(ModeloCliente.guardar(c1));
+    System.out.println(ModeloCliente.eliminar(c1));
+
+    List<Cliente> clientes = ModeloCliente.mostrar();
+
+    for (Cliente cliente : clientes) {
+      System.out.println(cliente.getNombre() + " " + cliente.getApellidos() + " " + cliente.getEstado());
+    }
 
   }
 }

@@ -2,16 +2,21 @@ package DB4O;
 
 import Clases.Cliente;
 
+import java.util.List;
+
 public class ModeloCliente {
 
-  public static void guardar(Cliente c1) {
-
-    ControladorCliente.guardaCliente(c1);
+  public static String guardar(Cliente c1) {
+    return ControladorCliente.guardaCliente(c1);
   }
 
-  public static void eliminar(Cliente c1) {
+  public static String eliminar(Cliente c1) {
+    return ControladorCliente.eliminaCliente(c1);
+  }
 
-    ControladorCliente.guardaCliente(c1);
+  public static List<Cliente> mostrar(){
+    return ControladorCliente.mostrarClientes();
+
   }
 
 
