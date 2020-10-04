@@ -1,5 +1,8 @@
 package Clases;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Empleado {
 
     private String dni;
@@ -11,6 +14,9 @@ public class Empleado {
     private String cargo;
     private String password;
     private String estado;
+
+    //Un empleado puede hacer varias visitas o ninguna
+    private final List<Visita> visitas = new ArrayList<>();
 
     public Empleado(String dni, String nombre, String apellidos, String fechaNacimiento, String fechaContratacion, String nacionalidad, String cargo, String password, String estado) {
         this.dni = dni;
@@ -94,5 +100,9 @@ public class Empleado {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public List<Visita> getVisitas() {
+        return visitas;
     }
 }
