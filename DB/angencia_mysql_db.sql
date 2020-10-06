@@ -18,37 +18,60 @@ USE `angenciasgrupo1`;
 
 -- Volcando estructura para tabla angenciasgrupo1.clientes
 CREATE TABLE IF NOT EXISTS `clientes` (
-  `DNI` varchar(9) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0',
-  `NOMBRE` varchar(50) DEFAULT NULL,
-  `APELLIDOS` varchar(50) DEFAULT NULL,
-  `FECHA_NACIMIENTO` date DEFAULT NULL,
-  `PROFESION` varchar(50) DEFAULT NULL,
-  `ESTADO` varchar(50) DEFAULT NULL,
+  `DNI` varchar(50) NOT NULL,
+  `NOMBRE` varchar(50) NOT NULL,
+  `APELLIDO` varchar(50) NOT NULL,
+  `FECHA_NAC` date NOT NULL,
+  `PROFESION` varchar(50) NOT NULL,
+  `ESTADO` varchar(50) NOT NULL,
   PRIMARY KEY (`DNI`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- La exportación de datos fue deseleccionada.
 
--- Volcando estructura para tabla angenciasgrupo1.clientes_visitas_guiadas
-CREATE TABLE IF NOT EXISTS `clientes_visitas_guiadas` (
-  `ID_VISITA` int DEFAULT NULL,
-  `DNI_CLIENTE` varchar(9) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- Volcando estructura para tabla angenciasgrupo1.empleados
+CREATE TABLE IF NOT EXISTS `empleados` (
+  `DNI` varchar(50) NOT NULL,
+  `NOMBRE` varchar(50) NOT NULL,
+  `APELLIDO` varchar(50) NOT NULL,
+  `FECHA_NAC` date NOT NULL,
+  `F_CONTRATACION` date NOT NULL,
+  `NACIONALIDAD` varchar(50) NOT NULL,
+  `CARGO` varchar(50) NOT NULL,
+  `PASSWORD` varchar(50) NOT NULL,
+  `ESTADO` varchar(50) NOT NULL,
+  PRIMARY KEY (`DNI`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- La exportación de datos fue deseleccionada.
 
 -- Volcando estructura para tabla angenciasgrupo1.visitas
 CREATE TABLE IF NOT EXISTS `visitas` (
-  `ID` int NOT NULL,
-  `NOMBRE` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0',
-  `CLIENTES_MAXIMOS` int NOT NULL DEFAULT '0',
-  `PUNTO_PARTIDA` varchar(50) NOT NULL DEFAULT '0',
-  `CURSO_ACADEMICO` varchar(50) NOT NULL DEFAULT '0',
-  `TEMATICA` varchar(50) NOT NULL DEFAULT '0',
-  `ESTADO` varchar(50) NOT NULL DEFAULT '0',
-  `DNI_EMPLEADO` varchar(9) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `NOMBRE` varchar(50) NOT NULL,
+  `N_MAX_CLI` int NOT NULL,
+  `PUNTO_PARTIDA` varchar(50) NOT NULL,
+  `CURSO_ACADEMICO` varchar(50) NOT NULL,
+  `TEMATICA` varchar(50) NOT NULL,
+  `COSTE` float NOT NULL,
+  `ESTADO` varchar(50) NOT NULL,
+  `DNI_EMPLEADO` varchar(50) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `DNI_EMPLEADO` (`DNI_EMPLEADO`),
+  CONSTRAINT `visitas_ibfk_1` FOREIGN KEY (`DNI_EMPLEADO`) REFERENCES `empleados` (`DNI`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla angenciasgrupo1.v_guiada
+CREATE TABLE IF NOT EXISTS `v_guiada` (
+  `ID_VISITA` int NOT NULL,
+  `DNI_CLI` varchar(50) NOT NULL,
+  KEY `ID_VISITA` (`ID_VISITA`),
+  KEY `DNI_CLI` (`DNI_CLI`),
+  CONSTRAINT `v_guiada_ibfk_1` FOREIGN KEY (`ID_VISITA`) REFERENCES `visitas` (`ID`),
+  CONSTRAINT `v_guiada_ibfk_2` FOREIGN KEY (`DNI_CLI`) REFERENCES `clientes` (`DNI`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- La exportación de datos fue deseleccionada.
 
