@@ -1,30 +1,30 @@
 package DB4O;
 
+import Clases.Empleado;
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
-import Clases.Cliente;
 import com.db4o.ObjectSet;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ControladorCliente {
+public class ControladorEmpleado {
 
-    final static String BD = ".\\DB\\AgenciaDB4O.yap";
+   /* final static String BD = ".\\DB\\AgenciaDB4O.yap";
 
-    public static String guardaCliente(Cliente c) {
+   /* public static String guardaEmpleado(Empleado e) {
 
         //Conexion con la base de datos
         ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), BD);
 
         //se obtienen todos los clientes que coincidan con los datos del objeto (deberia haber solo 1)
-        ObjectSet<Cliente> resultado = db.queryByExample(new Cliente(c.getDni(),
+        ObjectSet<Empleado> resultado = db.queryByExample(new Empleado(e.getDni(), null, null,
                 null, null, null, null, null, null));
 
 
-        //Se busca el cliente a guardar, si existe marcamos atributo "alta" y lo volvemos a guardar
+       /* //Se busca el cliente a guardar, si existe marcamos atributo "alta" y lo volvemos a guardar
         if (resultado.hasNext()) {
-            Cliente cliente = resultado.next();
+            Empleado cliente = resultado.next();
             cliente.setEstado("alta");
             db.store(cliente);
         } else {
@@ -61,26 +61,6 @@ public class ControladorCliente {
         return mensaje;
     }
 
-    public static Cliente buscaCliente(String dni) {
-
-        Cliente cli = null;
-
-        //Conexion con la base de datos
-        ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), BD);
-
-        //se obtienen todos los clientes que coincidan con los datos del objeto (deberian ser todos)
-        ObjectSet<Cliente> resultado = db.queryByExample(new Cliente(dni, null, null, null,
-                null, null, null));
-
-        if (resultado.hasNext())
-            cli = resultado.next();
-
-        db.close();
-
-        return cli;
-
-    }
-
     public static List<Cliente> mostrarClientes() {
 
         List<Cliente> listaClientes = new ArrayList<>();
@@ -99,13 +79,11 @@ public class ControladorCliente {
                 if (cliente.getEstado().equals("alta"))
                     listaClientes.add(cliente);
             }
-
         }
 
         db.close();
         return listaClientes;
     }
-
 
     public static String actualizaCliente(Cliente c) {
         String mensaje = c.getNombre() + "Actualizado!";
@@ -139,7 +117,7 @@ public class ControladorCliente {
         }
         db.close();
         return mensaje;
-    }
+    }*/
 }
 
 

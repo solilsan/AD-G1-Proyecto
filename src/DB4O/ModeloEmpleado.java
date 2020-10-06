@@ -4,7 +4,7 @@ import Clases.Cliente;
 
 import java.util.List;
 
-public class ModeloCliente {
+public class ModeloEmpleado {
 
     public static String guardar(Cliente cli) {
         return ControladorCliente.guardaCliente(cli);
@@ -17,8 +17,6 @@ public class ModeloCliente {
     public static String actualiza(Cliente cli) {
         return ControladorCliente.actualizaCliente(cli);
     }
-
-    public static Cliente buscar(String dni){return ControladorCliente.buscaCliente(dni);}
 
     public static List<Cliente> mostrar() {
         return ControladorCliente.mostrarClientes();
