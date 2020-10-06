@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class SQLiteTest {
 
     public static void main(String[] args) {
+
         ArrayList<Cliente> clientes = ControladorCliente.selectAll();
 
         // Comprobamos que no el array list no esta vacio
