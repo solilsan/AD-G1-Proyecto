@@ -38,7 +38,7 @@ public class ControladorCliente extends Conexion {
         return resultado;
     }
 
-    public static Boolean insertCliente(String DNI, String NOMBRE, String APELLIDO, String FECHA_NAC, String PROFESION, String ESTADO) {
+    public static Boolean insertCliente(Cliente objCliente) {
         Connection conn = conn();
         String query = "INSERT INTO CLIENTES (DNI, NOMBRE, APELLIDO, FECHA_NAC, PROFESION, ESTADO) VALUES(?, ?, ?, ?, ?, ?)";
 
@@ -47,12 +47,12 @@ public class ControladorCliente extends Conexion {
             PreparedStatement sentencia = conn.prepareStatement(query);
 
             // Introducimos los datos
-            sentencia.setString(1, DNI);
-            sentencia.setString(2, NOMBRE);
-            sentencia.setString(3, APELLIDO);
-            sentencia.setDate(4, Date.valueOf(FECHA_NAC));
-            sentencia.setString(5, PROFESION);
-            sentencia.setString(6, ESTADO);
+            sentencia.setString(1, objCliente.getDni());
+            sentencia.setString(2, objCliente.getNombre());
+            sentencia.setString(3, objCliente.getApellidos());
+            sentencia.setDate(4, Date.valueOf(objCliente.getFechaNacimiento()));
+            sentencia.setString(5, objCliente.getProfesion());
+            sentencia.setString(6, objCliente.getEstado());
 
             // Ejecutamos la sentencia
             Integer res = sentencia.executeUpdate();
@@ -68,10 +68,11 @@ public class ControladorCliente extends Conexion {
         return false;
     }
 
-    public static ArrayList<Cliente> selectWhere(String parametro, String tiene) {
+    public static ArrayList<Cliente> selectWhere(/*String parametro,*/ String tiene) {
         Connection conn = conn();
         ArrayList<Cliente> listaClientes = new ArrayList<>();
-        String query = "SELECT * FROM CLIENTES WHERE "+ parametro +" = ?";
+        //String query = "SELECT * FROM CLIENTES WHERE "+ parametro +" = ?";
+        String query = "SELECT * FROM CLIENTES WHERE DNI = ?";
 
 
         try {
@@ -162,16 +163,12 @@ public class ControladorCliente extends Conexion {
         return false;
     }
 
-
-    /**
-     * ATENCION !!!!! NO SE LE PUEDE PASAR EL CAMPO DE WHERE CON ALGO QUE SEA DISTINTO DE STRING
-     */
-    public static boolean updateUnCampo(String campo, String valor, String campoWhere, String valorWhere){
+    public static boolean updateUnCampo(Cliente objCliente){
         Connection conn = conn();
-        String query = "UPDATE CLIENTES SET "+ campo +" = 'alta' WHERE "+ campoWhere +" = ?";
+        String query = "UPDATE CLIENTES SET NOMBRE = ?, APELLIDO = ?, FECHA_NAC = ?, PROFESION = ?, ESTADO = ? WHERE DNI = ?";
 
         // Comprobamos que el DNI del objeto no este vacio
-        if (campo.equals("") || campo == null || campoWhere.equals("") || valorWhere == null){
+        if (objCliente.getDni() == ""){
             // No se puede seguir sin un DNI
             System.out.println("[SQLite - ControladorCliente] Se ha intentado alterar un campo del cliente, pero el parametro es\n" +
                     "nulo, o esta vacio.");
@@ -182,8 +179,12 @@ public class ControladorCliente extends Conexion {
             PreparedStatement sentencia = conn.prepareStatement(query);
 
             // Introducimos los datos
-            sentencia.setString(1, valor);
-            sentencia.setString(2, valorWhere);
+            sentencia.setString(1, objCliente.getNombre());
+            sentencia.setString(2, objCliente.getApellidos());
+            sentencia.setString(3, objCliente.getFechaNacimiento());
+            sentencia.setString(4, objCliente.getProfesion());
+            sentencia.setString(5, objCliente.getEstado());
+            sentencia.setString(6, objCliente.getDni());
 
             // Ejecutamos la sentencia
             Integer res = sentencia.executeUpdate();
