@@ -1,11 +1,10 @@
 package DB4O;
 
-import Clases.Cliente;
 import Clases.Empleado;
 
 import java.util.List;
 
-public class ModeloEmpleado {
+public class ModeloVisita {
 
     public static String guardar(Empleado emp) {
         return ControladorEmpleado.guardaEmpleado(emp);

@@ -5,13 +5,13 @@ import java.util.List;
 
 public class Visita {
 
-    private int id;
+    private Integer id;
     private String nombre;
-    private int nmaxCli;
+    private Integer nmaxCli;
     private String puntoPartida;
     private String cursoAcademico;
     private String tematica;
-    private float coste;
+    private Float coste;
     private String estado;
 
     //Una visita puede tener varios clientes o ninguno
@@ -20,7 +20,7 @@ public class Visita {
     //Una visita tiene un empleado
     private Empleado empleado;
 
-    public Visita(int id, String nombre, int nmaxCli, String puntoPartida, String cursoAcademico, String tematica, float coste, String estado, Empleado empleado) {
+    public Visita(int id, String nombre, Integer nmaxCli, String puntoPartida, String cursoAcademico, String tematica, Float coste, String estado, Empleado empleado) {
         this.id = id;
         this.nombre = nombre;
         this.nmaxCli = nmaxCli;
