@@ -1,6 +1,6 @@
 package DB4O;
 
-import Clases.Empleado;
+import Clases.Visita;
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
@@ -8,23 +8,23 @@ import com.db4o.ObjectSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ControladorEmpleado {
+public class ControladorVisita {
 
-    final static String BD = ".\\DB\\AgenciaDB4O.yap";
+    /*final static String BD = ".\\DB\\AgenciaDB4O.yap";
 
-    public static String guardaEmpleado(Empleado e) {
+    public static String guardaVisita(Visita v) {
 
         //Conexion con la base de datos
         ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), BD);
 
-        //se obtienen todos los clientes que coincidan con los datos del objeto (deberia haber solo 1)
-        ObjectSet<Empleado> resultado = db.queryByExample(new Empleado(e.getDni(), null, null,
-                null, null, null, null, null, null));
+        //se obtienen todos las visitas que coincidan con los datos del objeto (deberia haber solo 1)
+        ObjectSet<Visita> resultado = db.queryByExample(new Visita(v.getId(), null, null,null,
+                null, null, null, null,null));
 
 
-        //Se busca el cliente a guardar, si existe marcamos atributo "alta" y lo volvemos a guardar
+        //Se busca la visita a guardar, si existe marcamos atributo "alta" y lo volvemos a guardar
         if (resultado.hasNext()) {
-            Empleado empleado = resultado.next();
+            Visita visita = resultado.next();
             empleado.setEstado("alta");
             db.store(empleado);
         } else {
@@ -146,5 +146,5 @@ public class ControladorEmpleado {
         }
         db.close();
         return mensaje;
-    }
+    }*/
 }

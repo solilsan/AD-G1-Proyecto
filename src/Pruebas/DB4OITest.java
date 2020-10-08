@@ -28,7 +28,7 @@ public class DB4OITest {
                 "lakua",
                 "2020",
                 "educativa",
-                520,
+                520.20f,
                 "en curso",
                 emp1);
 
