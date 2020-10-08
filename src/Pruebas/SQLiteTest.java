@@ -14,6 +14,7 @@ public class SQLiteTest {
         //darClienteDeBaja();
        // selectAllClientes();
        // darClienteDeAlta();
+        actualizarUnoWhere();
 
     }
 
@@ -36,12 +37,12 @@ public class SQLiteTest {
     }
 
     public static void insertCliente(){
-        ControladorCliente.insertCliente("123asd","pepe","dfd","2020-03-03","una profesion","activo");
+        ControladorCliente.insertCliente(new Cliente("123asd","pepe","dfd","2020-03-03","una profesion","activo", null));
 
     }
 
     public static void selectWhereCliente(){
-        ArrayList<Cliente> clientes = ControladorCliente.selectWhere("APELLIDO", "dfd");
+        ArrayList<Cliente> clientes = ControladorCliente.selectWhere("dfd");
 
         // Comprobamos que no el array list no esta vacio
         if (!clientes.isEmpty()){
@@ -67,7 +68,8 @@ public class SQLiteTest {
     }
 
     public static void actualizarUnoWhere(){
-        ControladorCliente.updateUnCampo("PROFESION","")
+
+        ControladorCliente.updateUnCampo(new Cliente("123asd","pepe1","dfd","2020-03-03","una profesion","activo", null));
     }
 
 }
