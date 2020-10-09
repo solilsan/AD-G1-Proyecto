@@ -86,4 +86,17 @@ public class Cliente {
   public List<Visita> getVisitas() {
     return visitas;
   }
+
+  @Override
+  public String toString() {
+    return "Cliente{" +
+            "dni='" + dni + '\'' +
+            ", nombre='" + nombre + '\'' +
+            ", apellidos='" + apellidos + '\'' +
+            ", fechaNacimiento='" + fechaNacimiento + '\'' +
+            ", profesion='" + profesion + '\'' +
+            ", estado='" + estado + '\'' +
+            ", visitas=" + visitas +
+            '}';
+  }
 }
