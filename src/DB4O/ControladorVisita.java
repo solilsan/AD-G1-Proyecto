@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ControladorVisita {
 
-    /*final static String BD = ".\\DB\\AgenciaDB4O.yap";
+    final static String BD = ".\\DB\\AgenciaDB4O.yap";
 
     public static String guardaVisita(Visita v) {
 
@@ -25,16 +25,16 @@ public class ControladorVisita {
         //Se busca la visita a guardar, si existe marcamos atributo "alta" y lo volvemos a guardar
         if (resultado.hasNext()) {
             Visita visita = resultado.next();
-            empleado.setEstado("alta");
-            db.store(empleado);
+            visita.setEstado("alta");
+            db.store(visita);
         } else {
-            db.store(e);
+            db.store(v);
         }
         db.close();
-        return e.getNombre() + " " + e.getApellidos() + " Guardado!";
+        return v.getNombre() + " Guardado!";
     }
 
-    public static String eliminaEmpleado(Empleado e) {
+   /* public static String eliminaEmpleado(Empleado e) {
 
         String mensaje = e.getNombre() + " " + e.getApellidos() + " Eliminado!";
 
