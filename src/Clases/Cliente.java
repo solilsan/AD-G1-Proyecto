@@ -14,6 +14,17 @@ public class Cliente {
 
   private final List<Visita> visitas = new ArrayList<>();
 
+  public Cliente() {}
+
+  public Cliente(String dni, String nombre, String apellidos, String fechaNacimiento, String profesion, String estado) {
+    this.dni = dni;
+    this.nombre = nombre;
+    this.apellidos = apellidos;
+    this.fechaNacimiento = fechaNacimiento;
+    this.profesion = profesion;
+    this.estado = estado;
+  }
+
   public Cliente(String dni, String nombre, String apellidos, String fechaNacimiento, String profesion, String estado, Visita visita) {
     this.dni = dni;
     this.nombre = nombre;
@@ -74,5 +85,18 @@ public class Cliente {
 
   public List<Visita> getVisitas() {
     return visitas;
+  }
+
+  @Override
+  public String toString() {
+    return "Cliente{" +
+            "dni='" + dni + '\'' +
+            ", nombre='" + nombre + '\'' +
+            ", apellidos='" + apellidos + '\'' +
+            ", fechaNacimiento='" + fechaNacimiento + '\'' +
+            ", profesion='" + profesion + '\'' +
+            ", estado='" + estado + '\'' +
+            ", visitas=" + visitas +
+            '}';
   }
 }
