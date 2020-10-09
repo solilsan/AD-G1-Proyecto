@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class MySqlConexion {
 
-    protected static Connection conn() {
+    public static Connection connection() {
 
         Connection conn = null;
 
@@ -12,9 +12,8 @@ public class MySqlConexion {
 
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            //String sURL = "jdbc:mysql://127.0.0.1:3307/prueba";
-            String sURL = "jdbc:mysql://127.0.0.1:3307/prueba?serverTimezone=UTC";
-            conn = DriverManager.getConnection(sURL,"root","admin");
+            String sURL = "jdbc:mysql://127.0.0.1:3306/agencia_mysql?serverTimezone=UTC";
+            conn = DriverManager.getConnection(sURL,"root","ascent");
 
             if(conn != null) {
 
