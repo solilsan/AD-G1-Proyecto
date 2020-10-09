@@ -4,9 +4,9 @@ import Clases.Cliente;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.text.ParseException;
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MySqlControladorCliente {
@@ -15,9 +15,7 @@ public class MySqlControladorCliente {
 
         try {
 
-            connection = MySqlConexion.connection();
-
-            String sql = "INSERT INTO CLIENTES(DNI, NOMBRE, APELLIDO, FECHA_NAC, PROFESION, ESTADO) VALUES(?,?,?,?,?,?)";
+            String sql = "INSERT INTO CLIENTES(DNI, NOMBRE, APELLIDO, FECHA_NAC, PROFESION, ESTADO) VALUES(?,?,?,?,?,?);";
 
             SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
             Date parsed = format.parse(cliente.getFechaNacimiento());
@@ -25,17 +23,13 @@ public class MySqlControladorCliente {
 
             assert connection != null;
             PreparedStatement pstmt = connection.prepareStatement(sql);
-            {
-                pstmt.setString(1, cliente.getDni());
-                pstmt.setString(2, cliente.getNombre());
-                pstmt.setString(3, cliente.getApellidos());
-                pstmt.setDate(4, fecha_nac_sqlDate);
-                pstmt.setString(5, cliente.getProfesion());
-                pstmt.setString(6, cliente.getEstado());
-                pstmt.executeUpdate();
-            }
-
-            connection.close();
+            pstmt.setString(1, cliente.getDni());
+            pstmt.setString(2, cliente.getNombre());
+            pstmt.setString(3, cliente.getApellidos());
+            pstmt.setDate(4, fecha_nac_sqlDate);
+            pstmt.setString(5, cliente.getProfesion());
+            pstmt.setString(6, cliente.getEstado());
+            pstmt.execute();
 
         }
         catch (java.text.ParseException parseException) {
@@ -48,6 +42,139 @@ public class MySqlControladorCliente {
             System.out.println("Error general, " + e.getMessage());
         }
 
+    }
+
+    public static void deleteWithDni(Connection connection, String dniCliente) {
+
+        try {
+
+            String sql = "DELETE FROM CLIENTES WHERE dni = ?;";
+
+            assert connection != null;
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, dniCliente);
+            pstmt.execute();
+
+        }
+        catch (java.sql.SQLException sqlException) {
+            System.out.println("Error de sql, " + sqlException.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Error general, " + e.getMessage());
+        }
+
+    }
+
+    public static void updateWithDni(Connection connection, Cliente cliente) {
+
+        try {
+
+            String sql = "UPDATE CLIENTES\n" +
+                         "SET NOMBRE = ?, APELLIDO = ?, FECHA_NAC = ?, PROFESION = ?, ESTADO = ?\n" +
+                         "WHERE DNI = ?;";
+
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            Date parsed = format.parse(cliente.getFechaNacimiento());
+            java.sql.Date fecha_nac_sqlDate = new java.sql.Date(parsed.getTime());
+
+            assert connection != null;
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, cliente.getNombre());
+            pstmt.setString(2, cliente.getApellidos());
+            pstmt.setDate(3, fecha_nac_sqlDate);
+            pstmt.setString(4, cliente.getProfesion());
+            pstmt.setString(5, cliente.getEstado());
+            pstmt.setString(6, cliente.getDni());
+            pstmt.execute();
+
+        }
+        catch (java.text.ParseException parseException) {
+            System.out.println("Error al hacer el parse de fechas, " + parseException.getMessage());
+        }
+        catch (java.sql.SQLException sqlException) {
+            System.out.println("Error de sql, " + sqlException.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Error general, " + e.getMessage());
+        }
+
+    }
+
+    public static Cliente selectWithDni(Connection connection, String dniCliente) {
+
+        try {
+
+            String sql = "SELECT * FROM CLIENTES WHERE dni = ?;";
+
+            assert connection != null;
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, dniCliente);
+            ResultSet rs = pstmt.executeQuery();
+
+            Cliente cliente = null;
+
+            if (rs.next()) {
+
+                cliente = new Cliente();
+                cliente.setDni(rs.getString("DNI"));
+                cliente.setNombre(rs.getString("NOMBRE"));
+                cliente.setApellidos(rs.getString("APELLIDO"));
+                cliente.setFechaNacimiento(rs.getDate("FECHA_NAC").toString());
+                cliente.setProfesion(rs.getString("PROFESION"));
+                cliente.setEstado(rs.getString("ESTADO"));
+
+            }
+
+            return cliente;
+
+        }
+        catch (java.sql.SQLException sqlException) {
+            System.out.println("Error de sql, " + sqlException.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Error general, " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    public static ArrayList<Cliente> selectAll(Connection connection) {
+
+        try {
+
+            String sql = "SELECT * FROM CLIENTES;";
+
+            assert connection != null;
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            ArrayList<Cliente> listaClientes = new ArrayList<>();
+
+            while (rs.next()) {
+
+                Cliente cliente = new Cliente();
+                cliente.setDni(rs.getString("DNI"));
+                cliente.setNombre(rs.getString("NOMBRE"));
+                cliente.setApellidos(rs.getString("APELLIDO"));
+                cliente.setFechaNacimiento(rs.getDate("FECHA_NAC").toString());
+                cliente.setProfesion(rs.getString("PROFESION"));
+                cliente.setEstado(rs.getString("ESTADO"));
+
+                listaClientes.add(cliente);
+
+            }
+
+            return listaClientes;
+
+        }
+        catch (java.sql.SQLException sqlException) {
+            System.out.println("Error de sql, " + sqlException.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Error general, " + e.getMessage());
+        }
+
+        return null;
     }
 
 }
