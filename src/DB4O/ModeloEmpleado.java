@@ -1,6 +1,5 @@
 package DB4O;
 
-import Clases.Cliente;
 import Clases.Empleado;
 
 import java.util.List;

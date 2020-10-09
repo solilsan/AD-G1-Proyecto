@@ -1,27 +1,27 @@
 package DB4O;
 
-import Clases.Empleado;
+import Clases.Visita;
 
 import java.util.List;
 
 public class ModeloVisita {
 
-    public static String guardar(Empleado emp) {
-        return ControladorEmpleado.guardaEmpleado(emp);
+    public static String guardar(Visita vis) {
+        return ControladorVisita.guardaVisita(vis);
     }
 
-    public static String eliminar(Empleado emp) {
-        return ControladorEmpleado.eliminaEmpleado(emp);
+    public static String eliminar(Visita vis) {
+        return ControladorVisita.eliminaVisita(vis);
     }
 
-    public static String actualiza(Empleado emp) {
-        return ControladorEmpleado.actualizaEmpleado(emp);
+    public static String actualiza(Visita vis) {
+        return ControladorVisita.actualizaVisita(vis);
     }
 
-    public static Empleado buscar(String dni){return ControladorEmpleado.buscaEmpleado(dni);}
+    public static Visita buscar(Integer dni){return ControladorVisita.buscaVisista(dni);}
 
-    public static List<Empleado> mostrar() {
-        return ControladorEmpleado.mostrarEmpleados();
+    public static List<Visita> mostrar() {
+        return ControladorVisita.mostrarVisistas();
     }
 
 

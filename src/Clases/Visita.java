@@ -20,7 +20,7 @@ public class Visita {
     //Una visita tiene un empleado
     private Empleado empleado;
 
-    public Visita(int id, String nombre, Integer nmaxCli, String puntoPartida, String cursoAcademico, String tematica, Float coste, String estado, Empleado empleado) {
+    public Visita(Integer id, String nombre, Integer nmaxCli, String puntoPartida, String cursoAcademico, String tematica, Float coste, String estado, Empleado empleado) {
         this.id = id;
         this.nombre = nombre;
         this.nmaxCli = nmaxCli;
