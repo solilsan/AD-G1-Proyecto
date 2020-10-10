@@ -16,4 +16,5 @@ public class empleadoVentana {
     private JTextField tfNacionalidad;
     private JTextField tfCargo;
     private JPasswordField jfConstrasinal;
+
 }
