@@ -4,7 +4,6 @@ import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import Clases.Cliente;
 import com.db4o.ObjectSet;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -142,8 +141,31 @@ public class ControladorCliente {
     }
 }
 
+    String mensaje = c.getNombre() + " " + c.getApellidos() + " Actualizado!";
 
+    //Conexion con la base de datos
+    ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), BD);
 
+    //se obtienen todos los clientes que coincidan con los datos del objeto (deberia haber solo 1)
+    ObjectSet<Cliente> resultado = db.queryByExample(new Cliente(c.getDni(),
+        null, null, null, null, null, null));
 
-
-
+    //Se busca el cliente a eliminar, si existe marcamos atributo "baja" y lo volvemos a guardar
+    if (resultado.size() < 1)
+      mensaje = "Error " + c.getNombre() + " " + c.getApellidos() + " No está en la base de datos";
+    else if (resultado.size() > 1)//Por si acaso
+      mensaje = "Error " + c.getNombre() + " " + c.getApellidos() + " está Repetido en la base de datos";
+    else {
+      if (resultado.hasNext()) {
+        Cliente cliente = resultado.next();
+        cliente.setNombre(c.getNombre());
+        cliente.setApellidos(c.getApellidos());
+        cliente.setFechaNacimiento(c.getFechaNacimiento());
+        cliente.setProfesion(c.getProfesion());
+        db.store(cliente);
+      }
+    }
+    db.close();
+    return mensaje;
+  }
+}

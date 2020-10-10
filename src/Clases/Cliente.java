@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Cliente {
 
-  private String dni;
+  private final String dni;
   private String nombre;
   private String apellidos;
   private String fechaNacimiento;
@@ -37,10 +37,6 @@ public class Cliente {
 
   public String getDni() {
     return dni;
-  }
-
-  public void setDni(String dni) {
-    this.dni = dni;
   }
 
   public String getNombre() {
