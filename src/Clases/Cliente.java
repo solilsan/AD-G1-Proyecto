@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Cliente {
 
-  private final String dni;
+  private String dni;
   private String nombre;
   private String apellidos;
   private String fechaNacimiento;
@@ -77,6 +77,10 @@ public class Cliente {
 
   public void setEstado(String estado) {
     this.estado = estado;
+  }
+
+  public void setDni(String dni) {
+    this.dni = dni;
   }
 
   public List<Visita> getVisitas() {
