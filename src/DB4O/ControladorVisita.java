@@ -138,6 +138,8 @@ public class ControladorVisita {
                 visita.setTematica(v.getTematica());
                 //Actualiza el coste
                 visita.setCoste(v.getCoste());
+                //Actualiza fecha y hora
+                visita.setFecha_hora(v.getFecha_hora());
                 //Actualiza el empleado
                 visita.setEmpleado(v.getEmpleado());
 
