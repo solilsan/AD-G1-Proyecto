@@ -21,11 +21,11 @@ public class ControladorEmpleado extends Conexion{
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(query);
 
-                while (rs.next()) {
-                    resultado.add(new Cliente(rs.getString("DNI"), rs.getString("NOMBRE"),
+               /* while (rs.next()) {
+                    resultado.add(new Empleado(rs.getString("DNI"), rs.getString("NOMBRE"),
                             rs.getString("APELLIDO"), rs.getDate("FECHA_NAC").toString(),
                             rs.getString("PROFESION"), rs.getString("ESTADO"), null));
-                }
+                }*/
 
                 conn.close();
             } catch (SQLException throwables) {

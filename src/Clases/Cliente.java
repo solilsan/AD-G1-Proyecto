@@ -39,10 +39,6 @@ public class Cliente {
     return dni;
   }
 
-  public void setDni(String dni) {
-    this.dni = dni;
-  }
-
   public String getNombre() {
     return nombre;
   }
@@ -81,6 +77,10 @@ public class Cliente {
 
   public void setEstado(String estado) {
     this.estado = estado;
+  }
+
+  public void setDni(String dni) {
+    this.dni = dni;
   }
 
   public List<Visita> getVisitas() {
