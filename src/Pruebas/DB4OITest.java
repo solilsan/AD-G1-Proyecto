@@ -30,6 +30,7 @@ public class DB4OITest {
                 "educativa",
                 520.20f,
                 "en curso",
+                "19/03/2020",
                 emp1);
 
         Cliente c1 = new Cliente(
