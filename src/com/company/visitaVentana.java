@@ -2,9 +2,8 @@ package com.company;
 
 import javax.swing.*;
 
-public class visitaVentana {
+public class visitaVentana extends JFrame{
   private JPanel panel1;
-  private JTextField tfId;
   private JButton guardarButton;
   private JButton eliminarButton;
   private JButton actualizarButton;
@@ -18,4 +17,11 @@ public class visitaVentana {
   private JTextField tfCoste;
   private JTextField tfEmpleado;
   private JTextField tfFecha;
+
+  public visitaVentana() {
+    add(panel1);
+
+    setTitle("Gestión de Visitas");
+    setSize(630, 300);
+  }
 }
