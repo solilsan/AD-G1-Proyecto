@@ -4,7 +4,6 @@ import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import Clases.Cliente;
 import com.db4o.ObjectSet;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -141,9 +140,3 @@ public class ControladorCliente {
         return mensaje;
     }
 }
-
-
-
-
-
-

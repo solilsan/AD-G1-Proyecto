@@ -8,9 +8,10 @@ import com.db4o.ObjectSet;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class ControladorVisita {
 
-    /*final static String BD = ".\\DB\\AgenciaDB4O.yap";
+    final static String BD = ".\\DB\\AgenciaDB4O.yap";
 
     public static String guardaVisita(Visita v) {
 
@@ -18,133 +19,135 @@ public class ControladorVisita {
         ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), BD);
 
         //se obtienen todos las visitas que coincidan con los datos del objeto (deberia haber solo 1)
-        ObjectSet<Visita> resultado = db.queryByExample(new Visita(v.getId(), null, null,null,
-                null, null, null, null,null));
+        ObjectSet<Visita> resultado = db.queryByExample(new Visita(v.getId(), null, null, null,
+                null, null, null, null, null, null));
 
 
         //Se busca la visita a guardar, si existe marcamos atributo "alta" y lo volvemos a guardar
         if (resultado.hasNext()) {
             Visita visita = resultado.next();
-            empleado.setEstado("alta");
-            db.store(empleado);
+            visita.setEstado("alta");
+            db.store(visita);
         } else {
-            db.store(e);
+            db.store(v);
         }
         db.close();
-        return e.getNombre() + " " + e.getApellidos() + " Guardado!";
+        return v.getNombre() + " Guardado!";
     }
 
-    public static String eliminaEmpleado(Empleado e) {
+    public static String eliminaVisita(Visita v) {
 
-        String mensaje = e.getNombre() + " " + e.getApellidos() + " Eliminado!";
+        String mensaje = "Visita " + v.getNombre() + " Eliminada!";
 
         //Conexion con la base de datos
         ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), BD);
 
         //se obtienen todos los clientes que coincidan con los datos del objeto (deberia haber solo 1)
-        ObjectSet<Empleado> resultado = db.queryByExample(new Empleado(e.getDni(),null, null,
-                null, null, null, null,null,null));
+        ObjectSet<Visita> resultado = db.queryByExample(new Visita(v.getId(), null, null,
+                null, null, null, null, null, null,null));
 
         //Se busca el cliente a eliminar, si existe marcamos atributo "baja" y lo volvemos a guardar
         if (resultado.size() < 1)
-            mensaje = "Error " + e.getNombre() + " " + e.getApellidos() + " No está en la base de datos";
+            mensaje = "Error Visita " + v.getNombre() + " No está en la base de datos";
         else if (resultado.size() > 1)//Por si acaso
-            mensaje = "Error " + e.getNombre() + " " + e.getApellidos() + " está Repetido en la base de datos";
+            mensaje = "Error Visita " + v.getNombre() + " está Repetida en la base de datos";
         else {
             if (resultado.hasNext()) {
-                Empleado empleado = resultado.next();
-                empleado.setEstado("baja");
-                db.store(empleado);
+                Visita visita = resultado.next();
+                visita.setEstado("baja");
+                db.store(visita);
             }
         }
         db.close();
         return mensaje;
     }
 
-    public static Empleado buscaEmpleado(String dni) {
+    public static Visita buscaVisista(Integer id) {
 
-        Empleado emp = null;
+        Visita vis = null;
 
         //Conexion con la base de datos
         ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), BD);
 
         //se obtienen todos los clientes que coincidan con los datos del objeto (deberian ser todos)
-        ObjectSet<Empleado> resultado = db.queryByExample(new Empleado(dni, null, null,
-                null,null, null, null,null,null));
+        ObjectSet<Visita> resultado = db.queryByExample(new Visita(id, null, null,
+                null, null, null, null, null, null,null));
 
         if (resultado.hasNext())
-            emp = resultado.next();
+            vis = resultado.next();
 
         db.close();
 
-        return emp;
+        return vis;
 
     }
 
 
-    public static List<Empleado> mostrarEmpleados() {
+    public static List<Visita> mostrarVisistas() {
 
-        List<Empleado> listaEmpleados = new ArrayList<>();
+        List<Visita> listaVisitas = new ArrayList<>();
 
         //Conexion con la base de datos
         ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), BD);
 
         //se obtienen todos los clientes que coincidan con los datos del objeto (deberian ser todos)
-        ObjectSet<Empleado> resultado = db.queryByExample(new Empleado(null,null, null,
-                null, null, null, null,null,null));
+        ObjectSet<Visita> resultado = db.queryByExample(new Visita(null, null, null,
+                null, null, null, null, null, null,null));
 
         if (resultado.size() > 0) {
             //Se recorren todos los clientes de la base de datos
             while (resultado.hasNext()) {
-                Empleado empleado = resultado.next();
-                if (empleado.getEstado().equals("alta"))
-                    listaEmpleados.add(empleado);
+                Visita visita = resultado.next();
+                if (visita.getEstado().equals("alta"))
+                    listaVisitas.add(visita);
             }
         }
 
         db.close();
-        return listaEmpleados;
+        return listaVisitas;
     }
 
-    public static String actualizaEmpleado(Empleado e) {
+    public static String actualizaVisita(Visita v) {
 
-        String mensaje = e.getNombre() + "Actualizado!";
+        String mensaje = "Visita "+ v.getNombre() + "Actualizada!";
 
         //Conexion con la base de datos
         ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), BD);
 
         //se obtienen todos los clientes que coincidan con los datos del objeto (deberia haber solo 1)
-        ObjectSet<Empleado> resultado = db.queryByExample(new Empleado(e.getDni(),null, null,
-                null, null, null, null,null,null));
+        ObjectSet<Visita> resultado = db.queryByExample(new Visita(v.getId(), null, null,
+                null, null, null, null, null, null,null));
 
         //Se busca el cliente a eliminar, si existe marcamos atributo "baja" y lo volvemos a guardar
         if (resultado.size() < 1)
-            mensaje = "Error " + e.getNombre() + " " + e.getApellidos() + " No está en la base de datos";
+            mensaje = "Error Visita " + v.getNombre() + " No está en la base de datos";
         else if (resultado.size() > 1)//Por si acaso
-            mensaje = "Error " + e.getNombre() + " " + e.getApellidos() + " está Repetido en la base de datos";
+            mensaje = "Error Visita " + v.getNombre() + " está Repetida en la base de datos";
         else {
             if (resultado.hasNext()) {
-                Empleado empleado = resultado.next();
+                Visita visita = resultado.next();
                 //Actualiza el nombre
-                empleado.setNombre(e.getNombre());
-                //Actualiza los apellidos
-                empleado.setApellidos(e.getApellidos());
-                //Actualiza la fecha de nacimiento
-                empleado.setFechaNacimiento(e.getFechaNacimiento());
-                //Actualiza la fecha de contratación
-                empleado.setFechaContratacion(e.getFechaContratacion());
-                //Actualiza la nacionalidad
-                empleado.setNacionalidad(e.getNacionalidad());
-                //Actualiza el cargo
-                empleado.setCargo(e.getCargo());
-                //Actualiza la contraseña
-                empleado.setPassword(e.getPassword());
+                visita.setNombre(v.getNombre());
+                //Actualiza numero maximo de clientes
+                visita.setNmaxCli(v.getNmaxCli());
+                //Actualiza punto de partida
+                visita.setPuntoPartida(v.getPuntoPartida());
+                //Actualiza curso academico
+                visita.setCursoAcademico(v.getCursoAcademico());
+                //Actualiza la tematica
+                visita.setTematica(v.getTematica());
+                //Actualiza el coste
+                visita.setCoste(v.getCoste());
+                //Actualiza fecha y hora
+                visita.setFecha_hora(v.getFecha_hora());
+                //Actualiza el empleado
+                visita.setEmpleado(v.getEmpleado());
 
                 //Se guarda el empleado
-                db.store(empleado);
+                db.store(visita);
             }
         }
         db.close();
         return mensaje;
-    }*/
+    }
 }

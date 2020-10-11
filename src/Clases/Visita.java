@@ -13,6 +13,7 @@ public class Visita {
     private String tematica;
     private Float coste;
     private String estado;
+    private String fecha_hora;
 
     //Una visita puede tener varios clientes o ninguno
     private final List<Cliente> clientes = new ArrayList<>();
@@ -20,7 +21,7 @@ public class Visita {
     //Una visita tiene un empleado
     private Empleado empleado;
 
-    public Visita(int id, String nombre, Integer nmaxCli, String puntoPartida, String cursoAcademico, String tematica, Float coste, String estado, Empleado empleado) {
+    public Visita(Integer id, String nombre, Integer nmaxCli, String puntoPartida, String cursoAcademico, String tematica, Float coste, String estado,String fecha_hora, Empleado empleado) {
         this.id = id;
         this.nombre = nombre;
         this.nmaxCli = nmaxCli;
@@ -29,6 +30,7 @@ public class Visita {
         this.tematica = tematica;
         this.coste = coste;
         this.estado = estado;
+        this.fecha_hora = fecha_hora;
         this.empleado = empleado;
     }
 
@@ -95,6 +97,14 @@ public class Visita {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public String getFecha_hora() {
+        return fecha_hora;
+    }
+
+    public void setFecha_hora(String fecha_hora) {
+        this.fecha_hora = fecha_hora;
     }
 
     public Empleado getEmpleado() {
