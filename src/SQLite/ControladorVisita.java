@@ -26,7 +26,7 @@ public class ControladorVisita extends Conexion{
                             rs.getInt("N_MAX_CLI"), rs.getString("PUNTO_PARTIDA"),
                             rs.getString("CURSO_ACADEMICO"), rs.getString("TEMATICA"),
                             rs.getFloat("COSTE"), rs.getString("ESTADO"),
-                            ControladorEmpleado.selectByDni(rs.getString("DNI_EMPLEADO")).get(0)/*, rs.getDate("FECHA_HORA").toString()*/));
+                            rs.getDate("FECHA_HORA").toString(), ControladorEmpleado.selectByDni(rs.getString("DNI_EMPLEADO")).get(0)));
                 }
 
                 conn.close();
@@ -94,7 +94,7 @@ public class ControladorVisita extends Conexion{
                         rs.getInt("N_MAX_CLI"), rs.getString("PUNTO_PARTIDA"),
                         rs.getString("CURSO_ACADEMICO"), rs.getString("TEMATICA"),
                         rs.getFloat("COSTE"), rs.getString("ESTADO"),
-                        ControladorEmpleado.selectByDni(rs.getString("DNI_EMPLEADO")).get(0)));
+                        rs.getDate("FECHA_HORA").toString(), ControladorEmpleado.selectByDni(rs.getString("DNI_EMPLEADO")).get(0)));
             }
 
             return listaVisitas;
