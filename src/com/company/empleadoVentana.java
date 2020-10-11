@@ -2,7 +2,7 @@ package com.company;
 
 import javax.swing.*;
 
-public class empleadoVentana {
+public class empleadoVentana extends JFrame{
     private JPanel panel1;
     private JTextField tfDni;
     private JTextField tfNombre;
@@ -16,5 +16,14 @@ public class empleadoVentana {
     private JTextField tfNacionalidad;
     private JTextField tfCargo;
     private JPasswordField jfConstrasinal;
+
+    public empleadoVentana (){
+
+        add(panel1);
+
+        setTitle("Gestión de Empleados");
+        setSize(630, 300);
+
+    }
 
 }
