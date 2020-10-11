@@ -4,12 +4,14 @@ import javax.swing.*;
 
 public class clienteVentana {
   private JPanel panel1;
+  private JButton guardarButton;
+  private JButton eliminarButton;
+  private JButton actualizarButton;
+  private JButton listadoButton;
+  private JButton buscarButton;
+  private JTextField tfNombre;
+  private JTextField tfApellidos;
+  private JTextField tfNacimiento;
+  private JTextField tfProfesion;
   private JTextField tfDni;
-  private JButton button1;
-  private JButton button2;
-  private JButton button3;
-  private JButton button4;
-  private JButton button5;
-  private JTextField textField1;
-  private JTextField textField2;
 }
