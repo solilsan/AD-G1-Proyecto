@@ -20,7 +20,7 @@ public class ControladorVisita {
 
         //se obtienen todos las visitas que coincidan con los datos del objeto (deberia haber solo 1)
         ObjectSet<Visita> resultado = db.queryByExample(new Visita(v.getId(), null, null, null,
-                null, null, null, null, null));
+                null, null, null, null, null, null));
 
 
         //Se busca la visita a guardar, si existe marcamos atributo "alta" y lo volvemos a guardar
@@ -44,7 +44,7 @@ public class ControladorVisita {
 
         //se obtienen todos los clientes que coincidan con los datos del objeto (deberia haber solo 1)
         ObjectSet<Visita> resultado = db.queryByExample(new Visita(v.getId(), null, null,
-                null, null, null, null, null, null));
+                null, null, null, null, null, null,null));
 
         //Se busca el cliente a eliminar, si existe marcamos atributo "baja" y lo volvemos a guardar
         if (resultado.size() < 1)
@@ -71,7 +71,7 @@ public class ControladorVisita {
 
         //se obtienen todos los clientes que coincidan con los datos del objeto (deberian ser todos)
         ObjectSet<Visita> resultado = db.queryByExample(new Visita(id, null, null,
-                null, null, null, null, null, null));
+                null, null, null, null, null, null,null));
 
         if (resultado.hasNext())
             vis = resultado.next();
@@ -92,7 +92,7 @@ public class ControladorVisita {
 
         //se obtienen todos los clientes que coincidan con los datos del objeto (deberian ser todos)
         ObjectSet<Visita> resultado = db.queryByExample(new Visita(null, null, null,
-                null, null, null, null, null, null));
+                null, null, null, null, null, null,null));
 
         if (resultado.size() > 0) {
             //Se recorren todos los clientes de la base de datos
@@ -116,7 +116,7 @@ public class ControladorVisita {
 
         //se obtienen todos los clientes que coincidan con los datos del objeto (deberia haber solo 1)
         ObjectSet<Visita> resultado = db.queryByExample(new Visita(v.getId(), null, null,
-                null, null, null, null, null, null));
+                null, null, null, null, null, null,null));
 
         //Se busca el cliente a eliminar, si existe marcamos atributo "baja" y lo volvemos a guardar
         if (resultado.size() < 1)
@@ -138,6 +138,8 @@ public class ControladorVisita {
                 visita.setTematica(v.getTematica());
                 //Actualiza el coste
                 visita.setCoste(v.getCoste());
+                //Actualiza fecha y hora
+                visita.setFecha_hora(v.getFecha_hora());
                 //Actualiza el empleado
                 visita.setEmpleado(v.getEmpleado());
 

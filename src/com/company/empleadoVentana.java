@@ -2,18 +2,28 @@ package com.company;
 
 import javax.swing.*;
 
-public class empleadoVentana {
+public class empleadoVentana extends JFrame{
     private JPanel panel1;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
-    private JTextField textField4;
+    private JTextField tfDni;
+    private JTextField tfNombre;
+    private JTextField tfApellidos;
+    private JTextField tfNacimiento;
     private JButton guardarButton;
     private JButton eliminarButton;
     private JButton actualizarButton;
     private JButton listadoButton;
-    private JTextField textField5;
-    private JTextField textField6;
-    private JTextField textField7;
-    private JPasswordField passwordField1;
+    private JTextField tfContratacion;
+    private JTextField tfNacionalidad;
+    private JTextField tfCargo;
+    private JPasswordField jfConstrasinal;
+
+    public empleadoVentana (){
+
+        add(panel1);
+
+        setTitle("Gestión de Empleados");
+        setSize(630, 300);
+
+    }
+
 }
