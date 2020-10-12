@@ -1,6 +1,6 @@
 package SQLite;
 
-import Clases.Cliente;
+import Clases.Empleado;
 import Clases.Empleado;
 
 import java.sql.*;
@@ -21,11 +21,12 @@ public class ControladorEmpleado extends Conexion{
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(query);
 
-               /* while (rs.next()) {
+                while (rs.next()) {
                     resultado.add(new Empleado(rs.getString("DNI"), rs.getString("NOMBRE"),
                             rs.getString("APELLIDO"), rs.getDate("FECHA_NAC").toString(),
-                            rs.getString("PROFESION"), rs.getString("ESTADO"), null));
-                }*/
+                            rs.getDate("F_CONTRATACION").toString(), rs.getString("NACIONALIDAD"),
+                            rs.getString("CARGO"), rs.getString("PASSWORD"), rs.getString("ESTADO")));
+                }
 
                 conn.close();
             } catch (SQLException throwables) {
@@ -39,21 +40,24 @@ public class ControladorEmpleado extends Conexion{
         return resultado;
     }
 
-    public static Boolean insertCliente(Cliente objCliente) {
+    public static Boolean insertEmpleado(Empleado objEmpleado) {
         Connection conn = conn();
-        String query = "INSERT INTO CLIENTES (DNI, NOMBRE, APELLIDO, FECHA_NAC, PROFESION, ESTADO) VALUES(?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO EMPLEADOS (DNI, NOMBRE, APELLIDO, FECHA_NAC, F_CONTRATACION, NACIONALIDAD, CARGO, PASSWORD, ESTADO) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 
         try {
             PreparedStatement sentencia = conn.prepareStatement(query);
 
             // Introducimos los datos
-            sentencia.setString(1, objCliente.getDni());
-            sentencia.setString(2, objCliente.getNombre());
-            sentencia.setString(3, objCliente.getApellidos());
-            sentencia.setDate(4, Date.valueOf(objCliente.getFechaNacimiento()));
-            sentencia.setString(5, objCliente.getProfesion());
-            sentencia.setString(6, objCliente.getEstado());
+            sentencia.setString(1, objEmpleado.getDni());
+            sentencia.setString(2, objEmpleado.getNombre());
+            sentencia.setString(3, objEmpleado.getApellidos());
+            sentencia.setDate(4, Date.valueOf(objEmpleado.getFechaNacimiento()));
+            sentencia.setDate(5, Date.valueOf(objEmpleado.getFechaContratacion()));
+            sentencia.setString(6, objEmpleado.getNacionalidad());
+            sentencia.setString(7, objEmpleado.getCargo());
+            sentencia.setString(8, objEmpleado.getPassword());
+            sentencia.setString(9, objEmpleado.getEstado());
 
             // Ejecutamos la sentencia
             Integer res = sentencia.executeUpdate();
@@ -69,11 +73,11 @@ public class ControladorEmpleado extends Conexion{
         return false;
     }
 
-    public static ArrayList<Cliente> selectWhere(/*String parametro,*/ String tiene) {
+    public static ArrayList<Empleado> selectByDni(String tiene) {
         Connection conn = conn();
-        ArrayList<Cliente> listaClientes = new ArrayList<>();
-        //String query = "SELECT * FROM CLIENTES WHERE "+ parametro +" = ?";
-        String query = "SELECT * FROM CLIENTES WHERE DNI = ?";
+        ArrayList<Empleado> listaEmpleados = new ArrayList<>();
+        //String query = "SELECT * FROM EMPLEADOS WHERE "+ parametro +" = ?";
+        String query = "SELECT * FROM EMPLEADOS WHERE DNI = ?";
 
 
         try {
@@ -84,31 +88,32 @@ public class ControladorEmpleado extends Conexion{
             ResultSet rs = sentencia.executeQuery();
 
             while (rs.next()) {
-                listaClientes.add(new Cliente(rs.getString("DNI"), rs.getString("NOMBRE"),
+                listaEmpleados.add(new Empleado(rs.getString("DNI"), rs.getString("NOMBRE"),
                         rs.getString("APELLIDO"), rs.getDate("FECHA_NAC").toString(),
-                        rs.getString("PROFESION"), rs.getString("ESTADO"), null));
+                        rs.getDate("F_CONTRATACION").toString(), rs.getString("NACIONALIDAD"),
+                        rs.getString("CARGO"), rs.getString("PASSWORD"), rs.getString("ESTADO")));
             }
 
-            return listaClientes;
+            return listaEmpleados;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return listaClientes;
+        return listaEmpleados;
     }
 
     /**
      * ESTA FUNCION, Y LA DE ALTA, SE PODRIAN FUSIONAR EN UNA
      * TODO: POSIBLE OPTIMIZACION.
      */
-    public static boolean darBajaCliente(Cliente objCliente){
+    public static boolean darBajaEmpleado(Empleado objEmpleado){
         Connection conn = conn();
-        String query = "UPDATE CLIENTES SET ESTADO = 'baja' WHERE DNI = ?";
+        String query = "UPDATE EMPLEADOS SET ESTADO = 'baja' WHERE DNI = ?";
 
         // Comprobamos que el DNI del objeto no este vacio
-        if (objCliente.getDni().equals("") || objCliente.getDni() == null){
+        if (objEmpleado.getDni().equals("") || objEmpleado.getDni() == null){
             // No se puede seguir sin un DNI
-            System.out.println("[SQLite - ControladorCliente] Se ha intentado dar de baja un cliente, pero se ha\n" +
-                    "pasado un objeto cliente sin DNI.");
+            System.out.println("[SQLite - ControladorEmpleado] Se ha intentado dar de baja un Empleado, pero se ha\n" +
+                    "pasado un objeto Empleado sin DNI.");
             return false;
         }
 
@@ -116,7 +121,7 @@ public class ControladorEmpleado extends Conexion{
             PreparedStatement sentencia = conn.prepareStatement(query);
 
             // Introducimos los datos
-            sentencia.setString(1, objCliente.getDni());
+            sentencia.setString(1, objEmpleado.getDni());
 
             // Ejecutamos la sentencia
             Integer res = sentencia.executeUpdate();
@@ -132,15 +137,15 @@ public class ControladorEmpleado extends Conexion{
         return false;
     }
 
-    public static boolean darAltaCliente(Cliente objCliente){
+    public static boolean darAltaEmpleado(Empleado objEmpleado){
         Connection conn = conn();
-        String query = "UPDATE CLIENTES SET ESTADO = 'alta' WHERE DNI = ?";
+        String query = "UPDATE EMPLEADOS SET ESTADO = 'alta' WHERE DNI = ?";
 
         // Comprobamos que el DNI del objeto no este vacio
-        if (objCliente.getDni().equals("") || objCliente.getDni() == null){
+        if (objEmpleado.getDni().equals("") || objEmpleado.getDni() == null){
             // No se puede seguir sin un DNI
-            System.out.println("[SQLite - ControladorCliente] Se ha intentado dar de alta un cliente, pero se ha\n" +
-                    "pasado un objeto cliente sin DNI.");
+            System.out.println("[SQLite - ControladorEmpleado] Se ha intentado dar de alta un Empleado, pero se ha\n" +
+                    "pasado un objeto Empleado sin DNI.");
             return false;
         }
 
@@ -148,7 +153,7 @@ public class ControladorEmpleado extends Conexion{
             PreparedStatement sentencia = conn.prepareStatement(query);
 
             // Introducimos los datos
-            sentencia.setString(1, objCliente.getDni());
+            sentencia.setString(1, objEmpleado.getDni());
 
             // Ejecutamos la sentencia
             Integer res = sentencia.executeUpdate();
@@ -164,14 +169,14 @@ public class ControladorEmpleado extends Conexion{
         return false;
     }
 
-    public static boolean updateUnCampo(Cliente objCliente){
+    public static boolean updateUnCampo(Empleado objEmpleado){
         Connection conn = conn();
-        String query = "UPDATE CLIENTES SET NOMBRE = ?, APELLIDO = ?, FECHA_NAC = ?, PROFESION = ?, ESTADO = ? WHERE DNI = ?";
+        String query = "UPDATE EMPLEADOS SET NOMBRE = ?, APELLIDO = ?, FECHA_NAC = ?, F_CONTRATACION = ?, NACIONALIDAD = ?, CARGO = ?, PASSWORD = ?, ESTADO = ? WHERE DNI = ?";
 
         // Comprobamos que el DNI del objeto no este vacio
-        if (objCliente.getDni() == ""){
+        if (objEmpleado.getDni() == ""){
             // No se puede seguir sin un DNI
-            System.out.println("[SQLite - ControladorCliente] Se ha intentado alterar un campo del cliente, pero el parametro es\n" +
+            System.out.println("[SQLite - ControladorEmpleado] Se ha intentado alterar un campo del Empleado, pero el parametro es\n" +
                     "nulo, o esta vacio.");
             return false;
         }
@@ -180,12 +185,15 @@ public class ControladorEmpleado extends Conexion{
             PreparedStatement sentencia = conn.prepareStatement(query);
 
             // Introducimos los datos
-            sentencia.setString(1, objCliente.getNombre());
-            sentencia.setString(2, objCliente.getApellidos());
-            sentencia.setString(3, objCliente.getFechaNacimiento());
-            sentencia.setString(4, objCliente.getProfesion());
-            sentencia.setString(5, objCliente.getEstado());
-            sentencia.setString(6, objCliente.getDni());
+            sentencia.setString(1, objEmpleado.getDni());
+            sentencia.setString(2, objEmpleado.getNombre());
+            sentencia.setString(3, objEmpleado.getApellidos());
+            sentencia.setDate(4, Date.valueOf(objEmpleado.getFechaNacimiento()));
+            sentencia.setDate(5, Date.valueOf(objEmpleado.getFechaContratacion()));
+            sentencia.setString(6, objEmpleado.getNacionalidad());
+            sentencia.setString(7, objEmpleado.getCargo());
+            sentencia.setString(8, objEmpleado.getPassword());
+            sentencia.setString(9, objEmpleado.getEstado());
 
             // Ejecutamos la sentencia
             Integer res = sentencia.executeUpdate();
