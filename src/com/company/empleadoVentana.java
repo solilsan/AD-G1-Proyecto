@@ -6,6 +6,8 @@ import DB4O.ModeloEmpleado;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class empleadoVentana extends JFrame {
   private JPanel panel1;
@@ -21,6 +23,10 @@ public class empleadoVentana extends JFrame {
   private JTextField tfNacionalidad;
   private JTextField tfCargo;
   private JPasswordField jfContrasinal;
+  private JTable listado;
+  private JPanel formularioPanel;
+  private JPanel botoneraPanel;
+  private JPanel tablaPanel;
 
   public empleadoVentana(int opcion) {
 
@@ -28,7 +34,7 @@ public class empleadoVentana extends JFrame {
 
     setTitle("Gestión de Empleados");
 
-    setSize(630, 300);
+    setSize(630, 500);
 
     /**
      *
@@ -153,5 +159,50 @@ public class empleadoVentana extends JFrame {
 
       }
     });
+
+
+    /**
+     *
+     * BOTON LISTAR TODOS LOS EMPLEADOS
+     *
+     */
+    listadoButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+
+        List<Empleado> empleados =  ModeloEmpleado.mostrar();
+
+        /*for (int i = 0; i < empleados.size(); i++) {
+          listado.setValueAt(empleados.get(i).getNombre(),i,i);
+        }*/
+
+        String[] titulos = {"Dni", "Nombre", "Apellidos"};
+
+        Object[][] datosFila = {
+                {"35575600M","Santi","Gonzalez"},
+                {"35575601Y","Pablo","Gonzalez"}
+        };
+
+        rellenaTabla(empleados);
+
+        //listado.getColumnModel().getColumn(0).setCellRenderer(new GestionCeldas("numerico"));
+
+
+      }
+    });
   }
+
+
+  private Object[][] rellenaTabla(List<Empleado> empleados){
+
+    String[][] datos = new String[empleados.size()][];
+
+    for (int i = 0; i < datos.length; i++) {
+      datos[i][0] = empleados.get(i).getDni();
+      datos[i][1] = empleados.get(i).getNombre();
+      datos[i][2] = empleados.get(i).getApellidos();
+    }
+    return datos;
+  }
+
 }
