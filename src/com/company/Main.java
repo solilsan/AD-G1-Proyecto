@@ -13,18 +13,18 @@ public class Main {
     /*clienteVentana cv = new clienteVentana();
     cv.setVisible(true);*/
 
-    /*
+
     empleadoVentana ev = new empleadoVentana(DB4O);
     ev.setLocationRelativeTo(null); // para poner la ventana en el centro de la pantalla
     ev.setVisible(true);
-    */
+
 
     /*visitaVentana vv = new visitaVentana();
     vv.setVisible(true);*/
 
-    principalVentana pv = new principalVentana();
+    /*principalVentana pv = new principalVentana();
     pv.setLocationRelativeTo(null);
-    pv.setVisible(true);
+    pv.setVisible(true);*/
 
   }
 }
