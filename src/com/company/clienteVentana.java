@@ -23,6 +23,5 @@ public class clienteVentana extends JFrame {
     setTitle("Gestion de Clientes");
     setSize(630, 300);
 
-
   }
 }
