@@ -1,5 +1,7 @@
 package com.company;
 
+import SQLite.Metadatos;
+
 import javax.swing.*;
 
 public class metadatosVentana extends JFrame {
@@ -8,7 +10,7 @@ public class metadatosVentana extends JFrame {
 
     public metadatosVentana(int tipoDB){
         add(metadatosJPanel);
-        setTitle("Metadatos De"+ swithDB(tipoDB));
+        setTitle("Metadatos De "+ swithDB(tipoDB));
         setSize(400, 200);
     }
 
@@ -20,8 +22,7 @@ public class metadatosVentana extends JFrame {
                 return "DB4o";
 
             case 2:// SQLite
-                // TODO: Devolver los metadatos de la base de datos.
-                labelMetadatos.setText("");
+                labelMetadatos.setText(Metadatos.getMetadatos());
                 return "SQLite";
 
             case 3://MySQL

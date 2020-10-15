@@ -48,7 +48,9 @@ public class menuSeleccion extends JFrame{
         metadatosButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO: Crear Ventana Metadatos
+                metadatosVentana ventana = new metadatosVentana(tipoDB);
+                ventana.setLocationRelativeTo(null);
+                ventana.setVisible(true);
             }
         });
 
