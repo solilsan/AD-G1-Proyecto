@@ -7,7 +7,7 @@ public class Main {
   public static void main(String[] args) {
 
     int DB4O = 1;
-    int mysqlite = 2;
+    int sqlite = 2;
     int mysql = 3;
 
     /*clienteVentana cv = new clienteVentana();
