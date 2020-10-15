@@ -8,20 +8,26 @@ public class metadatosVentana extends JFrame {
 
     public metadatosVentana(int tipoDB){
         add(metadatosJPanel);
-        setTitle("Metadatos De");
+        setTitle("Metadatos De"+ swithDB(tipoDB));
         setSize(400, 200);
     }
 
     private String swithDB(int DB){
         switch (DB){
-            case 1:
-                return "";
+            case 1:// DB4O
+                // TODO: Devolver los metadatos de la base de datos.
+                labelMetadatos.setText("");
+                return "DB4o";
 
-            case 2:
-                return "";
+            case 2:// SQLite
+                // TODO: Devolver los metadatos de la base de datos.
+                labelMetadatos.setText("");
+                return "SQLite";
 
-            case 3:
-                return "";
+            case 3://MySQL
+                // TODO: Devolver los metadatos de la base de datos.
+                labelMetadatos.setText("");
+                return "MySQL";
 
             default:
                 return "";
