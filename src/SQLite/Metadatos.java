@@ -12,7 +12,7 @@ public class Metadatos extends Conexion {
 
     public static String getMetadatos() {
         Connection conn = conn();
-        String resultado = "<html>";
+        String resultado = "<html><body style='font-size: 10px; padding-left: 50px;'>";
         // Comprobamos que la conexion haya tenido exito.
         // Si sale null es que ha habido un error.
         if (conn != null) {
@@ -24,7 +24,7 @@ public class Metadatos extends Conexion {
 
                 while (rs.next()) {
 
-                    resultado += "<h1>Nombre Tabla: </h1><p>"+rs.getString("name")+"<p><br><h2>Estructura: </h2><br>"+rs.getString("sql");
+                    resultado += "<h1>Nombre Tabla: "+rs.getString("name")+"<p><br>"+rs.getString("sql");
 
                 }
 
@@ -35,6 +35,6 @@ public class Metadatos extends Conexion {
             }
 
         }
-        return (resultado + "</html>");
+        return (resultado + "</body></html>");
     }
 }
