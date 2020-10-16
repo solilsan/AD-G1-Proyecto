@@ -17,7 +17,7 @@ public class menuSeleccion extends JFrame{
     public menuSeleccion(int tipoDB){
         add(panel2);
         setTitle("Seleccione Un Apartado");
-        setSize(400, 200);
+        setSize(630, 300);
         setResizable(false);
         this.tipoDB = tipoDB;
 
