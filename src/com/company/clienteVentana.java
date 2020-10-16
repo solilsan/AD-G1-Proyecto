@@ -16,7 +16,7 @@ public class clienteVentana extends JFrame {
   private JTextField tfProfesion;
   private JPanel jpanel1;
 
-  public clienteVentana() {
+  public clienteVentana(int tipoDB) {
 
     add(jpanel1);
 
