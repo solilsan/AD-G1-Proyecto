@@ -27,6 +27,7 @@ public class visitaVentana extends JFrame{
   private JComboBox cbEmpleado;
 
   public visitaVentana(int opcion) {
+
     add(panel1);
 
     setTitle("Gestión de Visitas");
