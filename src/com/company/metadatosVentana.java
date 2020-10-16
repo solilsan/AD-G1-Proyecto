@@ -3,6 +3,7 @@ package com.company;
 import SQLite.Metadatos;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class metadatosVentana extends JFrame {
     private JPanel metadatosJPanel;
@@ -11,7 +12,7 @@ public class metadatosVentana extends JFrame {
     public metadatosVentana(int tipoDB){
         add(metadatosJPanel);
         setTitle("Metadatos De "+ swithDB(tipoDB));
-        setSize(400, 200);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     private String swithDB(int DB){
@@ -22,6 +23,12 @@ public class metadatosVentana extends JFrame {
                 return "DB4o";
 
             case 2:// SQLite
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                double width = screenSize.getWidth();
+                double height = screenSize.getHeight();
+
+                labelMetadatos.setFont(new Font("Arial", Font.PLAIN, (int)width/50));
+
                 labelMetadatos.setText(Metadatos.getMetadatos());
                 return "SQLite";
 
