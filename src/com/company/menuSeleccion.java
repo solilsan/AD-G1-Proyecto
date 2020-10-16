@@ -33,7 +33,9 @@ public class menuSeleccion extends JFrame{
         visitasButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO: Añadir una ventana de visitas
+                visitaVentana ventana = new visitaVentana(tipoDB);
+                ventana.setLocationRelativeTo(null);
+                ventana.setVisible(true);
             }
         });
 
