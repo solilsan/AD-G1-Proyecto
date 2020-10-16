@@ -26,5 +26,7 @@ public class ModeloEmpleado {
         return ControladorEmpleado.mostrarEmpleados();
     }
 
+    public static boolean login(){return true;}
+
 
 }
