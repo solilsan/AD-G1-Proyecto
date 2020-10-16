@@ -17,7 +17,9 @@ public class Main {
     empleadoVentana ev = new empleadoVentana(DB4O);
     ev.setLocationRelativeTo(null); // para poner la ventana en el centro de la pantalla
     ev.setVisible(true);
-    */
+
+     */
+
 
     /*visitaVentana vv = new visitaVentana();
     vv.setVisible(true);*/
