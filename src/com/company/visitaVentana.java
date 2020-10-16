@@ -18,7 +18,7 @@ public class visitaVentana extends JFrame{
   private JTextField tfEmpleado;
   private JTextField tfFecha;
 
-  public visitaVentana() {
+  public visitaVentana(int tipoDB) {
     add(panel1);
 
     setTitle("Gestión de Visitas");
