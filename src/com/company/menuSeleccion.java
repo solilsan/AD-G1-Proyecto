@@ -18,6 +18,7 @@ public class menuSeleccion extends JFrame{
         add(panel2);
         setTitle("Seleccione Un Apartado");
         setSize(400, 200);
+        setResizable(false);
         this.tipoDB = tipoDB;
 
         empleadosButton.addActionListener(new ActionListener() {
@@ -48,7 +49,23 @@ public class menuSeleccion extends JFrame{
         metadatosButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO: Crear Ventana Metadatos
+                metadatosVentana ventana = new metadatosVentana(tipoDB);
+                ventana.setLocationRelativeTo(null);
+                ventana.setVisible(true);
+            }
+        });
+
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+
+                // Crear la nueva venta para abrir
+                principalVentana pv = new principalVentana(){};
+                pv.setLocationRelativeTo(null);
+                pv.setVisible(true);
+                // Cerrar ventana actual
+                dispose();
+
             }
         });
 
