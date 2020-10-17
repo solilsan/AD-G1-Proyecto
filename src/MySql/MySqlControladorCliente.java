@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class MySqlControladorCliente {
 
-    public static void insert(Connection connection, Cliente cliente) {
+    public static String insert(Connection connection, Cliente cliente) {
 
         try {
 
@@ -31,41 +31,50 @@ public class MySqlControladorCliente {
             pstmt.setString(6, cliente.getEstado());
             pstmt.execute();
 
+            return "Cliente guardado";
+
         }
         catch (java.text.ParseException parseException) {
-            System.out.println("Error al hacer el parse de fechas, " + parseException.getMessage());
+            return ("Error al hacer el parse de fechas, " + parseException.getMessage());
         }
         catch (java.sql.SQLException sqlException) {
-            System.out.println("Error de sql, " + sqlException.getMessage());
+            return ("Error de sql, " + sqlException.getMessage());
         }
         catch (Exception e) {
-            System.out.println("Error general, " + e.getMessage());
+            return ("Error general, " + e.getMessage());
         }
 
     }
 
-    public static void deleteWithDni(Connection connection, String dniCliente) {
+    public static String deleteWithDni(Connection connection, String dniCliente) {
 
         try {
 
-            String sql = "DELETE FROM CLIENTES WHERE dni = ?;";
+            String sql = "UPDATE CLIENTES SET ESTADO = ? WHERE dni = ?;";
 
             assert connection != null;
             PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setString(1, dniCliente);
-            pstmt.execute();
+            pstmt.setString(1, "baja");
+            pstmt.setString(2, dniCliente);
+
+            if (pstmt.executeUpdate() >= 1) {
+                return "Cliente eliminado";
+            }
+            else {
+                return "No existe un cliente con ese dni";
+            }
 
         }
         catch (java.sql.SQLException sqlException) {
-            System.out.println("Error de sql, " + sqlException.getMessage());
+            return ("Error de sql, " + sqlException.getMessage());
         }
         catch (Exception e) {
-            System.out.println("Error general, " + e.getMessage());
+            return ("Error general, " + e.getMessage());
         }
 
     }
 
-    public static void updateWithDni(Connection connection, Cliente cliente) {
+    public static String updateWithDni(Connection connection, Cliente cliente) {
 
         try {
 
@@ -85,17 +94,19 @@ public class MySqlControladorCliente {
             pstmt.setString(4, cliente.getProfesion());
             pstmt.setString(5, cliente.getEstado());
             pstmt.setString(6, cliente.getDni());
-            pstmt.execute();
 
-        }
-        catch (java.text.ParseException parseException) {
-            System.out.println("Error al hacer el parse de fechas, " + parseException.getMessage());
-        }
-        catch (java.sql.SQLException sqlException) {
-            System.out.println("Error de sql, " + sqlException.getMessage());
+            if (pstmt.executeUpdate() >= 1) {
+                return "Cliente actualizado";
+            }
+            else {
+                return "No existe un cliente con ese dni";
+            }
+
+        } catch (java.sql.SQLException sqlException) {
+            return ("Error de sql, " + sqlException.getMessage());
         }
         catch (Exception e) {
-            System.out.println("Error general, " + e.getMessage());
+            return ("Error general, " + e.getMessage());
         }
 
     }
