@@ -17,7 +17,7 @@ public class menuSeleccion extends JFrame{
     public menuSeleccion(int tipoDB){
         add(panel2);
         setTitle("Seleccione Un Apartado");
-        setSize(400, 200);
+        setSize(630, 300);
         setResizable(false);
         this.tipoDB = tipoDB;
 
@@ -33,7 +33,9 @@ public class menuSeleccion extends JFrame{
         visitasButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO: Añadir una ventana de visitas
+                visitaVentana ventana = new visitaVentana(tipoDB);
+                ventana.setLocationRelativeTo(null);
+                ventana.setVisible(true);
             }
         });
 
