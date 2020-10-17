@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Empleado {
 
-    private final String dni;
+    private String dni;
     private String nombre;
     private String apellidos;
     private String fechaNacimiento;
@@ -18,6 +18,8 @@ public class Empleado {
     //Un empleado puede hacer varias visitas o ninguna
     private final List<Visita> visitas = new ArrayList<>();
 
+    public Empleado() {}
+
     public Empleado(String dni, String nombre, String apellidos, String fechaNacimiento, String fechaContratacion, String nacionalidad, String cargo, String password, String estado) {
         this.dni = dni;
         this.nombre = nombre;
@@ -28,6 +30,10 @@ public class Empleado {
         this.cargo = cargo;
         this.password = password;
         this.estado = estado;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
     }
 
     public String getDni() {
