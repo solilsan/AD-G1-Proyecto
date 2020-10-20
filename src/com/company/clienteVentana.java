@@ -135,12 +135,14 @@ public class clienteVentana extends JFrame {
 
                 } else {
 
-                    //Se recogen los datos de los input para borrar
-                    String dni = tfDni.getText();
 
-                    //Se crea el objeto para enviar a eliminar
+                  //Se recogen los datos de los input para borrar
+                  String dni = tfDni.getText();
+
+                   //Se crea el objeto para enviar a eliminar
                     Cliente cliente = new Cliente(dni, null, null, null,
-                            null, null, null);
+                            null, "baja", null);
+
 
                     switch (opcion) {
                         case 1://OPCION DB4O
