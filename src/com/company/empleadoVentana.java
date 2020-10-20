@@ -35,7 +35,7 @@ public class empleadoVentana extends JFrame {
 
     setTitle("Gestión de Empleados");
 
-    setSize(630, 500);
+    setSize(700, 500);
 
     /**
      *
