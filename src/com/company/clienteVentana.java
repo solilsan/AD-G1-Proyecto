@@ -136,7 +136,7 @@ public class clienteVentana extends JFrame {
 
           //Se crea el objeto para enviar a eliminar
           Cliente cliente = new Cliente(dni, null, null, null,
-                  null, null, null);
+                  null, "baja", null);
 
           switch (opcion) {
             case 1://OPCION DB4O

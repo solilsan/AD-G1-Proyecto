@@ -107,7 +107,7 @@ public class empleadoVentana extends JFrame {
 
         //Se crea el objeto para enviar a eliminar
         Empleado empleado = new Empleado(dni, null, null, null,
-            null, null, null, null, null);
+            null, null, null, null, "baja");
 
         switch (opcion) {
           case 1://OPCION DB4O
