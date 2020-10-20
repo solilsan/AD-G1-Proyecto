@@ -172,7 +172,7 @@ public class ControladorEmpleado extends Conexion{
         return false;
     }
 
-    public static boolean updateUnCampo(Empleado objEmpleado){
+    public static boolean updateEmpleado(Empleado objEmpleado){
         Connection conn = conn();
         String query = "UPDATE EMPLEADOS SET NOMBRE = ?, APELLIDO = ?, FECHA_NAC = ?, F_CONTRATACION = ?, NACIONALIDAD = ?, CARGO = ?, PASSWORD = ?, ESTADO = ? WHERE DNI = ?";
 
