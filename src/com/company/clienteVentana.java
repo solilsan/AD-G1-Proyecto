@@ -17,317 +17,353 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class clienteVentana extends JFrame {
-  private JButton guardarButton;
-  private JButton eliminarButton;
-  private JButton actualizarButton;
-  private JButton listadoButton;
-  private JButton buscarButton;
-  private JTextField tfDni;
-  private JTextField tfNombre;
-  private JTextField tfApellidos;
-  private JTextField tfNacimiento;
-  private JTextField tfProfesion;
-  private JPanel jpanel1;
+    private JButton guardarButton;
+    private JButton eliminarButton;
+    private JButton actualizarButton;
+    private JButton listadoButton;
+    private JButton buscarButton;
+    private JTextField tfDni;
+    private JTextField tfNombre;
+    private JTextField tfApellidos;
+    private JTextField tfNacimiento;
+    private JTextField tfProfesion;
+    private JPanel jpanel1;
+    private JLabel lAltaBaja;
+    private JTable table1;
+    private JPanel jpTabla;
 
-  private String estadoCliente;
+    private String estadoCliente;
 
-  public clienteVentana(int opcion) {
+    public clienteVentana(int opcion) {
 
-    add(jpanel1);
+        add(jpanel1);
 
-    setTitle("Gestion de Clientes");
-    setSize(570, 300);
+        setTitle("Gestion de Clientes");
+        setSize(570, 300);
 
-    /**
-     *
-     * BOTON GUARDAR CLIENTE
-     *
-     */
-    guardarButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
+        /**
+         *
+         * BOTON GUARDAR CLIENTE
+         *
+         */
+        guardarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-        //todo validaciones
+                //todo validaciones
 
-        if (tfDni.getText().isEmpty() || tfNombre.getText().isEmpty() || tfApellidos.getText().isEmpty() || tfNacimiento.getText().isEmpty() || tfProfesion.getText().isEmpty()) {
+                if (tfDni.getText().isEmpty() || tfNombre.getText().isEmpty() || tfApellidos.getText().isEmpty() || tfNacimiento.getText().isEmpty() || tfProfesion.getText().isEmpty()) {
 
-          JOptionPane.showMessageDialog(null, "Faltan campos por rellenar.", "Informacion Guardado",
-                  JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Faltan campos por rellenar.", "Informacion Guardado",
+                            JOptionPane.INFORMATION_MESSAGE);
 
-        }
-        else {
+                } else {
 
-          String dni = tfDni.getText();
-          String nombre = tfNombre.getText();
-          String apellidos = tfApellidos.getText();
-          String nacimiento = tfNacimiento.getText();
-          String profesion = tfProfesion.getText();
+                    String dni = tfDni.getText();
+                    String nombre = tfNombre.getText();
+                    String apellidos = tfApellidos.getText();
+                    String nacimiento = tfNacimiento.getText();
+                    String profesion = tfProfesion.getText();
 
-          //Se crea el objeto para enviar a guardar
-          Cliente cliente = new Cliente(dni,nombre,apellidos,nacimiento,profesion,"alta");
+                    //Se crea el objeto para enviar a guardar
+                    Cliente cliente = new Cliente(dni, nombre, apellidos, nacimiento, profesion, "alta");
 
-          switch (opcion) {
-            case 1://OPCION DB4O
-              String mensaje = ModeloCliente.guardar(cliente);
+                    switch (opcion) {
+                        case 1://OPCION DB4O
+                            String mensaje = ModeloCliente.guardar(cliente);
 
-              JOptionPane.showMessageDialog(null, mensaje, "Informacion Guardado",
-                      JOptionPane.INFORMATION_MESSAGE);
-              break;
+                            tfDni.setText("");
+                            tfNombre.setText("");
+                            tfApellidos.setText("");
+                            tfNacimiento.setText("");
+                            tfProfesion.setText("");
 
-            case 2://OPCION SQLITE
-              //todo opcion sqlite guardado
-              break;
+                            JOptionPane.showMessageDialog(null, mensaje, "Informacion Guardado",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            break;
 
-            case 3://OPCION MYSQL
+                        case 2://OPCION SQLITE
+                            //todo opcion sqlite guardado
+                            break;
 
-              Connection mysqlConn = MySqlConexion.connection();
+                        case 3://OPCION MYSQL
 
-              String mysqlMensaje = MySqlControladorCliente.insert(mysqlConn, cliente);
+                            Connection mysqlConn = MySqlConexion.connection();
 
-              JOptionPane.showMessageDialog(null, mysqlMensaje, "Información.",
-                      JOptionPane.INFORMATION_MESSAGE);
+                            String mysqlMensaje = MySqlControladorCliente.insert(mysqlConn, cliente);
 
-              if (mysqlMensaje.equals("Cliente guardado")) {
+                            JOptionPane.showMessageDialog(null, mysqlMensaje, "Información.",
+                                    JOptionPane.INFORMATION_MESSAGE);
 
-                tfDni.setText("");
-                tfNombre.setText("");
-                tfApellidos.setText("");
-                tfNacimiento.setText("");
-                tfProfesion.setText("");
+                            if (mysqlMensaje.equals("Cliente guardado")) {
 
-              }
+                                tfDni.setText("");
+                                tfNombre.setText("");
+                                tfApellidos.setText("");
+                                tfNacimiento.setText("");
+                                tfProfesion.setText("");
 
-              try {
-                assert mysqlConn != null;
-                mysqlConn.close();
-              } catch (SQLException throwables) {
-                throwables.printStackTrace();
-              }
+                            }
 
-              break;
-          }
+                            try {
+                                assert mysqlConn != null;
+                                mysqlConn.close();
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
 
-        }
+                            break;
+                    }
 
-      }
-    });
+                }
 
-    /**
-     *
-     * BOTON ELIMINAR CLIENTE
-     *
-     */
-    eliminarButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
+            }
+        });
 
-        //todo validaciones
+        /**
+         *
+         * BOTON ELIMINAR CLIENTE
+         *
+         */
+        eliminarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-        if (tfDni.getText().isEmpty()) {
+                //todo validaciones
 
-          JOptionPane.showMessageDialog(null, "Introduce un DNI.", "Informacion Eliminado",
-                  JOptionPane.INFORMATION_MESSAGE);
+                if (tfDni.getText().isEmpty()) {
 
-        }
-        else {
+                    JOptionPane.showMessageDialog(null, "Introduce un DNI.", "Informacion Eliminado",
+                            JOptionPane.INFORMATION_MESSAGE);
 
-          //Se recogen los datos de los input para borrar
-          String dni = tfDni.getText();
+                } else {
 
-          //Se crea el objeto para enviar a eliminar
-          Cliente cliente = new Cliente(dni, null, null, null,
-                  null, "baja", null);
 
-          switch (opcion) {
-            case 1://OPCION DB4O
-              String mensaje = ModeloCliente.eliminar(cliente);
-              JOptionPane.showMessageDialog(null, mensaje, "Informacion Eliminado",
-                      JOptionPane.INFORMATION_MESSAGE);
-              break;
+                  //Se recogen los datos de los input para borrar
+                  String dni = tfDni.getText();
 
-            case 2://OPCION SQLITE
-              //todo opcion sqlite borrado
-              break;
+                   //Se crea el objeto para enviar a eliminar
+                    Cliente cliente = new Cliente(dni, null, null, null,
+                            null, "baja", null);
 
-            case 3://OPCION MYSQL
 
-              Connection mysqlConn = MySqlConexion.connection();
+                    switch (opcion) {
+                        case 1://OPCION DB4O
+                            String mensaje = ModeloCliente.eliminar(cliente);
 
-              String mysqlMensaje = MySqlControladorCliente.deleteWithDni(mysqlConn, cliente.getDni());
+                            tfDni.setText("");
+                            tfNombre.setText("");
+                            tfApellidos.setText("");
+                            tfNacimiento.setText("");
+                            tfProfesion.setText("");
 
-              JOptionPane.showMessageDialog(null, mysqlMensaje, "Información.",
-                      JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, mensaje, "Informacion Eliminado",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            break;
 
-              if (mysqlMensaje.equals("Cliente eliminado")) {
+                        case 2://OPCION SQLITE
+                            //todo opcion sqlite borrado
+                            break;
 
-                tfDni.setText("");
+                        case 3://OPCION MYSQL
 
-              }
+                            Connection mysqlConn = MySqlConexion.connection();
 
-              try {
-                assert mysqlConn != null;
-                mysqlConn.close();
-              } catch (SQLException throwables) {
-                throwables.printStackTrace();
-              }
+                            String mysqlMensaje = MySqlControladorCliente.deleteWithDni(mysqlConn, cliente.getDni());
 
-              break;
-          }
+                            JOptionPane.showMessageDialog(null, mysqlMensaje, "Información.",
+                                    JOptionPane.INFORMATION_MESSAGE);
 
-        }
+                            if (mysqlMensaje.equals("Cliente eliminado")) {
 
-      }
-    });
+                                tfDni.setText("");
 
-    /**
-     *
-     * BOTON ACTUALIZAR CLIENTE
-     *
-     */
-    actualizarButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
+                            }
 
+                            try {
+                                assert mysqlConn != null;
+                                mysqlConn.close();
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
 
-        //todo validaciones
+                            break;
+                    }
 
-        if (tfDni.getText().isEmpty() || tfNombre.getText().isEmpty() || tfApellidos.getText().isEmpty() || tfNacimiento.getText().isEmpty() || tfProfesion.getText().isEmpty()) {
+                }
 
-          JOptionPane.showMessageDialog(null, "Faltan campos por rellenar.", "Informacion Guardado",
-                  JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
 
-        }
-        else {
+        /**
+         *
+         * BOTON ACTUALIZAR CLIENTE
+         *
+         */
+        actualizarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-          //Se recogen los datos de los input para posible actualizacion
-          String dni = tfDni.getText();
-          String nombre = tfNombre.getText();
-          String apellidos = tfApellidos.getText();
-          String nacimiento = tfNacimiento.getText();
-          String profesion = tfProfesion.getText();
 
-          //Se crea el objeto para enviar a actualizar
-          Cliente cliente = new Cliente(dni, nombre, apellidos, nacimiento, profesion, estadoCliente);
+                //todo validaciones
 
-          switch (opcion) {
-            case 1://OPCION DB4O
-              //todo opcion db4o actualizar
-              break;
+                if (tfDni.getText().isEmpty() || tfNombre.getText().isEmpty() || tfApellidos.getText().isEmpty() || tfNacimiento.getText().isEmpty() || tfProfesion.getText().isEmpty()) {
 
-            case 2://OPCION SQLITE
-              //todo opcion sqlite actulizar
-              break;
+                    JOptionPane.showMessageDialog(null, "Faltan campos por rellenar.", "Informacion Guardado",
+                            JOptionPane.INFORMATION_MESSAGE);
 
-            case 3://OPCION MYSQL
+                } else {
 
-              Connection mysqlConn = MySqlConexion.connection();
+                    //Se recogen los datos de los input para posible actualizacion
+                    String dni = tfDni.getText();
+                    String nombre = tfNombre.getText();
+                    String apellidos = tfApellidos.getText();
+                    String nacimiento = tfNacimiento.getText();
+                    String profesion = tfProfesion.getText();
 
-              String mysqlMensaje = MySqlControladorCliente.updateWithDni(mysqlConn, cliente);
+                    //Se crea el objeto para enviar a actualizar
+                    Cliente cliente = new Cliente(dni, nombre, apellidos, nacimiento, profesion, estadoCliente);
 
-              JOptionPane.showMessageDialog(null, mysqlMensaje, "Información.",
-                      JOptionPane.INFORMATION_MESSAGE);
+                    switch (opcion) {
+                        case 1://OPCION DB4O
+                            String mensaje = ModeloCliente.actualiza(cliente);
 
-              if (mysqlMensaje.equals("Cliente actualizado")) {
+                            JOptionPane.showMessageDialog(null, mensaje, "Informacion Actualizado",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            break;
 
-                tfDni.setText("");
-                tfNombre.setText("");
-                tfApellidos.setText("");
-                tfNacimiento.setText("");
-                tfProfesion.setText("");
+                        case 2://OPCION SQLITE
+                            //todo opcion sqlite actulizar
+                            break;
 
-                actualizarButton.setEnabled(false);
+                        case 3://OPCION MYSQL
 
-              }
+                            Connection mysqlConn = MySqlConexion.connection();
 
-              try {
-                assert mysqlConn != null;
-                mysqlConn.close();
-              } catch (SQLException throwables) {
-                throwables.printStackTrace();
-              }
+                            String mysqlMensaje = MySqlControladorCliente.updateWithDni(mysqlConn, cliente);
 
-              break;
-          }
+                            JOptionPane.showMessageDialog(null, mysqlMensaje, "Información.",
+                                    JOptionPane.INFORMATION_MESSAGE);
 
-        }
+                            if (mysqlMensaje.equals("Cliente actualizado")) {
 
-      }
-    });
+                                tfDni.setText("");
+                                tfNombre.setText("");
+                                tfApellidos.setText("");
+                                tfNacimiento.setText("");
+                                tfProfesion.setText("");
 
-    /**
-     *
-     * BOTON BUSCAR CLIENTE
-     *
-     */
-    buscarButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        //todo validaciones
+                                actualizarButton.setEnabled(false);
 
-        if (tfDni.getText().isEmpty()) {
+                            }
 
-          JOptionPane.showMessageDialog(null, "Introduce un DNI.", "Informacion Actualizado",
-                  JOptionPane.INFORMATION_MESSAGE);
+                            try {
+                                assert mysqlConn != null;
+                                mysqlConn.close();
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
 
-        }
-        else {
+                            break;
+                    }
 
-          //Se recogen los datos de los input para posible busqueda
-          String dni = tfDni.getText();
+                }
 
-          switch (opcion) {
-            case 1://OPCION DB4O
-              //todo opcion db4o buscar
-              break;
+            }
+        });
 
-            case 2://OPCION SQLITE
-              //todo opcion sqlite buscar
-              break;
+        /**
+         *
+         * BOTON BUSCAR CLIENTE
+         *
+         */
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //todo validaciones
 
-            case 3://OPCION MYSQL
+                if (tfDni.getText().isEmpty()) {
 
-              Connection mysqlConn = MySqlConexion.connection();
+                    JOptionPane.showMessageDialog(null, "Introduce un DNI.", "Informacion Actualizado",
+                            JOptionPane.INFORMATION_MESSAGE);
 
-              Cliente cliente = MySqlControladorCliente.selectWithDni(mysqlConn, dni);
+                } else {
 
-              if (cliente != null) {
+                    //Se recogen los datos de los input para posible busqueda
+                    String dni = tfDni.getText();
 
-                tfDni.setText(cliente.getDni());
-                tfNombre.setText(cliente.getNombre());
-                tfApellidos.setText(cliente.getApellidos());
+                    switch (opcion) {
+                        case 1://OPCION DB4O
+                            Cliente c = ModeloCliente.buscar(tfDni.getText());
 
-                String dia = cliente.getFechaNacimiento().substring(8,10);
-                String mes = cliente.getFechaNacimiento().substring(5,7);
-                String anno = cliente.getFechaNacimiento().substring(0,4);
+                            if (c != null) {
 
-                tfNacimiento.setText(dia+"/"+mes+"/"+anno);
-                tfProfesion.setText(cliente.getProfesion());
-                estadoCliente = cliente.getEstado();
+                                tfDni.setText(c.getDni());
+                                tfNombre.setText(c.getNombre());
+                                tfApellidos.setText(c.getApellidos());
+                                tfNacimiento.setText(c.getFechaNacimiento());
+                                tfProfesion.setText(c.getProfesion());
+                                estadoCliente = c.getEstado();
 
-                actualizarButton.setEnabled(true);
+                                actualizarButton.setEnabled(true);
 
-              }
-              else {
+                            } else {
 
-                JOptionPane.showMessageDialog(null, "Cliente no encontrado", "Información.",
-                        JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Cliente no encontrado", "Información.",
+                                        JOptionPane.INFORMATION_MESSAGE);
 
-              }
+                            }
 
-              try {
-                assert mysqlConn != null;
-                mysqlConn.close();
-              } catch (SQLException throwables) {
-                throwables.printStackTrace();
-              }
 
-              break;
-          }
+                            break;
 
-        }
+                        case 2://OPCION SQLITE
+                            //todo opcion sqlite buscar
+                            break;
 
+                        case 3://OPCION MYSQL
+
+                            Connection mysqlConn = MySqlConexion.connection();
+
+                            Cliente cliente = MySqlControladorCliente.selectWithDni(mysqlConn, dni);
+
+                            if (cliente != null) {
+
+                                tfDni.setText(cliente.getDni());
+                                tfNombre.setText(cliente.getNombre());
+                                tfApellidos.setText(cliente.getApellidos());
+
+                                String dia = cliente.getFechaNacimiento().substring(8, 10);
+                                String mes = cliente.getFechaNacimiento().substring(5, 7);
+                                String anno = cliente.getFechaNacimiento().substring(0, 4);
+
+                                tfNacimiento.setText(dia + "/" + mes + "/" + anno);
+                                tfProfesion.setText(cliente.getProfesion());
+                                estadoCliente = cliente.getEstado();
+
+                                actualizarButton.setEnabled(true);
+
+                            } else {
+
+                                JOptionPane.showMessageDialog(null, "Cliente no encontrado", "Información.",
+                                        JOptionPane.INFORMATION_MESSAGE);
+
+                            }
+
+                            try {
+                                assert mysqlConn != null;
+                                mysqlConn.close();
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
+
+                            break;
+                    }
+
+                }
+
+            }
+
+        });
     }
-
-    });
-  }
 }
