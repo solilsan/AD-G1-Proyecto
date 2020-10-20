@@ -28,6 +28,9 @@ public class clienteVentana extends JFrame {
     private JTextField tfNacimiento;
     private JTextField tfProfesion;
     private JPanel jpanel1;
+    private JLabel lAltaBaja;
+    private JTable table1;
+    private JPanel jpTabla;
 
     private String estadoCliente;
 
