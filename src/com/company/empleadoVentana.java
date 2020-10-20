@@ -2,10 +2,15 @@ package com.company;
 
 import Clases.Empleado;
 import DB4O.ModeloEmpleado;
+import MySql.MySqlConexion;
+import MySql.MySqlControladorCliente;
+import MySql.MySqlControladorEmpleado;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,37 +50,72 @@ public class empleadoVentana extends JFrame {
       @Override
       public void actionPerformed(ActionEvent e) {
 
-        //Se recogen los datos de los input para posible validación
-        String dni = tfDni.getText();
-        String nombre = tfNombre.getText();
-        String apellidos = tfApellidos.getText();
-        String nacimiento = tfNacimiento.getToolTipText();
-        String contratacion = tfContratacion.getText();
-        String nacionalidad = tfNacionalidad.getText();
-        String cargo = tfCargo.getText();
-        String contrasinal = new String(jfContrasinal.getPassword());
-        //todo validaciones
+        if (tfDni.getText().isEmpty() || tfNombre.getText().isEmpty() || tfApellidos.getText().isEmpty() || tfNacimiento.getText().isEmpty() || tfContratacion.getText().isEmpty() || tfNacionalidad.getText().isEmpty() || tfCargo.getText().isEmpty() || jfContrasinal.getText().isEmpty()) {
 
-        //Se crea el objeto para enviar a guardar
-        Empleado empleado = new Empleado(dni, nombre, apellidos, nacimiento, contratacion,
-            nacionalidad, cargo, contrasinal, "alta");
+          JOptionPane.showMessageDialog(null, "Faltan campos por rellenar.", "Informacion Guardado",
+                  JOptionPane.INFORMATION_MESSAGE);
+
+        } else {
+
+          //Se recogen los datos de los input para posible validación
+          String dni = tfDni.getText();
+          String nombre = tfNombre.getText();
+          String apellidos = tfApellidos.getText();
+          String nacimiento = tfNacimiento.getText();
+          String contratacion = tfContratacion.getText();
+          String nacionalidad = tfNacionalidad.getText();
+          String cargo = tfCargo.getText();
+          String contrasinal = new String(jfContrasinal.getPassword());
+          //todo validaciones
+
+          //Se crea el objeto para enviar a guardar
+          Empleado empleado = new Empleado(dni, nombre, apellidos, nacimiento, contratacion,
+                  nacionalidad, cargo, contrasinal, "alta");
 
 
-        switch (opcion) {
-          case 1://OPCION DB4O
-            String mensaje = ModeloEmpleado.guardar(empleado);
+          switch (opcion) {
+            case 1://OPCION DB4O
+              String mensaje = ModeloEmpleado.guardar(empleado);
 
-            JOptionPane.showMessageDialog(null, mensaje, "Informacion Guardado",
-                JOptionPane.INFORMATION_MESSAGE);
-            break;
+              JOptionPane.showMessageDialog(null, mensaje, "Informacion Guardado",
+                      JOptionPane.INFORMATION_MESSAGE);
+              break;
 
-          case 2://OPCION SQLITE
-            //todo opcion sqlite guardado
-            break;
+            case 2://OPCION SQLITE
+              //todo opcion sqlite guardado
+              break;
 
-          case 3://OPCION MYSQL
-            //todo opcion mysql guardado
-            break;
+            case 3://OPCION MYSQL
+
+              Connection mysqlConn = MySqlConexion.connection();
+
+              String mysqlMensaje = MySqlControladorEmpleado.insert(mysqlConn, empleado);
+
+              JOptionPane.showMessageDialog(null, mysqlMensaje, "Información.",
+                      JOptionPane.INFORMATION_MESSAGE);
+
+              if (mysqlMensaje.equals("Empleado guardado")) {
+
+                tfDni.setText("");
+                tfNombre.setText("");
+                tfApellidos.setText("");
+                tfNacimiento.setText("");
+                tfContratacion.setText("");
+                tfNacionalidad.setText("");
+                tfCargo.setText("");
+                jfContrasinal.setText("");
+
+              }
+
+              try {
+                assert mysqlConn != null;
+                mysqlConn.close();
+              } catch (SQLException throwables) {
+                throwables.printStackTrace();
+              }
+
+              break;
+          }
         }
       }
     });
