@@ -4,7 +4,10 @@ import Clases.Empleado;
 import Clases.Empleado;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.sql.*;
 
 public class ControladorEmpleado extends Conexion{
 
@@ -46,17 +49,24 @@ public class ControladorEmpleado extends Conexion{
 
         // Verificamos las fechas
         // TODO: Validar las fechas antes de meterlas a la base de datos.
-
-
         try {
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+            java.util.Date fecha_nac = format.parse(objEmpleado.getFechaNacimiento());
+            java.sql.Date fecha_nac_sqlDate = new java.sql.Date(fecha_nac.getTime());
+
+            java.util.Date f_contratacion = format.parse(objEmpleado.getFechaContratacion());
+            java.sql.Date f_contratacion_sqlDate = new java.sql.Date(f_contratacion.getTime());
+
+
             PreparedStatement sentencia = conn.prepareStatement(query);
 
             // Introducimos los datos
             sentencia.setString(1, objEmpleado.getDni());
             sentencia.setString(2, objEmpleado.getNombre());
             sentencia.setString(3, objEmpleado.getApellidos());
-            sentencia.setDate(4, Date.valueOf(objEmpleado.getFechaNacimiento()));
-            sentencia.setDate(5, Date.valueOf(objEmpleado.getFechaContratacion()));
+            sentencia.setDate(4, fecha_nac_sqlDate);
+            sentencia.setDate(5, f_contratacion_sqlDate);
             sentencia.setString(6, objEmpleado.getNacionalidad());
             sentencia.setString(7, objEmpleado.getCargo());
             sentencia.setString(8, objEmpleado.getPassword());
@@ -71,6 +81,9 @@ public class ControladorEmpleado extends Conexion{
         } catch (Exception throwables) {
             throwables.printStackTrace();
         }
+
+
+
 
         // Si hemos llegado aqui, es que algo malo ha pasado.
         return false;
