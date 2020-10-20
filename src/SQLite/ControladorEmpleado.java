@@ -44,6 +44,9 @@ public class ControladorEmpleado extends Conexion{
         Connection conn = conn();
         String query = "INSERT INTO EMPLEADOS (DNI, NOMBRE, APELLIDO, FECHA_NAC, F_CONTRATACION, NACIONALIDAD, CARGO, PASSWORD, ESTADO) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+        // Verificamos las fechas
+        // TODO: Validar las fechas antes de meterlas a la base de datos.
+
 
         try {
             PreparedStatement sentencia = conn.prepareStatement(query);
@@ -65,7 +68,7 @@ public class ControladorEmpleado extends Conexion{
             if (res > 0) {
                 return true;
             }
-        } catch (SQLException throwables) {
+        } catch (Exception throwables) {
             throwables.printStackTrace();
         }
 

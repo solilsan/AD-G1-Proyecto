@@ -5,6 +5,7 @@ import DB4O.ModeloEmpleado;
 import MySql.MySqlConexion;
 import MySql.MySqlControladorCliente;
 import MySql.MySqlControladorEmpleado;
+import SQLite.ControladorEmpleado;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -72,6 +73,20 @@ public class empleadoVentana extends JFrame {
           Empleado empleado = new Empleado(dni, nombre, apellidos, nacimiento, contratacion,
                   nacionalidad, cargo, contrasinal, "alta");
 
+          case 2://OPCION SQLITE
+            // Guardamos el empleado
+            Boolean exito = ControladorEmpleado.insertEmpleado(empleado);
+
+            if (exito){
+              JOptionPane.showMessageDialog(null, "Informacion Guardada.", "Informacion Guardado",
+                      JOptionPane.INFORMATION_MESSAGE);
+            }else{
+              JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
+                              "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
+                      JOptionPane.WARNING_MESSAGE);
+            }
+
+            break;
 
           switch (opcion) {
             case 1://OPCION DB4O
@@ -135,7 +150,7 @@ public class empleadoVentana extends JFrame {
 
         //Se crea el objeto para enviar a eliminar
         Empleado empleado = new Empleado(dni, null, null, null,
-            null, null, null, null, null);
+            null, null, null, null, "baja");
 
         switch (opcion) {
           case 1://OPCION DB4O
