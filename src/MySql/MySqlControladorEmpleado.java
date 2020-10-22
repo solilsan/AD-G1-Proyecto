@@ -44,7 +44,7 @@ public class MySqlControladorEmpleado {
 
         try {
 
-            String sql = "INSERT INTO EMPLEADOS(DNI, NOMBRE, APELLIDO, FECHA_NAC, F_CONTRATACION, NACIONALIDAD, CARGO, PASSWORD, ESTADO) VALUES(?,?,?,?,?,?,?,?);";
+            String sql = "INSERT INTO EMPLEADOS(DNI, NOMBRE, APELLIDO, FECHA_NAC, F_CONTRATACION, NACIONALIDAD, CARGO, PASSWORD, ESTADO) VALUES(?,?,?,?,?,?,?,?,?);";
 
             SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
