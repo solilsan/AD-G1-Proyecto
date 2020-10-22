@@ -73,20 +73,7 @@ public class empleadoVentana extends JFrame {
           Empleado empleado = new Empleado(dni, nombre, apellidos, nacimiento, contratacion,
                   nacionalidad, cargo, contrasinal, "alta");
 
-          case 2://OPCION SQLITE
-            // Guardamos el empleado
-            Boolean exito = ControladorEmpleado.insertEmpleado(empleado);
 
-            if (exito){
-              JOptionPane.showMessageDialog(null, "Informacion Guardada.", "Informacion Guardado",
-                      JOptionPane.INFORMATION_MESSAGE);
-            }else{
-              JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
-                              "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
-                      JOptionPane.WARNING_MESSAGE);
-            }
-
-            break;
 
           switch (opcion) {
             case 1://OPCION DB4O
@@ -97,7 +84,18 @@ public class empleadoVentana extends JFrame {
               break;
 
             case 2://OPCION SQLITE
-              //todo opcion sqlite guardado
+              // Guardamos el empleado
+              Boolean exito = ControladorEmpleado.insertEmpleado(empleado);
+
+              if (exito){
+                JOptionPane.showMessageDialog(null, "Informacion Guardada.", "Informacion Guardado",
+                        JOptionPane.INFORMATION_MESSAGE);
+              }else{
+                JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
+                                "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
+                        JOptionPane.WARNING_MESSAGE);
+              }
+
               break;
 
             case 3://OPCION MYSQL
@@ -160,7 +158,16 @@ public class empleadoVentana extends JFrame {
             break;
 
           case 2://OPCION SQLITE
-            //todo opcion sqlite borrado
+            Boolean exito = ControladorEmpleado.darBajaEmpleado(empleado);
+
+            if (exito){
+              JOptionPane.showMessageDialog(null, "Empleado dado de baja.", "Informacion Baja",
+                      JOptionPane.INFORMATION_MESSAGE);
+            }else{
+              JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
+                              "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
+                      JOptionPane.WARNING_MESSAGE);
+            }
             break;
 
           case 3://OPCION MYSQL
@@ -203,7 +210,16 @@ public class empleadoVentana extends JFrame {
             break;
 
           case 2://OPCION SQLITE
-            //todo opcion sqlite guardado
+            Boolean exito = ControladorEmpleado.updateEmpleado(empleado);
+
+            if (exito){
+              JOptionPane.showMessageDialog(null, "Empleado Actualizado con Exito.", "Informacion Actualizada",
+                      JOptionPane.INFORMATION_MESSAGE);
+            }else{
+              JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
+                              "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
+                      JOptionPane.WARNING_MESSAGE);
+            }
             break;
 
           case 3://OPCION MYSQL
