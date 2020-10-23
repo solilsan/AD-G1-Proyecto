@@ -5,18 +5,12 @@ import DB4O.ModeloCliente;
 import MySql.MySqlConexion;
 import MySql.MySqlControladorCliente;
 import SQLite.ControladorCliente;
-import javax.naming.ldap.Control;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +27,7 @@ public class clienteVentana extends JFrame {
     private JTextField tfProfesion;
     private JPanel jpanel1;
     private JLabel lAltaBaja;
-    private JTable table1;
+    private JTable tablaClientes;
     private JPanel jpTabla;
     private JButton bLimpiar;
 
@@ -45,6 +39,7 @@ public class clienteVentana extends JFrame {
 
         setTitle("Gestion de Clientes");
         setSize(570, 300);
+        jpTabla.setVisible(false);
 
         /**
          *
@@ -91,10 +86,10 @@ public class clienteVentana extends JFrame {
                         case 2://OPCION SQLITE
                             Boolean exito = ControladorCliente.insertCliente(cliente);
 
-                            if (exito){
+                            if (exito) {
                                 JOptionPane.showMessageDialog(null, "Informacion Guardada.", "Informacion Guardado",
                                         JOptionPane.INFORMATION_MESSAGE);
-                            }else{
+                            } else {
                                 JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
                                                 "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
                                         JOptionPane.WARNING_MESSAGE);
@@ -182,10 +177,10 @@ public class clienteVentana extends JFrame {
                             Boolean exito = ControladorCliente.darBajaCliente(cliente);
 
 
-                            if (exito){
+                            if (exito) {
                                 JOptionPane.showMessageDialog(null, "Cliente dado de baja.", "Informacion Baja",
                                         JOptionPane.INFORMATION_MESSAGE);
-                            }else{
+                            } else {
                                 JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
                                                 "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
                                         JOptionPane.WARNING_MESSAGE);
@@ -262,10 +257,10 @@ public class clienteVentana extends JFrame {
                         case 2://OPCION SQLITE
                             Boolean exito = ControladorCliente.updateCliente(cliente);
 
-                            if (exito){
+                            if (exito) {
                                 JOptionPane.showMessageDialog(null, "Cliente Actualizado con Exito.", "Informacion Actualizada",
                                         JOptionPane.INFORMATION_MESSAGE);
-                            }else{
+                            } else {
                                 JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
                                                 "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
                                         JOptionPane.WARNING_MESSAGE);
@@ -356,7 +351,7 @@ public class clienteVentana extends JFrame {
                         case 2://OPCION SQLITE
                             ArrayList<Cliente> cli = ControladorCliente.selectWhereDni(dni);
 
-                            if (cli.size() > 0){
+                            if (cli.size() > 0) {
                                 Cliente cl = cli.get(0);
 
                                 tfDni.setText(cl.getDni());
@@ -367,7 +362,7 @@ public class clienteVentana extends JFrame {
                                 estadoCliente = cl.getEstado();
 
                                 actualizarButton.setEnabled(true);
-                            }else {
+                            } else {
                                 JOptionPane.showMessageDialog(null, "No se ha encontrado el cliente", "Error",
                                         JOptionPane.WARNING_MESSAGE);
                             }
@@ -453,46 +448,37 @@ public class clienteVentana extends JFrame {
 
                 Cliente cli = new Cliente(dni, nombre, apellidos, nacimiento, profesion, null);
 
+                //pra revisar
+                DefaultTableModel modeloTablaCliente = new DefaultTableModel();
+
+                modeloTablaCliente.setColumnIdentifiers(new Object[]{"Dni", "Nombre", "Apellidos", "F. Nacimiento", "Profesion", "Estado"});
+
                 switch (opcion) {
 
                     case 1:
                         //todo opcion DB4O listado todos los clientes
                         List<Cliente> listadoClientes = ModeloCliente.mostrar();
 
-                        Object[] nombreColumnas = {"Dni", "Nombre", "Apellidos", "F. Nacimiento", "Profesion", "Estado"};
+                        if (listadoClientes.size() > 0)
+                            jpTabla.setVisible(true);
 
-                        Object[][] datos = new Object[listadoClientes.size()][5];
+                        for (Cliente listadoCliente : listadoClientes) {
 
-                        for (int i = 0; i < datos.length; i++) {
+                            modeloTablaCliente.addRow(new Object[]{
+                                    listadoCliente.getDni(),
+                                    listadoCliente.getNombre(),
+                                    listadoCliente.getApellidos(),
+                                    listadoCliente.getFechaNacimiento(),
+                                    listadoCliente.getProfesion(),
+                                    listadoCliente.getEstado()
 
-                            for (Cliente listadoCliente : listadoClientes) {
 
-                                datos[i][5] = new String[]{
-                                        listadoCliente.getDni(),
-                                        listadoCliente.getNombre(),
-                                        listadoCliente.getApellidos(),
-                                        listadoCliente.getFechaNacimiento(),
-                                        listadoCliente.getProfesion(),
-                                        listadoCliente.getEstado()
-                                };
+                            });
 
-                            }
+                            tablaClientes.setModel(modeloTablaCliente);
 
                         }
 
-                       /* JTabbedPane jTabbedPane = new JTabbedPane();
-                        jTabbedPane.addTab("Listado", CoresAlternadas(defaultTableModel));
-                        add(jTabbedPane);*/
-
-
-
-                        DefaultTableModel defaultTableModel = new DefaultTableModel(datos, nombreColumnas) {
-                            @Override
-                            public Class getColumnClass(int column) {
-                                return getValueAt(0, column).getClass();
-                            }
-
-                        };
                         break;
 
                     case 2:
@@ -507,4 +493,5 @@ public class clienteVentana extends JFrame {
             }
         });
     }
+
 }
