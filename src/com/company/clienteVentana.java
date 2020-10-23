@@ -1,20 +1,20 @@
 package com.company;
 
 import Clases.Cliente;
-import Clases.Empleado;
 import DB4O.ModeloCliente;
-import DB4O.ModeloEmpleado;
 import MySql.MySqlConexion;
 import MySql.MySqlControladorCliente;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class clienteVentana extends JFrame {
     private JButton guardarButton;
@@ -31,6 +31,7 @@ public class clienteVentana extends JFrame {
     private JLabel lAltaBaja;
     private JTable table1;
     private JPanel jpTabla;
+    private JButton bLimpiar;
 
     private String estadoCliente;
 
@@ -77,6 +78,7 @@ public class clienteVentana extends JFrame {
                             tfApellidos.setText("");
                             tfNacimiento.setText("");
                             tfProfesion.setText("");
+                            lAltaBaja.setText("");
 
                             JOptionPane.showMessageDialog(null, mensaje, "Informacion Guardado",
                                     JOptionPane.INFORMATION_MESSAGE);
@@ -102,6 +104,7 @@ public class clienteVentana extends JFrame {
                                 tfApellidos.setText("");
                                 tfNacimiento.setText("");
                                 tfProfesion.setText("");
+                                lAltaBaja.setText("");
 
                             }
 
@@ -139,10 +142,10 @@ public class clienteVentana extends JFrame {
                 } else {
 
 
-                  //Se recogen los datos de los input para borrar
-                  String dni = tfDni.getText();
+                    //Se recogen los datos de los input para borrar
+                    String dni = tfDni.getText();
 
-                   //Se crea el objeto para enviar a eliminar
+                    //Se crea el objeto para enviar a eliminar
                     Cliente cliente = new Cliente(dni, null, null, null,
                             null, "baja", null);
 
@@ -156,6 +159,7 @@ public class clienteVentana extends JFrame {
                             tfApellidos.setText("");
                             tfNacimiento.setText("");
                             tfProfesion.setText("");
+                            lAltaBaja.setText("");
 
                             JOptionPane.showMessageDialog(null, mensaje, "Informacion Eliminado",
                                     JOptionPane.INFORMATION_MESSAGE);
@@ -274,7 +278,7 @@ public class clienteVentana extends JFrame {
 
         /**
          *
-         * BOTON BUSCAR CLIENTE
+         * BOTON BUSCAR CLIENTE POR DNI
          *
          */
         buscarButton.addActionListener(new ActionListener() {
@@ -303,8 +307,7 @@ public class clienteVentana extends JFrame {
                                 tfApellidos.setText(c.getApellidos());
                                 tfNacimiento.setText(c.getFechaNacimiento());
                                 tfProfesion.setText(c.getProfesion());
-                                estadoCliente = c.getEstado();
-
+                                lAltaBaja.setText(c.getEstado());
                                 actualizarButton.setEnabled(true);
 
                             } else {
@@ -364,6 +367,95 @@ public class clienteVentana extends JFrame {
 
             }
 
+        });
+
+        /**
+         *
+         * BOTON PARA LIMPIAR EL FORMULARIO
+         *
+         */
+        bLimpiar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tfDni.setText("");
+                tfNombre.setText("");
+                tfApellidos.setText("");
+                tfNacimiento.setText("");
+                tfProfesion.setText("");
+                lAltaBaja.setText("");
+            }
+        });
+
+        /**
+         *
+         * BOTON GENERA LISTADO DE CLIENTES
+         *
+         */
+        listadoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                //Se recogen los datos de los input para posible actualizacion
+                String dni = tfDni.getText();
+                String nombre = tfNombre.getText();
+                String apellidos = tfApellidos.getText();
+                String nacimiento = tfNacimiento.getText();
+                String profesion = tfProfesion.getText();
+
+                Cliente cli = new Cliente(dni, nombre, apellidos, nacimiento, profesion, null);
+
+                switch (opcion) {
+
+                    case 1:
+                        //todo opcion DB4O listado todos los clientes
+                        List<Cliente> listadoClientes = ModeloCliente.mostrar();
+
+                        Object[] nombreColumnas = {"Dni", "Nombre", "Apellidos", "F. Nacimiento", "Profesion", "Estado"};
+
+                        Object[][] datos = new Object[listadoClientes.size()][5];
+
+                        for (int i = 0; i < datos.length; i++) {
+
+                            for (Cliente listadoCliente : listadoClientes) {
+
+                                datos[i][5] = new String[]{
+                                        listadoCliente.getDni(),
+                                        listadoCliente.getNombre(),
+                                        listadoCliente.getApellidos(),
+                                        listadoCliente.getFechaNacimiento(),
+                                        listadoCliente.getProfesion(),
+                                        listadoCliente.getEstado()
+                                };
+
+                            }
+
+                        }
+
+                       /* JTabbedPane jTabbedPane = new JTabbedPane();
+                        jTabbedPane.addTab("Listado", CoresAlternadas(defaultTableModel));
+                        add(jTabbedPane);*/
+
+
+
+                        DefaultTableModel defaultTableModel = new DefaultTableModel(datos, nombreColumnas) {
+                            @Override
+                            public Class getColumnClass(int column) {
+                                return getValueAt(0, column).getClass();
+                            }
+
+                        };
+                        break;
+
+                    case 2:
+                        //todo opcion sqlite listado todos los Clientes
+                        break;
+
+                    case 3:
+                        //todo opcion mysql listado todos los clientes
+                        break;
+                }
+
+            }
         });
     }
 }
