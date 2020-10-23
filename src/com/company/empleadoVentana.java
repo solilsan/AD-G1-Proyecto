@@ -6,7 +6,6 @@ import MySql.MySqlConexion;
 import MySql.MySqlControladorCliente;
 import MySql.MySqlControladorEmpleado;
 import SQLite.ControladorEmpleado;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class empleadoVentana extends JFrame {
+
   private JPanel panel1;
   private JTextField tfDni;
   private JTextField tfNombre;
@@ -227,53 +227,52 @@ public class empleadoVentana extends JFrame {
             break;
         }
 
+            }
+        });
 
-      }
-    });
 
+        /**
+         *
+         * BOTON LISTAR TODOS LOS EMPLEADOS
+         *
+         */
+        listadoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-    /**
-     *
-     * BOTON LISTAR TODOS LOS EMPLEADOS
-     *
-     */
-    listadoButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-
-        List<Empleado> empleados =  ModeloEmpleado.mostrar();
+                List<Empleado> empleados = ModeloEmpleado.mostrar();
 
         /*for (int i = 0; i < empleados.size(); i++) {
           listado.setValueAt(empleados.get(i).getNombre(),i,i);
         }*/
 
-        String[] titulos = {"Dni", "Nombre", "Apellidos"};
+                String[] titulos = {"Dni", "Nombre", "Apellidos"};
 
-        Object[][] datosFila = {
-                {"35575600M","Santi","Gonzalez"},
-                {"35575601Y","Pablo","Gonzalez"}
-        };
+                Object[][] datosFila = {
+                        {"35575600M", "Santi", "Gonzalez"},
+                        {"35575601Y", "Pablo", "Gonzalez"}
+                };
 
-        rellenaTabla(empleados);
+                rellenaTabla(empleados);
 
-        //listado.getColumnModel().getColumn(0).setCellRenderer(new GestionCeldas("numerico"));
-
-
-      }
-    });
-  }
+                //listado.getColumnModel().getColumn(0).setCellRenderer(new GestionCeldas("numerico"));
 
 
-  private Object[][] rellenaTabla(List<Empleado> empleados){
-
-    String[][] datos = new String[empleados.size()][];
-
-    for (int i = 0; i < datos.length; i++) {
-      datos[i][0] = empleados.get(i).getDni();
-      datos[i][1] = empleados.get(i).getNombre();
-      datos[i][2] = empleados.get(i).getApellidos();
+            }
+        });
     }
-    return datos;
-  }
+
+
+    private Object[][] rellenaTabla(List<Empleado> empleados) {
+
+        String[][] datos = new String[empleados.size()][];
+
+        for (int i = 0; i < datos.length; i++) {
+            datos[i][0] = empleados.get(i).getDni();
+            datos[i][1] = empleados.get(i).getNombre();
+            datos[i][2] = empleados.get(i).getApellidos();
+        }
+        return datos;
+    }
 
 }
