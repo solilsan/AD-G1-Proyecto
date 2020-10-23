@@ -4,7 +4,8 @@ import Clases.Cliente;
 import DB4O.ModeloCliente;
 import MySql.MySqlConexion;
 import MySql.MySqlControladorCliente;
-
+import SQLite.ControladorCliente;
+import javax.naming.ldap.Control;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -12,9 +13,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class clienteVentana extends JFrame {
     private JButton guardarButton;
@@ -85,7 +89,16 @@ public class clienteVentana extends JFrame {
                             break;
 
                         case 2://OPCION SQLITE
-                            //todo opcion sqlite guardado
+                            Boolean exito = ControladorCliente.insertCliente(cliente);
+
+                            if (exito){
+                                JOptionPane.showMessageDialog(null, "Informacion Guardada.", "Informacion Guardado",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            }else{
+                                JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
+                                                "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
+                                        JOptionPane.WARNING_MESSAGE);
+                            }
                             break;
 
                         case 3://OPCION MYSQL
@@ -166,7 +179,17 @@ public class clienteVentana extends JFrame {
                             break;
 
                         case 2://OPCION SQLITE
-                            //todo opcion sqlite borrado
+                            Boolean exito = ControladorCliente.darBajaCliente(cliente);
+
+
+                            if (exito){
+                                JOptionPane.showMessageDialog(null, "Cliente dado de baja.", "Informacion Baja",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            }else{
+                                JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
+                                                "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
+                                        JOptionPane.WARNING_MESSAGE);
+                            }
                             break;
 
                         case 3://OPCION MYSQL
@@ -237,7 +260,17 @@ public class clienteVentana extends JFrame {
                             break;
 
                         case 2://OPCION SQLITE
-                            //todo opcion sqlite actulizar
+                            Boolean exito = ControladorCliente.updateCliente(cliente);
+
+                            if (exito){
+                                JOptionPane.showMessageDialog(null, "Cliente Actualizado con Exito.", "Informacion Actualizada",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            }else{
+                                JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
+                                                "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
+                                        JOptionPane.WARNING_MESSAGE);
+                            }
+
                             break;
 
                         case 3://OPCION MYSQL
@@ -321,7 +354,23 @@ public class clienteVentana extends JFrame {
                             break;
 
                         case 2://OPCION SQLITE
-                            //todo opcion sqlite buscar
+                            ArrayList<Cliente> cli = ControladorCliente.selectWhereDni(dni);
+
+                            if (cli.size() > 0){
+                                Cliente cl = cli.get(0);
+
+                                tfDni.setText(cl.getDni());
+                                tfNombre.setText(cl.getNombre());
+                                tfApellidos.setText(cl.getApellidos());
+                                tfNacimiento.setText(cl.getFechaNacimiento());
+                                tfProfesion.setText(cl.getProfesion());
+                                estadoCliente = cl.getEstado();
+
+                                actualizarButton.setEnabled(true);
+                            }else {
+                                JOptionPane.showMessageDialog(null, "No se ha encontrado el cliente", "Error",
+                                        JOptionPane.WARNING_MESSAGE);
+                            }
                             break;
 
                         case 3://OPCION MYSQL

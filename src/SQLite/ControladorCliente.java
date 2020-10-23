@@ -3,6 +3,7 @@ package SQLite;
 import Clases.Cliente;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class ControladorCliente extends Conexion {
@@ -44,13 +45,19 @@ public class ControladorCliente extends Conexion {
 
 
         try {
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+            java.util.Date fecha_nac = format.parse(objCliente.getFechaNacimiento());
+            java.sql.Date fecha_nac_sqlDate = new java.sql.Date(fecha_nac.getTime());
+
+
             PreparedStatement sentencia = conn.prepareStatement(query);
 
             // Introducimos los datos
             sentencia.setString(1, objCliente.getDni());
             sentencia.setString(2, objCliente.getNombre());
             sentencia.setString(3, objCliente.getApellidos());
-            sentencia.setDate(4, Date.valueOf(objCliente.getFechaNacimiento()));
+            sentencia.setDate(4, fecha_nac_sqlDate);
             sentencia.setString(5, objCliente.getProfesion());
             sentencia.setString(6, objCliente.getEstado());
 
@@ -60,7 +67,7 @@ public class ControladorCliente extends Conexion {
             if (res > 0) {
                 return true;
             }
-        } catch (SQLException throwables) {
+        } catch (Exception throwables) {
             throwables.printStackTrace();
         }
 
@@ -68,7 +75,7 @@ public class ControladorCliente extends Conexion {
         return false;
     }
 
-    public static ArrayList<Cliente> selectWhere(/*String parametro,*/ String tiene) {
+    public static ArrayList<Cliente> selectWhereDni(/*String parametro,*/ String tiene) {
         Connection conn = conn();
         ArrayList<Cliente> listaClientes = new ArrayList<>();
         //String query = "SELECT * FROM CLIENTES WHERE "+ parametro +" = ?";
@@ -163,7 +170,7 @@ public class ControladorCliente extends Conexion {
         return false;
     }
 
-    public static boolean updateUnCampo(Cliente objCliente){
+    public static boolean updateCliente(Cliente objCliente){
         Connection conn = conn();
         String query = "UPDATE CLIENTES SET NOMBRE = ?, APELLIDO = ?, FECHA_NAC = ?, PROFESION = ?, ESTADO = ? WHERE DNI = ?";
 
