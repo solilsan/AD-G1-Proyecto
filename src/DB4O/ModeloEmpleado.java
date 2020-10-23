@@ -26,7 +26,8 @@ public class ModeloEmpleado {
         return ControladorEmpleado.mostrarEmpleados();
     }
 
-    public static boolean login(){return true;}
+    //public static boolean login(String dni, String contrasinal){return ControladorEmpleado.login(dni, contrasinal);}
 
+    public static boolean login(String dni, String contrasinal){return true;}
 
 }

@@ -108,7 +108,7 @@ public class principalVentana extends JFrame {
                         JLabelError.setText("Introduce una contraseña por favor.");
                     } else {
 
-                        if (ModeloEmpleado.login()) {
+                        if (ModeloEmpleado.login(textFieldDni.getText(),new String(passwordField1.getPassword()))) {
                             //ha podido logearse
                             JLabelError.setText("");
 
@@ -123,7 +123,7 @@ public class principalVentana extends JFrame {
                             dispose();
 
                         }else{
-                            System.out.println("Login Fallido");
+                            System.out.println("Usuario o contraseña incorrectos.");
                             //No ha podido logearse
                         }
 
