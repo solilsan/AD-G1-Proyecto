@@ -2,6 +2,7 @@ package SQLite;
 
 import Clases.Empleado;
 import Clases.Empleado;
+import EDU.purdue.cs.bloat.tree.ReturnAddressExpr;
 
 import java.sql.*;
 import java.text.ParseException;
@@ -10,6 +11,46 @@ import java.util.ArrayList;
 import java.sql.*;
 
 public class ControladorEmpleado extends Conexion{
+
+    public static boolean login(String username, String password) {
+        Connection conn = conn();
+
+        // Comprobamos que la conexion haya tenido exito.
+        // Si sale null es que ha habido un error.
+        if (conn != null) {
+            String query = "SELECT COUNT(*) AS EXISTE FROM EMPLEADOS WHERE DNI = ? AND PASSWORD = ?";
+
+            try {
+                PreparedStatement sentencia = conn.prepareStatement(query);
+
+                // Introducimos los datos
+                sentencia.setString(1, username);
+                sentencia.setString(2, password);
+
+
+                ResultSet rs = sentencia.executeQuery();
+
+
+                int existe = 0;
+                while (rs.next()){
+                    existe = rs.getInt("EXISTE");
+                }
+
+                rs.close();
+                conn.close();
+
+                // Si existe, esta variable sera mayor de cero.
+                if (existe > 0){
+                    return true;
+                }
+
+            } catch (SQLException throwables) {
+                System.out.println("[SQLite - ControladorEmpleado] Login Error: \n " +
+                        throwables.getMessage());
+            }
+        }
+        return false;
+    }
 
     public static ArrayList<Empleado> selectAll() {
         Connection conn = conn();
