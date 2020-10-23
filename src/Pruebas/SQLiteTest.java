@@ -14,7 +14,7 @@ public class SQLiteTest {
         //darClienteDeBaja();
        // selectAllClientes();
        // darClienteDeAlta();
-        actualizarUnoWhere();
+       // actualizarUnoWhere();
 
     }
 
@@ -41,8 +41,8 @@ public class SQLiteTest {
 
     }
 
-    public static void selectWhereCliente(){
-        ArrayList<Cliente> clientes = ControladorCliente.selectWhere("dfd");
+    public static void selectWhereCliente() {
+        /*ArrayList<Cliente> clientes = ControladorCliente.selectWhere("dfd");
 
         // Comprobamos que no el array list no esta vacio
         if (!clientes.isEmpty()){
@@ -57,9 +57,9 @@ public class SQLiteTest {
         }else{
             System.out.println("[SQLite - Select All] La tabla esta vacia, o ha ocurrido un error.");
         }
-    }
+    }*/
 
-    public static void darClienteDeBaja(){
+    /*public static void darClienteDeBaja(){
         ControladorCliente.darBajaCliente(new Cliente("123asd",null,null,null,null,null,null));
     }
 
@@ -70,6 +70,6 @@ public class SQLiteTest {
     public static void actualizarUnoWhere(){
 
         ControladorCliente.updateUnCampo(new Cliente("123asd","pepe1","dfd","2020-03-03","una profesion","activo", null));
+    }*/
     }
-
 }
