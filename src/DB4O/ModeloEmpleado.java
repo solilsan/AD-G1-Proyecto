@@ -7,27 +7,37 @@ import java.util.List;
 
 public class ModeloEmpleado {
 
-    public static String guardar(Empleado emp) {
+  public static String guardar(Empleado emp) {
 
-        return ControladorEmpleado.guardaEmpleado(emp);
-    }
+    return ControladorEmpleado.guardaEmpleado(emp);
+  }
 
-    public static String eliminar(Empleado emp) {
-        return ControladorEmpleado.eliminaEmpleado(emp);
-    }
+  public static String eliminar(Empleado emp) {
+    return ControladorEmpleado.eliminaEmpleado(emp);
+  }
 
-    public static String actualiza(Empleado emp) {
-        return ControladorEmpleado.actualizaEmpleado(emp);
-    }
+  public static String actualiza(Empleado emp) {
 
-    public static Empleado buscar(String dni){return ControladorEmpleado.buscaEmpleado(dni);}
+    Empleado e = buscar(emp.getDni());
 
-    public static List<Empleado> mostrar() {
-        return ControladorEmpleado.mostrarEmpleados();
-    }
+    //si no ha escrito nada en la contraseña le dejo la que tenia puesta
+    if (emp.getPassword().length() < 1) emp.setPassword(e.getPassword());
 
-    //public static boolean login(String dni, String contrasinal){return ControladorEmpleado.login(dni, contrasinal);}
+    return ControladorEmpleado.actualizaEmpleado(emp);
+  }
 
-    public static boolean login(String dni, String contrasinal){return true;}
+  public static Empleado buscar(String dni) {
+    return ControladorEmpleado.buscaEmpleado(dni);
+  }
+
+  public static List<Empleado> mostrar() {
+    return ControladorEmpleado.mostrarEmpleados();
+  }
+
+  //public static boolean login(String dni, String contrasinal){return ControladorEmpleado.login(dni, contrasinal);}
+
+  public static boolean login(String dni, String contrasinal) {
+    return true;
+  }
 
 }
