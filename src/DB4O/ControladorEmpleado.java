@@ -108,7 +108,7 @@ public class ControladorEmpleado {
 
     public static String actualizaEmpleado(Empleado e) {
 
-        String mensaje = e.getNombre() + "Actualizado!";
+        String mensaje = e.getNombre() + " Actualizado!";
 
         //Conexion con la base de datos
         ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), BD);
@@ -148,12 +148,16 @@ public class ControladorEmpleado {
         return mensaje;
     }
 
+    /**
+     *
+     * Devuelve true si puede hacer login o false si no puede
+     *
+     */
     public static boolean login(String dni, String contrasinal){
-        boolean acceso = false;
 
         Empleado empleado = buscaEmpleado(dni);
 
-        if (empleado == null) return acceso;
+        if (empleado == null) return false;
 
         return empleado.getPassword().equals(contrasinal);
     }
