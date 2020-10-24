@@ -258,7 +258,7 @@ public class clienteVentana extends JFrame {
               break;
 
             case 2://OPCION SQLITE
-              Boolean exito = ControladorCliente.updateCliente(cliente);
+              boolean exito = ControladorCliente.updateCliente(cliente);
 
               if (exito) {
                 JOptionPane.showMessageDialog(null, "Cliente Actualizado con Exito.", "Informacion Actualizada",
@@ -342,12 +342,9 @@ public class clienteVentana extends JFrame {
                 actualizarButton.setEnabled(true);
 
               } else {
-
                 JOptionPane.showMessageDialog(null, "Cliente no encontrado", "Información.",
                     JOptionPane.INFORMATION_MESSAGE);
-
               }
-
 
               break;
 
