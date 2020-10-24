@@ -261,59 +261,57 @@ public class empleadoVentana extends JFrame {
      * BOTON LISTAR TODOS LOS EMPLEADOS
      *
      */
-    listadoButton.addActionListener(new
+    listadoButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
 
-                                        ActionListener() {
-                                          @Override
-                                          public void actionPerformed(ActionEvent e) {
+        DefaultTableModel modeloTablaEmpleado = new DefaultTableModel();
 
-                                            DefaultTableModel modeloTablaEmpleado = new DefaultTableModel();
+        modeloTablaEmpleado.setColumnIdentifiers(new Object[]{
+            "Dni",
+            "Nombre",
+            "Apellidos",
+            "F. Nacimiento",
+            "F. Contrato",
+            "Nacionalidad",
+            "Cargo"});
 
-                                            modeloTablaEmpleado.setColumnIdentifiers(new Object[]{
-                                                "Dni",
-                                                "Nombre",
-                                                "Apellidos",
-                                                "F. Nacimiento",
-                                                "F. Contrato",
-                                                "Nacionalidad",
-                                                "Cargo"});
+        switch (opcion) {
+          case 1:
+            //todo opcion DB4O listado todos los Empleados
+            List<Empleado> listadoEmpleados = ModeloEmpleado.mostrar();
 
-                                            switch (opcion) {
-                                              case 1:
-                                                //todo opcion DB4O listado todos los Empleados
-                                                List<Empleado> listadoEmpleados = ModeloEmpleado.mostrar();
+            if (listadoEmpleados.size() > 0)
+              tablaPanel.setVisible(true);
 
-                                                if (listadoEmpleados.size() > 0)
-                                                  tablaPanel.setVisible(true);
+            for (Empleado listadoEmpleado : listadoEmpleados) {
 
-                                                for (Empleado listadoEmpleado : listadoEmpleados) {
+              modeloTablaEmpleado.addRow(new Object[]{
+                  listadoEmpleado.getDni(),
+                  listadoEmpleado.getNombre(),
+                  listadoEmpleado.getApellidos(),
+                  listadoEmpleado.getFechaNacimiento(),
+                  listadoEmpleado.getFechaContratacion(),
+                  listadoEmpleado.getNacionalidad(),
+                  listadoEmpleado.getCargo()
+              });
 
-                                                  modeloTablaEmpleado.addRow(new Object[]{
-                                                      listadoEmpleado.getDni(),
-                                                      listadoEmpleado.getNombre(),
-                                                      listadoEmpleado.getApellidos(),
-                                                      listadoEmpleado.getFechaNacimiento(),
-                                                      listadoEmpleado.getFechaContratacion(),
-                                                      listadoEmpleado.getNacionalidad(),
-                                                      listadoEmpleado.getCargo()
-                                                  });
+              listado.setModel(modeloTablaEmpleado);
 
-                                                  listado.setModel(modeloTablaEmpleado);
+            }
+            break;
 
-                                                }
-                                                break;
+          case 2:
+            //todo opcion sqlite listado todos los Empleados
+            break;
 
-                                              case 2:
-                                                //todo opcion sqlite listado todos los Empleados
-                                                break;
+          case 3:
+            //todo opcion mysql listado todos los Empleados
+            break;
+        }
 
-                                              case 3:
-                                                //todo opcion mysql listado todos los Empleados
-                                                break;
-                                            }
-
-                                          }
-                                        });
+      }
+    });
 
 
     /**
