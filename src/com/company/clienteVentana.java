@@ -7,6 +7,8 @@ import MySql.MySqlControladorCliente;
 import SQLite.ControladorCliente;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -489,17 +491,87 @@ public class clienteVentana extends JFrame {
 
             break;
 
-          case 2:
-            //todo opcion sqlite listado todos los Clientes
-            break;
+
+                    case 2:
+                        //todo opcion sqlite listado todos los Clientes
+                        ArrayList<Cliente> listaClientes = ControladorCliente.selectAll();
+
+
+                        if (listaClientes.size() > 0)
+                            jpTabla.setVisible(true);
+
+                        for (Cliente listadoCliente : listaClientes) {
+
+                            modeloTablaCliente.addRow(new Object[]{
+                                    listadoCliente.getNombre(),
+                                    listadoCliente.getApellidos(),
+                                    listadoCliente.getFechaNacimiento(),
+                                    listadoCliente.getProfesion(),
+                                    listadoCliente.getEstado()
+
+
+                            });
+
+                            tablaClientes.setModel(modeloTablaCliente);
+
+                        }
+                        break;
 
           case 3:
             //todo opcion mysql listado todos los clientes
             break;
         }
 
-      }
-    });
-  }
+            }
+        });
+
+
+        /**
+         *
+         * RELLENAR FORMULARIO AL CLICKAR EN TABLA
+         * 
+         */
+        tablaClientes.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (tablaClientes.getSelectedRow() >= 0){
+                    String dni = tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 0).toString();
+
+
+                    switch (opcion){
+                        case 1:
+                            //TODO: Añadir peticion a la base de datos
+                            break;
+
+                        case 2:
+                            ArrayList<Cliente> cli = ControladorCliente.selectWhereDni(dni);
+
+                            if (cli.size() > 0) {
+                                Cliente cl = cli.get(0);
+
+                                tfDni.setText(cl.getDni());
+                                tfNombre.setText(cl.getNombre());
+                                tfApellidos.setText(cl.getApellidos());
+                                tfNacimiento.setText(cl.getFechaNacimiento());
+                                tfProfesion.setText(cl.getProfesion());
+                                estadoCliente = cl.getEstado();
+
+                                actualizarButton.setEnabled(true);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "No se ha encontrado el cliente", "Error",
+                                        JOptionPane.WARNING_MESSAGE);
+                            }
+                            break;
+
+                        case 3:
+                            //TODO: Añadir peticion a la base de datos
+                            break;
+                    }
+
+                }
+            }
+        });
+
+    }
 
 }
