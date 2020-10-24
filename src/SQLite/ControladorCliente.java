@@ -185,10 +185,15 @@ public class ControladorCliente extends Conexion {
         try {
             PreparedStatement sentencia = conn.prepareStatement(query);
 
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+            java.util.Date fecha_nac = format.parse(objCliente.getFechaNacimiento());
+            java.sql.Date fecha_nac_sqlDate = new java.sql.Date(fecha_nac.getTime());
+
             // Introducimos los datos
             sentencia.setString(1, objCliente.getNombre());
             sentencia.setString(2, objCliente.getApellidos());
-            sentencia.setString(3, objCliente.getFechaNacimiento());
+            sentencia.setDate(3, fecha_nac_sqlDate);
             sentencia.setString(4, objCliente.getProfesion());
             sentencia.setString(5, objCliente.getEstado());
             sentencia.setString(6, objCliente.getDni());
@@ -199,7 +204,7 @@ public class ControladorCliente extends Conexion {
             if (res > 0) {
                 return true;
             }
-        } catch (SQLException throwables) {
+        } catch (Exception throwables) {
             throwables.printStackTrace();
         }
 
