@@ -3,6 +3,7 @@ package com.company;
 import DB4O.ModeloEmpleado;
 import MySql.MySqlConexion;
 import MySql.MySqlControladorEmpleado;
+import SQLite.ControladorEmpleado;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -131,6 +132,27 @@ public class principalVentana extends JFrame {
 
                 // SQLite Login
                 if (radioButtonSQLite.isSelected()) {
+
+                    if (textFieldDni.getText().isEmpty()){
+                        JLabelError.setText("Introduce un DNI valido.");
+                    }else if (passwordField1.getText().isEmpty()){
+                        JLabelError.setText("Introduce una contraseña.");
+                    }else{
+                        // Miramos si los datos son validos
+                        Boolean resultado = ControladorEmpleado.login(textFieldDni.getText(), passwordField1.getText());
+
+                        if(resultado){
+                            // Crear la nueva venta para abrir
+                            menuSeleccion menu = new menuSeleccion(2);
+                            menu.setLocationRelativeTo(null);
+                            menu.setVisible(true);
+                            // Cerrar ventana actual
+                            dispose();
+                        }else{
+                               JLabelError.setText("ERROR: El usuario o la contraseña son incorrectos.");
+                        }
+                    }
+
 
                 }
 
