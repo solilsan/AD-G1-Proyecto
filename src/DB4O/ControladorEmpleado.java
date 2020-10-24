@@ -147,4 +147,14 @@ public class ControladorEmpleado {
         db.close();
         return mensaje;
     }
+
+    public static boolean login(String dni, String contrasinal){
+        boolean acceso = false;
+
+        Empleado empleado = buscaEmpleado(dni);
+
+        if (empleado == null) return acceso;
+
+        return empleado.getPassword().equals(contrasinal);
+    }
 }

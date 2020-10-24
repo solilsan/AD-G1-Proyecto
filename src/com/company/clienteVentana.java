@@ -448,7 +448,6 @@ public class clienteVentana extends JFrame {
 
                 Cliente cli = new Cliente(dni, nombre, apellidos, nacimiento, profesion, null);
 
-                //pra revisar
                 DefaultTableModel modeloTablaCliente = new DefaultTableModel();
 
                 modeloTablaCliente.setColumnIdentifiers(new Object[]{"Dni", "Nombre", "Apellidos", "F. Nacimiento", "Profesion", "Estado"});
