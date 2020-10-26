@@ -3,6 +3,7 @@ package com.company;
 import Clases.Empleado;
 import Clases.Visita;
 import DB4O.ModeloEmpleado;
+import DB4O.ModeloVisita;
 import MySql.MySqlConexion;
 import MySql.MySqlControladorEmpleado;
 import SQLite.ControladorEmpleado;
@@ -62,6 +63,7 @@ public class visitaVentana extends JFrame {
         float coste = 0;
         int aforo = 0;
 
+        //SE VALIDA QUE NO ESTEN VACIOS LOS CAMPOS
         if (tfId.getText().isEmpty() ||
           tfNombre.getText().isEmpty() ||
           tfAforo.getText().isEmpty() ||
@@ -72,14 +74,15 @@ public class visitaVentana extends JFrame {
           cbEmpleado.getSelectedIndex() < 0 ||
           tfFecha.getText().isEmpty()) {
 
-
+          //error campos obligatorios no estan rellenos
           JOptionPane.showMessageDialog(null, "Faltan campos por rellenar.", "Informacion Guardado",
             JOptionPane.INFORMATION_MESSAGE);
-        } else {
 
-          boolean correcto = true;
+        } else {//campos estan rellenos
 
+          boolean falloTipoDato = true;
 
+          //SE VALIDA QUE EL TIPO DE DATO ES EL CORRECTO
           try {
 
             id = Integer.parseInt(tfId.getText());
@@ -87,32 +90,48 @@ public class visitaVentana extends JFrame {
             aforo = Integer.parseInt(tfAforo.getText());
 
           } catch (NumberFormatException numberFormatException) {
-            correcto = false;
+            falloTipoDato = false;
           }
-
-          String nombre = tfNombre.getText();
-          String partida = tfPartida.getText();
-          String curso = tfCurso.getText();
-          String tematica = tfTematica.getText();
-          Empleado empleado = empleados.get(cbEmpleado.getSelectedIndex() - 1);
-          String fechaHora = tfFecha.getText();
 
           //TODO validaciones
 
-          Visita visita = new Visita(id,nombre,aforo,partida,curso,tematica,coste,"alta",fechaHora,empleado);
+          if (falloTipoDato){
 
-          switch (opcion) {
-            case 1://OPCION DB4O
-              //TODO Guarda visita DB4O
-              break;
+            //error al hacer la conversion de tipo de dato
+            JOptionPane.showMessageDialog(null, "Faltan campos por rellenar.", "Informacion Guardado",
+              JOptionPane.INFORMATION_MESSAGE);
 
-            case 2://OPCION SQLITE
-              //TODO Guarda visita SQLITE
-              break;
+          }else {//AQUI HA SALIDO BIEN Y SE PUEDE HACER EL GUARDADO
 
-            case 3://OPCION MYSQL
-              //TODO Guarda visita MYSQL
-              break;
+            String nombre = tfNombre.getText();
+            String partida = tfPartida.getText();
+            String curso = tfCurso.getText();
+            String tematica = tfTematica.getText();
+            Empleado empleado = empleados.get(cbEmpleado.getSelectedIndex() - 1);
+            String fechaHora = tfFecha.getText();
+
+            //ESTE ES EL OBJETO VISITA A GUARDAR
+            Visita visita = new Visita(id, nombre, aforo, partida, curso, tematica, coste, "alta", fechaHora, empleado);
+
+            switch (opcion) {
+
+              case 1://OPCION DB4O
+                String mensaje = ModeloVisita.guardar(visita);
+
+                JOptionPane.showMessageDialog(null, mensaje, "Informacion Guardado",
+                  JOptionPane.INFORMATION_MESSAGE);
+
+                break;
+
+              case 2://OPCION SQLITE
+                //TODO Guarda visita SQLITE
+                break;
+
+              case 3://OPCION MYSQL
+                //TODO Guarda visita MYSQL
+                break;
+            }
+
           }
 
         }
