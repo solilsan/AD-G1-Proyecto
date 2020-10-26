@@ -34,6 +34,15 @@ public class ModeloEmpleado {
     return ControladorEmpleado.mostrarEmpleados();
   }
 
+  public static List<Empleado> mostrarEmpleadosAlta() {
+
+    List<Empleado> empleados = ControladorEmpleado.mostrarEmpleados();
+
+    empleados.removeIf(empleado -> empleado.getEstado().equals("baja"));
+
+    return empleados;
+  }
+
   //public static boolean login(String dni, String contrasinal){return ControladorEmpleado.login(dni, contrasinal);}
 
   public static boolean login(String dni, String contrasinal) {
