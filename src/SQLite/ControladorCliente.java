@@ -3,6 +3,7 @@ package SQLite;
 import Clases.Cliente;
 
 import java.sql.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -23,7 +24,7 @@ public class ControladorCliente extends Conexion {
 
                 while (rs.next()) {
                     resultado.add(new Cliente(rs.getString("DNI"), rs.getString("NOMBRE"),
-                            rs.getString("APELLIDO"), rs.getDate("FECHA_NAC").toString(),
+                            rs.getString("APELLIDO"), reformatearFechas(rs.getDate("FECHA_NAC").toString()),
                             rs.getString("PROFESION"), rs.getString("ESTADO"), null));
                 }
 
@@ -45,19 +46,13 @@ public class ControladorCliente extends Conexion {
 
 
         try {
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-
-            java.util.Date fecha_nac = format.parse(objCliente.getFechaNacimiento());
-            java.sql.Date fecha_nac_sqlDate = new java.sql.Date(fecha_nac.getTime());
-
-
             PreparedStatement sentencia = conn.prepareStatement(query);
 
             // Introducimos los datos
             sentencia.setString(1, objCliente.getDni());
             sentencia.setString(2, objCliente.getNombre());
             sentencia.setString(3, objCliente.getApellidos());
-            sentencia.setDate(4, fecha_nac_sqlDate);
+            sentencia.setDate(4, formatearFechaDb(objCliente.getFechaNacimiento()));
             sentencia.setString(5, objCliente.getProfesion());
             sentencia.setString(6, objCliente.getEstado());
 
@@ -91,7 +86,7 @@ public class ControladorCliente extends Conexion {
 
             while (rs.next()) {
                 listaClientes.add(new Cliente(rs.getString("DNI"), rs.getString("NOMBRE"),
-                        rs.getString("APELLIDO"), rs.getDate("FECHA_NAC").toString(),
+                        rs.getString("APELLIDO"), reformatearFechas(rs.getDate("FECHA_NAC").toString()),
                         rs.getString("PROFESION"), rs.getString("ESTADO"), null));
             }
 
@@ -185,15 +180,10 @@ public class ControladorCliente extends Conexion {
         try {
             PreparedStatement sentencia = conn.prepareStatement(query);
 
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-
-            java.util.Date fecha_nac = format.parse(objCliente.getFechaNacimiento());
-            java.sql.Date fecha_nac_sqlDate = new java.sql.Date(fecha_nac.getTime());
-
             // Introducimos los datos
             sentencia.setString(1, objCliente.getNombre());
             sentencia.setString(2, objCliente.getApellidos());
-            sentencia.setDate(3, fecha_nac_sqlDate);
+            sentencia.setDate(3, formatearFechaDb(objCliente.getFechaNacimiento()));
             sentencia.setString(4, objCliente.getProfesion());
             sentencia.setString(5, objCliente.getEstado());
             sentencia.setString(6, objCliente.getDni());
@@ -210,5 +200,27 @@ public class ControladorCliente extends Conexion {
 
         // Si hemos llegado aqui, es que algo malo ha pasado.
         return false;
+    }
+
+    private static String reformatearFechas(String fecha){
+        String dia = fecha.substring(8, 10);
+        String mes = fecha.substring(5, 7);
+        String anio = fecha.substring(0, 4);
+
+        return (dia + "/" + mes + "/" + anio);
+    }
+
+    private static Date formatearFechaDb(String fecha){
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+        java.util.Date fecha_nac = null;
+        try {
+            fecha_nac = format.parse(fecha);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        java.sql.Date fecha_sqlDate = new java.sql.Date(fecha_nac.getTime());
+
+        return fecha_sqlDate;
     }
 }
