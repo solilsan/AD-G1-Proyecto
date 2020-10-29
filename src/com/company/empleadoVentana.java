@@ -305,7 +305,28 @@ public class empleadoVentana extends JFrame {
             break;
 
           case 2:
-            //todo opcion sqlite listado todos los Empleados
+            ArrayList<Empleado> listaEmpleados = ControladorEmpleado.selectAll();
+
+
+            if (listaEmpleados.size() > 0)
+              tablaPanel.setVisible(true);
+
+            for (Empleado listadoEmpleado : listaEmpleados) {
+
+              modeloTablaEmpleado.addRow(new Object[]{
+                      listadoEmpleado.getDni(),
+                      listadoEmpleado.getNombre(),
+                      listadoEmpleado.getApellidos(),
+                      listadoEmpleado.getFechaNacimiento(),
+                      listadoEmpleado.getFechaContratacion(),
+                      listadoEmpleado.getNacionalidad(),
+                      listadoEmpleado.getCargo(),
+                      listadoEmpleado.getEstado()
+              });
+
+              listado.setModel(modeloTablaEmpleado);
+
+            }
             break;
 
           case 3:
@@ -366,7 +387,26 @@ public class empleadoVentana extends JFrame {
               break;
 
             case 2://OPCION SQLITE
-              //todo Codigo sqlite
+              ArrayList<Empleado> emple =  ControladorEmpleado.selectByDni(dni);
+
+              if (emple.size() > 0){
+                emp = emple.get(0);
+
+                tfDni.setText(emp.getDni());
+                tfNombre.setText(emp.getNombre());
+                tfApellidos.setText(emp.getApellidos());
+                tfNacimiento.setText(emp.getFechaNacimiento());
+                tfContratacion.setText(emp.getFechaContratacion());
+                tfNacionalidad.setText(emp.getNacionalidad());
+                tfCargo.setText(emp.getCargo());
+                lEstado.setText(emp.getEstado());
+
+                actualizarButton.setEnabled(true);
+              }else {
+                JOptionPane.showMessageDialog(null, "No se ha encontrado el empleado", "Error",
+                        JOptionPane.WARNING_MESSAGE);
+              }
+
               break;
 
             case 3://OPCION MYSQL
@@ -437,7 +477,24 @@ public class empleadoVentana extends JFrame {
               break;
 
             case 2:
-              //TODO: Añadir peticion a la base de datos
+              ArrayList<Empleado> emple = ControladorEmpleado.selectByDni(dni);
+
+              if (emple.size() > 0) {
+                Empleado emp = emple.get(0);
+
+                tfDni.setText(emp.getDni());
+                tfNombre.setText(emp.getNombre());
+                tfApellidos.setText(emp.getApellidos());
+                tfNacimiento.setText(emp.getFechaNacimiento());
+                tfContratacion.setText(emp.getFechaContratacion());
+                tfNacionalidad.setText(emp.getNacionalidad());
+                tfCargo.setText(emp.getCargo());
+
+                actualizarButton.setEnabled(true);
+              } else {
+                JOptionPane.showMessageDialog(null, "No se ha encontrado el empleado", "Error",
+                        JOptionPane.WARNING_MESSAGE);
+              }
               break;
 
             case 3:

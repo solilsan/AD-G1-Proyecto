@@ -488,7 +488,6 @@ public class clienteVentana extends JFrame {
             break;
 
           case 2:
-            //todo opcion sqlite listado todos los Clientes
             ArrayList<Cliente> listaClientes = ControladorCliente.selectAll();
 
 
