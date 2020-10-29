@@ -305,22 +305,23 @@ public class empleadoVentana extends JFrame {
             break;
 
           case 2:
-            ArrayList<Cliente> listaClientes = ControladorCliente.selectAll();
+            ArrayList<Empleado> listaEmpleados = ControladorEmpleado.selectAll();
 
 
-            if (listaClientes.size() > 0)
+            if (listaEmpleados.size() > 0)
               tablaPanel.setVisible(true);
 
-            for (Cliente listadoCliente : listaClientes) {
+            for (Empleado listadoEmpleado : listaEmpleados) {
 
               modeloTablaEmpleado.addRow(new Object[]{
-                      listadoCliente.getNombre(),
-                      listadoCliente.getApellidos(),
-                      listadoCliente.getFechaNacimiento(),
-                      listadoCliente.getProfesion(),
-                      listadoCliente.getEstado()
-
-
+                      listadoEmpleado.getDni(),
+                      listadoEmpleado.getNombre(),
+                      listadoEmpleado.getApellidos(),
+                      listadoEmpleado.getFechaNacimiento(),
+                      listadoEmpleado.getFechaContratacion(),
+                      listadoEmpleado.getNacionalidad(),
+                      listadoEmpleado.getCargo(),
+                      listadoEmpleado.getEstado()
               });
 
               listado.setModel(modeloTablaEmpleado);
@@ -401,6 +402,9 @@ public class empleadoVentana extends JFrame {
                 lEstado.setText(emp.getEstado());
 
                 actualizarButton.setEnabled(true);
+              }else {
+                JOptionPane.showMessageDialog(null, "No se ha encontrado el empleado", "Error",
+                        JOptionPane.WARNING_MESSAGE);
               }
 
               break;
@@ -473,7 +477,24 @@ public class empleadoVentana extends JFrame {
               break;
 
             case 2:
-              //TODO: Añadir peticion a la base de datos
+              ArrayList<Empleado> emple = ControladorEmpleado.selectByDni(dni);
+
+              if (emple.size() > 0) {
+                Empleado emp = emple.get(0);
+
+                tfDni.setText(emp.getDni());
+                tfNombre.setText(emp.getNombre());
+                tfApellidos.setText(emp.getApellidos());
+                tfNacimiento.setText(emp.getFechaNacimiento());
+                tfContratacion.setText(emp.getFechaContratacion());
+                tfNacionalidad.setText(emp.getNacionalidad());
+                tfCargo.setText(emp.getCargo());
+
+                actualizarButton.setEnabled(true);
+              } else {
+                JOptionPane.showMessageDialog(null, "No se ha encontrado el empleado", "Error",
+                        JOptionPane.WARNING_MESSAGE);
+              }
               break;
 
             case 3:
