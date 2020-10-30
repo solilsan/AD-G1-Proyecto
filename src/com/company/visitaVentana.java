@@ -7,6 +7,7 @@ import DB4O.ModeloVisita;
 import MySql.MySqlConexion;
 import MySql.MySqlControladorEmpleado;
 import SQLite.ControladorEmpleado;
+import SQLite.ControladorVisita;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -124,7 +125,16 @@ public class visitaVentana extends JFrame {
                 break;
 
               case 2://OPCION SQLITE
-                //TODO Guarda visita SQLITE
+                Boolean exito = ControladorVisita.insertVisita(visita);
+
+                if (exito) {
+                  JOptionPane.showMessageDialog(null, "Visita Guardada con Exito.", "Informacion Guardada",
+                          JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                  JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
+                                  "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
+                          JOptionPane.WARNING_MESSAGE);
+                }
                 break;
 
               case 3://OPCION MYSQL
