@@ -214,6 +214,42 @@ public class visitaVentana extends JFrame {
 
       }
     });
+
+    /**
+     *
+     * BOTON ACTUALIZAR VISITA
+     *
+     */
+    actualizarButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        // TODO: completar
+      }
+    });
+
+    /**
+     *
+     * BOTON LISTAR VISITAS
+     *
+     */
+    listadoButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        // TODO: completar
+      }
+    });
+
+    /**
+     *
+     * BOTON BUSCAR VISITA
+     *
+     */
+    buscarButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        // TODO: completar
+      }
+    });
   }
 
   private void rellenaEmpleados(int opcion) {
