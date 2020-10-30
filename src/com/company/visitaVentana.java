@@ -167,6 +167,50 @@ public class visitaVentana extends JFrame {
     eliminarButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
+        boolean error = false;
+        int idVisita = -1;
+
+        if (tfId.getText().isEmpty()){
+            error = true;
+        }else {
+          try {
+            idVisita = Integer.parseInt(tfId.getText());
+          } catch (NumberFormatException numberFormatException) {
+            error = true;
+          }
+        }
+
+        if (!error){
+
+          switch (opcion){
+
+            case 1:
+              // TODO: Añadir DB4O Eliminar Visita
+              break;
+
+            case 2:
+              Boolean exito = ControladorVisita.darBajaVisita(idVisita);
+
+              if (exito) {
+                JOptionPane.showMessageDialog(null, "Visita Eliminada con Exito.", "Informacion Guardada",
+                        JOptionPane.INFORMATION_MESSAGE);
+              } else {
+                JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
+                                "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
+                        JOptionPane.WARNING_MESSAGE);
+              }
+              break;
+
+            case 3:
+              // TODO: Añadir MYSQL Eliminar Visita
+              break;
+
+          }
+
+        }else {
+          JOptionPane.showMessageDialog(null, "Faltan campos por rellenar.", "Informacion Guardado",
+                  JOptionPane.INFORMATION_MESSAGE);
+        }
 
       }
     });
