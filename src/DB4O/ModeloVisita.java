@@ -24,5 +24,7 @@ public class ModeloVisita {
         return ControladorVisita.mostrarVisistas();
     }
 
+    public static List<Visita> mostrarVisitasAlta() {return ControladorVisita.mostrarVisitasAlta();}
+
 
 }

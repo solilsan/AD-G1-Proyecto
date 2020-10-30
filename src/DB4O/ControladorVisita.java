@@ -98,6 +98,29 @@ public class ControladorVisita {
             //Se recorren todos los clientes de la base de datos
             while (resultado.hasNext()) {
                 Visita visita = resultado.next();
+                    listaVisitas.add(visita);
+            }
+        }
+
+        db.close();
+        return listaVisitas;
+    }
+
+    public static List<Visita> mostrarVisitasAlta(){
+
+        List<Visita> listaVisitas = new ArrayList<>();
+
+        //Conexion con la base de datos
+        ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), BD);
+
+        //se obtienen todos los clientes que coincidan con los datos del objeto (deberian ser todos)
+        ObjectSet<Visita> resultado = db.queryByExample(new Visita(null, null, null,
+            null, null, null, null, null, null,null));
+
+        if (resultado.size() > 0) {
+            //Se recorren todos los clientes de la base de datos
+            while (resultado.hasNext()) {
+                Visita visita = resultado.next();
                 if (visita.getEstado().equals("alta"))
                     listaVisitas.add(visita);
             }

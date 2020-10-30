@@ -11,7 +11,8 @@ public class menuSeleccion extends JFrame{
     private JButton metadatosButton;
     private JPanel panel1;
     private JPanel panel2;
-    private int tipoDB;
+  private JButton inscripcionesButton;
+  private int tipoDB;
 
 
     public menuSeleccion(int tipoDB){
@@ -71,6 +72,15 @@ public class menuSeleccion extends JFrame{
             }
         });
 
+      inscripcionesButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Inscripciones ventana = new Inscripciones(tipoDB);
+            ventana.setLocationRelativeTo(null);
+            ventana.setVisible(true);
+
+        }
+      });
     }
 
 }
