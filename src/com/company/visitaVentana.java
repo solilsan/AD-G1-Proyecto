@@ -95,7 +95,7 @@ public class visitaVentana extends JFrame {
 
           //TODO validaciones
 
-          if (falloTipoDato){
+          if (!falloTipoDato){
 
             //error al hacer la conversion de tipo de dato
             JOptionPane.showMessageDialog(null, "Faltan campos por rellenar.", "Informacion Guardado",
@@ -149,8 +149,25 @@ public class visitaVentana extends JFrame {
 
       }
     });
+
+    /**
+     *
+     * BOTON QUE ACTLIZA LA VISTA
+     *
+     */
+    actualizarButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+
+      }
+    });
   }
 
+  /**
+   *
+   * Funcion que se encarga de generar la lista para rellenar el desplegable
+   *
+   */
   private void rellenaEmpleados(int opcion) {
 
     switch (opcion) {
