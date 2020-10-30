@@ -4,6 +4,8 @@ import Clases.Empleado;
 import Clases.Visita;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class ControladorVisita extends Conexion{
@@ -26,7 +28,7 @@ public class ControladorVisita extends Conexion{
                             rs.getInt("N_MAX_CLI"), rs.getString("PUNTO_PARTIDA"),
                             rs.getString("CURSO_ACADEMICO"), rs.getString("TEMATICA"),
                             rs.getFloat("COSTE"), rs.getString("ESTADO"),
-                            rs.getDate("FECHA_HORA").toString(), ControladorEmpleado.selectByDni(rs.getString("DNI_EMPLEADO")).get(0)));
+                            reformatearFechas(rs.getDate("FECHA_HORA").toString()), ControladorEmpleado.selectByDni(rs.getString("DNI_EMPLEADO")).get(0)));
                 }
 
                 conn.close();
@@ -59,7 +61,7 @@ public class ControladorVisita extends Conexion{
             sentencia.setFloat(7, objVisita.getCoste());
             sentencia.setString(8, objVisita.getEstado());
             sentencia.setString(9, objVisita.getEmpleado().getDni());
-            //sentencia.setDate(10, Date.valueOf(objVisita.get)); // Pendiente de actualiza la clase empleado.
+            sentencia.setDate(10, formatearFechaDb(objVisita.getFecha_hora())); // Pendiente de actualiza la clase empleado.
 
             // Ejecutamos la sentencia
             Integer res = sentencia.executeUpdate();
@@ -94,7 +96,7 @@ public class ControladorVisita extends Conexion{
                         rs.getInt("N_MAX_CLI"), rs.getString("PUNTO_PARTIDA"),
                         rs.getString("CURSO_ACADEMICO"), rs.getString("TEMATICA"),
                         rs.getFloat("COSTE"), rs.getString("ESTADO"),
-                        rs.getDate("FECHA_HORA").toString(), ControladorEmpleado.selectByDni(rs.getString("DNI_EMPLEADO")).get(0)));
+                        reformatearFechas(rs.getDate("FECHA_HORA").toString()), ControladorEmpleado.selectByDni(rs.getString("DNI_EMPLEADO")).get(0)));
             }
 
             return listaVisitas;
@@ -173,7 +175,7 @@ public class ControladorVisita extends Conexion{
             sentencia.setFloat(7, objVisita.getCoste());
             sentencia.setString(8, objVisita.getEstado());
             sentencia.setString(9, objVisita.getEmpleado().getDni());
-            //sentencia.setDate(10, Date.valueOf(objVisita.get)); // Pendiente de actualiza la clase empleado.
+            sentencia.setDate(10, formatearFechaDb(objVisita.getFecha_hora()));
 
             // Ejecutamos la sentencia
             Integer res = sentencia.executeUpdate();
@@ -187,6 +189,28 @@ public class ControladorVisita extends Conexion{
 
         // Si hemos llegado aqui, es que algo malo ha pasado.
         return false;
+    }
+
+    private static String reformatearFechas(String fecha){
+        String dia = fecha.substring(8, 10);
+        String mes = fecha.substring(5, 7);
+        String anio = fecha.substring(0, 4);
+
+        return (dia + "/" + mes + "/" + anio);
+    }
+
+    private static Date formatearFechaDb(String fecha){
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+        java.util.Date fecha_nac = null;
+        try {
+            fecha_nac = format.parse(fecha);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        java.sql.Date fecha_sqlDate = new java.sql.Date(fecha_nac.getTime());
+
+        return fecha_sqlDate;
     }
 
 }
