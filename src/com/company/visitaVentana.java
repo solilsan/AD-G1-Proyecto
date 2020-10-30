@@ -250,8 +250,25 @@ public class visitaVentana extends JFrame {
         // TODO: completar
       }
     });
+
+    /**
+     *
+     * BOTON QUE ACTLIZA LA VISTA
+     *
+     */
+    actualizarButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+
+      }
+    });
   }
 
+  /**
+   *
+   * Funcion que se encarga de generar la lista para rellenar el desplegable
+   *
+   */
   private void rellenaEmpleados(int opcion) {
 
     switch (opcion) {

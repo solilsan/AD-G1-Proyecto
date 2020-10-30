@@ -177,7 +177,7 @@ public class clienteVentana extends JFrame {
               break;
 
             case 2://OPCION SQLITE
-              Boolean exito = ControladorCliente.darBajaCliente(cliente);
+              boolean exito = ControladorCliente.darBajaCliente(cliente);
 
 
               if (exito) {
