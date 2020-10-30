@@ -110,15 +110,15 @@ public class ControladorVisita extends Conexion{
      * ESTA FUNCION, Y LA DE ALTA, SE PODRIAN FUSIONAR EN UNA
      * TODO: POSIBLE OPTIMIZACION.
      */
-    public static boolean darBajaVisita(Visita objVisita){
+    public static boolean darBajaVisita(int idVisita){
         Connection conn = conn();
-        String query = "UPDATE VISITAS SET ESTADO = 'baja' WHERE DNI = ?";
+        String query = "UPDATE VISITAS SET ESTADO = 'baja' WHERE ID = ?";
 
         try {
             PreparedStatement sentencia = conn.prepareStatement(query);
 
             // Introducimos los datos
-            sentencia.setInt(1, objVisita.getId());
+            sentencia.setInt(1, idVisita);
 
             // Ejecutamos la sentencia
             Integer res = sentencia.executeUpdate();
@@ -134,15 +134,15 @@ public class ControladorVisita extends Conexion{
         return false;
     }
 
-    public static boolean darAltaVisita(Visita objVisita){
+    public static boolean darAltaVisita(int idVisita){
         Connection conn = conn();
-        String query = "UPDATE VISITAS SET ESTADO = 'alta' WHERE DNI = ?";
+        String query = "UPDATE VISITAS SET ESTADO = 'alta' WHERE ID = ?";
 
         try {
             PreparedStatement sentencia = conn.prepareStatement(query);
 
             // Introducimos los datos
-            sentencia.setInt(1, objVisita.getId());
+            sentencia.setInt(1, idVisita);
 
             // Ejecutamos la sentencia
             Integer res = sentencia.executeUpdate();
