@@ -75,6 +75,17 @@ public class visitaVentana extends JFrame {
           cbEmpleado.getSelectedIndex() < 0 ||
           tfFecha.getText().isEmpty()) {
 
+          /*System.out.println(tfId.getText() + "\n" +
+                  tfNombre.getText() + "\n" +
+                  tfAforo.getText() + "\n" +
+                  tfPartida.getText() + "\n" +
+                  tfCurso.getText() + "\n" +
+                  tfTematica.getText() + "\n" +
+                  tfCoste.getText() + "\n" +
+                  cbEmpleado.getSelectedIndex() + "\n" +
+                  tfFecha.getText());*/
+
+
           //error campos obligatorios no estan rellenos
           JOptionPane.showMessageDialog(null, "Faltan campos por rellenar.", "Informacion Guardado",
             JOptionPane.INFORMATION_MESSAGE);
@@ -96,7 +107,7 @@ public class visitaVentana extends JFrame {
 
           //TODO validaciones
 
-          if (falloTipoDato){
+          if (!falloTipoDato){
 
             //error al hacer la conversion de tipo de dato
             JOptionPane.showMessageDialog(null, "Faltan campos por rellenar.", "Informacion Guardado",
@@ -170,7 +181,7 @@ public class visitaVentana extends JFrame {
         break;
 
       case 2://SQLITE
-        //TODO listado de empleados para el combobox sqlite
+        empleados = ControladorEmpleado.selectEmpActivo();
         break;
 
       case 3://MYSQL
