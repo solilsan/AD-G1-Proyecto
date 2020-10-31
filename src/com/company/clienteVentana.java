@@ -12,6 +12,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -177,7 +178,7 @@ public class clienteVentana extends JFrame {
               break;
 
             case 2://OPCION SQLITE
-              Boolean exito = ControladorCliente.darBajaCliente(cliente);
+              boolean exito = ControladorCliente.darBajaCliente(cliente);
 
 
               if (exito) {
@@ -387,6 +388,7 @@ public class clienteVentana extends JFrame {
                 tfNacimiento.setText(dia + "/" + mes + "/" + anno);
                 tfProfesion.setText(cliente.getProfesion());
                 estadoCliente = cliente.getEstado();
+                lAltaBaja.setText(estadoCliente);
 
                 actualizarButton.setEnabled(true);
 
@@ -513,7 +515,44 @@ public class clienteVentana extends JFrame {
 
           case 3:
             //todo opcion mysql listado todos los clientes
-            break;
+            Connection mysqlConn = MySqlConexion.connection();
+
+            ArrayList<Cliente> listaClientesMysql = MySqlControladorCliente.selectAll(mysqlConn);
+
+            if (listaClientesMysql != null) {
+
+              jpTabla.setVisible(true);
+
+              for (Cliente listadoCliente : listaClientesMysql) {
+
+                modeloTablaCliente.addRow(new Object[]{
+                        listadoCliente.getDni(),
+                        listadoCliente.getNombre(),
+                        listadoCliente.getApellidos(),
+                        listadoCliente.getFechaNacimiento(),
+                        listadoCliente.getProfesion(),
+                        listadoCliente.getEstado()
+
+
+                });
+
+                tablaClientes.setModel(modeloTablaCliente);
+
+              }
+
+            } else {
+
+              JOptionPane.showMessageDialog(null, "No existen clientes", "Información.",
+                      JOptionPane.INFORMATION_MESSAGE);
+
+            }
+
+            try {
+              assert mysqlConn != null;
+              mysqlConn.close();
+            } catch (SQLException throwables) {
+              throwables.printStackTrace();
+            }
         }
 
       }
@@ -578,7 +617,40 @@ public class clienteVentana extends JFrame {
 
             case 3:
               //TODO: Añadir peticion a la base de datos
-              break;
+              Connection mysqlConn = MySqlConexion.connection();
+
+              Cliente cliente = MySqlControladorCliente.selectWithDni(mysqlConn, dni);
+
+              if (cliente != null) {
+
+                tfDni.setText(cliente.getDni());
+                tfNombre.setText(cliente.getNombre());
+                tfApellidos.setText(cliente.getApellidos());
+
+                String dia = cliente.getFechaNacimiento().substring(8, 10);
+                String mes = cliente.getFechaNacimiento().substring(5, 7);
+                String anno = cliente.getFechaNacimiento().substring(0, 4);
+
+                tfNacimiento.setText(dia + "/" + mes + "/" + anno);
+                tfProfesion.setText(cliente.getProfesion());
+                estadoCliente = cliente.getEstado();
+                lAltaBaja.setText(estadoCliente);
+
+                actualizarButton.setEnabled(true);
+
+              } else {
+
+                JOptionPane.showMessageDialog(null, "Cliente no encontrado", "Información.",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+              }
+
+              try {
+                assert mysqlConn != null;
+                mysqlConn.close();
+              } catch (SQLException throwables) {
+                throwables.printStackTrace();
+              }
           }
 
         }

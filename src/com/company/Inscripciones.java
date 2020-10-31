@@ -1,90 +1,238 @@
 package com.company;
 
+import Clases.Cliente;
 import Clases.Empleado;
 import Clases.Visita;
+import DB4O.ModeloCliente;
 import DB4O.ModeloEmpleado;
 import DB4O.ModeloVisita;
 import SQLite.ControladorEmpleado;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Inscripciones extends JFrame {
-  private JPanel jpPrincipal;
-  private JPanel jpVisitas;
-  private JPanel jpApuntados;
-  private JPanel jpDisponibles;
-  private JTable visitasTabla;
-  private JTable inscritosTabla;
-  private JPanel jplstados;
-  private JButton apuntarButton;
-  private JButton desapuntarButton;
-  private JTable disponiblesTabla;
-  private JPanel jpbotonera;
+    private JPanel jpPrincipal;
+    private JPanel jpVisitas;
+    private JPanel jpApuntados;
+    private JPanel jpDisponibles;
+    private JTable visitasTabla;
+    private JTable inscritosTabla;
+    private JPanel jplstados;
+    private JButton apuntarButton;
+    private JButton desapuntarButton;
+    private JTable disponiblesTabla;
+    private JPanel jpbotonera;
 
-  //variable global de lista de empleados
-  private static List<Visita> visitas = new ArrayList<>();
+    //variable global de lista de empleados
+    private static List<Visita> visitas = new ArrayList<>();
 
-  public Inscripciones(int opcion) {
+    public Inscripciones(int opcion) {
 
-    add(jpPrincipal);
+        add(jpPrincipal);
 
-    setTitle("Gestión de Empleados");
+        setTitle("Gestión de Empleados");
 
-    setSize(700, 500);
+        setSize(700, 500);
 
-    cargarVisitas(opcion);
-  }
+        cargarVisitas(opcion);
+        cargarClientes(opcion);
 
-  private void cargarVisitas(int opcion) {
+        /**
+         *
+         * Rellena la lista de apuntados al clicar en la visita
+         *
+         */
+        visitasTabla.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (visitasTabla.getSelectedRow() >= 0) {
+                    String id = visitasTabla.getValueAt(visitasTabla.getSelectedRow(), 0).toString();
 
-    DefaultTableModel modeloTablaEmpleado = new DefaultTableModel();
+                    DefaultTableModel modeloTablaClientes = new DefaultTableModel();
 
-    modeloTablaEmpleado.setColumnIdentifiers(new Object[]{
-        "Id",
-        "Nombre",
-        "Aforo",
-        "Partida",
-        "Temática",
-        "Coste",
-        "Fecha"
-    });
+                    modeloTablaClientes.setColumnIdentifiers(new Object[]{
+                            "Dni",
+                            "Nombre",
+                            "Apellidos",
+                            "Fecha de Nacimiento",
+                            "Profesion"
+                    });
 
-    switch (opcion) {
-      case 1://DB4O
-        List<Visita> listadoVisitas = ModeloVisita.mostrarVisitasAlta();
+                    switch (opcion) {
 
-        if (listadoVisitas.size() > 0)
-          jpVisitas.setVisible(true);
+                        case 1:
 
-        for (Visita listadoVisita : listadoVisitas) {
+                            int identificador = -1;
 
-          modeloTablaEmpleado.addRow(new Object[]{
-              listadoVisita.getNombre(),
-              listadoVisita.getNmaxCli(),
-              listadoVisita.getPuntoPartida(),
-              listadoVisita.getTematica(),
-              listadoVisita.getCoste(),
-              listadoVisita.getFecha_hora()
-          });
+                            try {
+                                identificador = Integer.parseInt(id);
+                            } catch (NumberFormatException numberFormatException) {
+                                numberFormatException.printStackTrace();
+                            }
 
-          visitasTabla.setModel(modeloTablaEmpleado);
+                            //peticion a la base de datos rellena datos DB4O
+                            Visita v = ModeloVisita.buscar(identificador);
 
+                            if (v.getClientes().size() > 0) {
+
+                                for (Cliente cliente : v.getClientes()) {
+
+                                    modeloTablaClientes.addRow(new Object[]{
+                                            cliente.getDni(),
+                                            cliente.getNombre(),
+                                            cliente.getApellidos(),
+                                            cliente.getFechaNacimiento(),
+                                            cliente.getProfesion()
+                                    });
+
+                                    disponiblesTabla.setModel(modeloTablaClientes);
+                                }
+
+                            } else {
+                                JOptionPane.showMessageDialog(null,
+                                        "No se ha encontrado ningún cliente apuntado", "Error", JOptionPane.WARNING_MESSAGE);
+                            }
+
+
+                            break;
+
+                        case 2://SQLITE
+                            //TODO Se utiliza modeloTablaClientes para rellenar las filas de los apuntados a esa visita
+                            break;
+
+                        case 3://MYSQL
+                            //TODO Se utiliza modeloTablaClientes para rellenar las filas de los apuntados a esa visita
+                            break;
+
+                    }
+                }
+            }
+        });
+
+
+        /**
+         *
+         * Funcion que se encarga de apuntar a los clientes a una visita
+         *
+         */
+        apuntarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+
+    }//Fin del constructor
+
+
+    /**
+     * Función que carga la lista de clientes activas en la tabla
+     */
+    private void cargarClientes(int opcion) {
+        DefaultTableModel modeloTablaClientes = new DefaultTableModel();
+
+        modeloTablaClientes.setColumnIdentifiers(new Object[]{
+                "Dni",
+                "Nombre",
+                "Apellidos",
+                "Fecha de Nacimiento",
+                "Profesion"
+        });
+
+        switch (opcion) {
+            case 1://DB4O
+                List<Cliente> listadoClientes = ModeloCliente.mostrarClientesAlta();
+
+                if (listadoClientes.size() > 0)
+                    jpDisponibles.setVisible(true);
+
+                for (Cliente listadoCliente : listadoClientes) {
+
+                    modeloTablaClientes.addRow(new Object[]{
+                            listadoCliente.getDni(),
+                            listadoCliente.getNombre(),
+                            listadoCliente.getApellidos(),
+                            listadoCliente.getFechaNacimiento(),
+                            listadoCliente.getProfesion()
+                    });
+
+                    disponiblesTabla.setModel(modeloTablaClientes);
+
+                }
+                break;
+
+            case 2:
+                //todo opcion sqlite listado todos los clientes de alta
+                break;
+
+            case 3:
+                //todo opcion mysql listado todos los clientes de alta
+                break;
         }
-        break;
 
-      case 2:
-        //todo opcion sqlite listado todos las Visitas
-        break;
 
-      case 3:
-        //todo opcion mysql listado todos los Visitas
-        break;
     }
 
+    /**
+     * Función que carga la lista de visitas activas en la tabla
+     */
+    private void cargarVisitas(int opcion) {
 
-  }
+        DefaultTableModel modeloTablaVisitas = new DefaultTableModel();
+
+        modeloTablaVisitas.setColumnIdentifiers(new Object[]{
+                "Id",
+                "Nombre",
+                "Aforo",
+                "Partida",
+                "Temática",
+                "Coste",
+                "Fecha"
+        });
+
+        switch (opcion) {
+            case 1://DB4O
+                List<Visita> listadoVisitas = ModeloVisita.mostrarVisitasAlta();
+
+                if (listadoVisitas.size() > 0)
+                    jpVisitas.setVisible(true);
+
+                for (Visita listadoVisita : listadoVisitas) {
+
+                    modeloTablaVisitas.addRow(new Object[]{
+                            listadoVisita.getId(),
+                            listadoVisita.getNombre(),
+                            listadoVisita.getNmaxCli(),
+                            listadoVisita.getPuntoPartida(),
+                            listadoVisita.getTematica(),
+                            listadoVisita.getCoste(),
+                            listadoVisita.getFecha_hora()
+                    });
+
+                    visitasTabla.setModel(modeloTablaVisitas);
+
+                }
+                break;
+
+            case 2:
+                //todo opcion sqlite listado todos las Visitas
+                break;
+
+            case 3:
+                //todo opcion mysql listado todos los Visitas
+                break;
+        }
+
+
+    }
 
 }

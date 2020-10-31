@@ -24,5 +24,14 @@ public class ModeloCliente {
         return ControladorCliente.mostrarClientes();
     }
 
+    public static List<Cliente> mostrarClientesAlta(){
+
+        List<Cliente> clientes = ControladorCliente.mostrarClientes();
+
+        clientes.removeIf(cliente -> cliente.getEstado().equals("baja"));
+
+        return clientes;
+    }
+
 
 }
