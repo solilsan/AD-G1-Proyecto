@@ -77,17 +77,17 @@ public class ControladorVisita extends Conexion{
         return false;
     }
 
-    public static ArrayList<Visita> selectWhere(/*String parametro,*/ String tiene) {
+    public static ArrayList<Visita> selectWhere(int id) {
         Connection conn = conn();
         ArrayList<Visita> listaVisitas = new ArrayList<>();
         //String query = "SELECT * FROM VISITAS WHERE "+ parametro +" = ?";
-        String query = "SELECT * FROM VISITAS WHERE DNI = ?";
+        String query = "SELECT * FROM VISITAS WHERE ID = ?";
 
 
         try {
             PreparedStatement sentencia = conn.prepareStatement(query);
 
-            sentencia.setString(1, tiene);
+            sentencia.setInt(1, id);
 
             ResultSet rs = sentencia.executeQuery();
 
