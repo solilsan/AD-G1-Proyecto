@@ -438,6 +438,7 @@ public class visitaVentana extends JFrame {
                   tfTematica.setText(vi.getTematica());
                   tfCoste.setText(String.valueOf(vi.getCoste()));
                   tfFecha.setText(vi.getFecha_hora());
+                  cbEmpleado.setSelectedIndex(posicionEmpleadoCombo(vi.getEmpleado().getDni()));
 
                 } else {
                   JOptionPane.showMessageDialog(null, "No se ha encontrado el empleado", "Error",
@@ -469,7 +470,7 @@ public class visitaVentana extends JFrame {
 
         switch (opcion) {
           case 1:
-
+            // TODO: DB4O
             break;
 
           case 2:
@@ -486,6 +487,7 @@ public class visitaVentana extends JFrame {
               tfTematica.setText(vi.getTematica());
               tfCoste.setText(String.valueOf(vi.getCoste()));
               tfFecha.setText(vi.getFecha_hora());
+              cbEmpleado.setSelectedIndex(posicionEmpleadoCombo(vi.getEmpleado().getDni()));
             }
             break;
 
