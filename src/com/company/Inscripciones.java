@@ -110,6 +110,32 @@ public class Inscripciones extends JFrame {
 
                         case 2://SQLITE
                             //TODO Se utiliza modeloTablaClientes para rellenar las filas de los apuntados a esa visita
+                            int idVisita = -1;
+
+                            try {
+                                idVisita = Integer.parseInt(id);
+                            } catch (NumberFormatException numberFormatException) {
+                                numberFormatException.printStackTrace();
+                            }
+
+                            //peticion a la base de datos rellena datos DB4O
+                            ArrayList<Visita> visit = ControladorVisita.selectWhere(idVisita);
+
+                            if (visit.get(0).getClientes().size() > 0) {
+
+                                for (Cliente cliente : visit.get(0).getClientes()) {
+
+                                    modeloTinscritos.addRow(new Object[]{
+                                            cliente.getDni(),
+                                            cliente.getNombre(),
+                                            cliente.getApellidos(),
+                                            cliente.getFechaNacimiento(),
+                                            cliente.getProfesion()
+                                    });
+
+                                    inscritosTabla.setModel(modeloTinscritos);
+                                }
+                            }
                             break;
 
                         case 3://MYSQL
@@ -194,7 +220,36 @@ public class Inscripciones extends JFrame {
                             break;
 
                         case 2://SQLITE
-                            //todo apuntar este cliente a la visita y actualizar la tabla apuntados
+                            int idVisita = Integer.parseInt(id);
+
+                            boolean exito = ControladorVisita.addClienteVisita(dni, idVisita);
+
+                            if (exito) {
+                                JOptionPane.showMessageDialog(null, "Cliente Añadido con Exito.", "Informacion Actualizada",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
+                                                "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
+                                        JOptionPane.WARNING_MESSAGE);
+                            }
+
+                            /// CODIGO DE SUPERVIVENCIA
+                            Visita vis = ControladorVisita.selectWhere(idVisita).get(0);
+
+
+                            for (Cliente listCliente : vis.getClientes()) {
+
+                                modeloTablaClientes.addRow(new Object[]{
+                                        listCliente.getDni(),
+                                        listCliente.getNombre(),
+                                        listCliente.getApellidos(),
+                                        listCliente.getFechaNacimiento(),
+                                        listCliente.getProfesion()
+                                });
+
+                                inscritosTabla.setModel(modeloTablaClientes);
+                            }
+
                             break;
 
                         case 3://MYSQL
@@ -214,7 +269,17 @@ public class Inscripciones extends JFrame {
 
         });
 
+        /**
+         *
+         * BOTON DESAPUNTAR CLIENTE
+         *
+         */
+        desapuntarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
+            }
+        });
     }//Fin del constructor
 
 
