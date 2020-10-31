@@ -1,14 +1,11 @@
 package SQLite;
 
 import Clases.Empleado;
-import Clases.Empleado;
-import EDU.purdue.cs.bloat.tree.ReturnAddressExpr;
 
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.sql.*;
 
 public class ControladorEmpleado extends Conexion{
 
@@ -66,9 +63,11 @@ public class ControladorEmpleado extends Conexion{
                 ResultSet rs = stmt.executeQuery(query);
 
                 while (rs.next()) {
+
+
                     resultado.add(new Empleado(rs.getString("DNI"), rs.getString("NOMBRE"),
-                            rs.getString("APELLIDO"), rs.getDate("FECHA_NAC").toString(),
-                            rs.getDate("F_CONTRATACION").toString(), rs.getString("NACIONALIDAD"),
+                            rs.getString("APELLIDO"), reformatearFechas(rs.getDate("FECHA_NAC").toString()),
+                            reformatearFechas(rs.getDate("F_CONTRATACION").toString()), rs.getString("NACIONALIDAD"),
                             rs.getString("CARGO"), rs.getString("PASSWORD"), rs.getString("ESTADO")));
                 }
 
@@ -91,23 +90,14 @@ public class ControladorEmpleado extends Conexion{
         // Verificamos las fechas
         // TODO: Validar las fechas antes de meterlas a la base de datos.
         try {
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-
-            java.util.Date fecha_nac = format.parse(objEmpleado.getFechaNacimiento());
-            java.sql.Date fecha_nac_sqlDate = new java.sql.Date(fecha_nac.getTime());
-
-            java.util.Date f_contratacion = format.parse(objEmpleado.getFechaContratacion());
-            java.sql.Date f_contratacion_sqlDate = new java.sql.Date(f_contratacion.getTime());
-
-
             PreparedStatement sentencia = conn.prepareStatement(query);
 
             // Introducimos los datos
             sentencia.setString(1, objEmpleado.getDni());
             sentencia.setString(2, objEmpleado.getNombre());
             sentencia.setString(3, objEmpleado.getApellidos());
-            sentencia.setDate(4, fecha_nac_sqlDate);
-            sentencia.setDate(5, f_contratacion_sqlDate);
+            sentencia.setDate(4, formatearFechaDb(objEmpleado.getFechaNacimiento()));
+            sentencia.setDate(5, formatearFechaDb(objEmpleado.getFechaContratacion()));
             sentencia.setString(6, objEmpleado.getNacionalidad());
             sentencia.setString(7, objEmpleado.getCargo());
             sentencia.setString(8, objEmpleado.getPassword());
@@ -146,8 +136,8 @@ public class ControladorEmpleado extends Conexion{
 
             while (rs.next()) {
                 listaEmpleados.add(new Empleado(rs.getString("DNI"), rs.getString("NOMBRE"),
-                        rs.getString("APELLIDO"), rs.getDate("FECHA_NAC").toString(),
-                        rs.getDate("F_CONTRATACION").toString(), rs.getString("NACIONALIDAD"),
+                        rs.getString("APELLIDO"), reformatearFechas(rs.getDate("FECHA_NAC").toString()),
+                        reformatearFechas(rs.getDate("F_CONTRATACION").toString()), rs.getString("NACIONALIDAD"),
                         rs.getString("CARGO"), rs.getString("PASSWORD"), rs.getString("ESTADO")));
             }
 
@@ -242,15 +232,15 @@ public class ControladorEmpleado extends Conexion{
             PreparedStatement sentencia = conn.prepareStatement(query);
 
             // Introducimos los datos
-            sentencia.setString(1, objEmpleado.getDni());
-            sentencia.setString(2, objEmpleado.getNombre());
-            sentencia.setString(3, objEmpleado.getApellidos());
-            sentencia.setDate(4, Date.valueOf(objEmpleado.getFechaNacimiento()));
-            sentencia.setDate(5, Date.valueOf(objEmpleado.getFechaContratacion()));
-            sentencia.setString(6, objEmpleado.getNacionalidad());
-            sentencia.setString(7, objEmpleado.getCargo());
-            sentencia.setString(8, objEmpleado.getPassword());
-            sentencia.setString(9, objEmpleado.getEstado());
+            sentencia.setString(1, objEmpleado.getNombre());
+            sentencia.setString(2, objEmpleado.getApellidos());
+            sentencia.setDate(3, formatearFechaDb(objEmpleado.getFechaNacimiento()));
+            sentencia.setDate(4, formatearFechaDb(objEmpleado.getFechaContratacion()));
+            sentencia.setString(5, objEmpleado.getNacionalidad());
+            sentencia.setString(6, objEmpleado.getCargo());
+            sentencia.setString(7, objEmpleado.getPassword());
+            sentencia.setString(8, objEmpleado.getEstado());
+            sentencia.setString(9, objEmpleado.getDni());
 
             // Ejecutamos la sentencia
             Integer res = sentencia.executeUpdate();
@@ -264,6 +254,56 @@ public class ControladorEmpleado extends Conexion{
 
         // Si hemos llegado aqui, es que algo malo ha pasado.
         return false;
+    }
+
+    public static ArrayList<Empleado> selectEmpActivo(){
+        Connection conn = conn();
+        ArrayList<Empleado> listaEmpleados = new ArrayList<>();
+        //String query = "SELECT * FROM EMPLEADOS WHERE "+ parametro +" = ?";
+        String query = "SELECT * FROM EMPLEADOS WHERE ESTADO = ?";
+
+
+        try {
+            PreparedStatement sentencia = conn.prepareStatement(query);
+
+            sentencia.setString(1, "alta");
+
+            ResultSet rs = sentencia.executeQuery();
+
+            while (rs.next()) {
+                listaEmpleados.add(new Empleado(rs.getString("DNI"), rs.getString("NOMBRE"),
+                        rs.getString("APELLIDO"), reformatearFechas(rs.getDate("FECHA_NAC").toString()),
+                        reformatearFechas(rs.getDate("F_CONTRATACION").toString()), rs.getString("NACIONALIDAD"),
+                        rs.getString("CARGO"), rs.getString("PASSWORD"), rs.getString("ESTADO")));
+            }
+
+            return listaEmpleados;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return listaEmpleados;
+    }
+
+    private static String reformatearFechas(String fecha){
+        String dia = fecha.substring(8, 10);
+        String mes = fecha.substring(5, 7);
+        String anio = fecha.substring(0, 4);
+
+        return (dia + "/" + mes + "/" + anio);
+    }
+
+    private static Date formatearFechaDb(String fecha){
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+        java.util.Date fecha_nac = null;
+        try {
+            fecha_nac = format.parse(fecha);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        java.sql.Date fecha_sqlDate = new java.sql.Date(fecha_nac.getTime());
+
+        return fecha_sqlDate;
     }
 
 }
