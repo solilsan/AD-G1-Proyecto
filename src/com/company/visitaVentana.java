@@ -266,7 +266,7 @@ public class visitaVentana extends JFrame {
                                 boolean exito = ControladorVisita.updateVisita(visit);
 
                                 if (exito) {
-                                    JOptionPane.showMessageDialog(null, "Visita Eliminada con Exito.", "Informacion Guardada",
+                                    JOptionPane.showMessageDialog(null, "Visita Actualizada con Exito.", "Informacion Guardada",
                                             JOptionPane.INFORMATION_MESSAGE);
                                 } else {
                                     JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
