@@ -18,7 +18,7 @@ public class ModeloVisita {
         return ControladorVisita.actualizaVisita(vis);
     }
 
-    public static Visita buscar(Integer dni){return ControladorVisita.buscaVisista(dni);}
+    public static Visita buscar(Integer id){return ControladorVisita.buscaVisista(id);}
 
     public static List<Visita> mostrar() {
         return ControladorVisita.mostrarVisistas();
@@ -27,4 +27,5 @@ public class ModeloVisita {
     public static List<Visita> mostrarVisitasAlta() {return ControladorVisita.mostrarVisitasAlta();}
 
 
+    public static Visita apuntar(int id, String dni) {return ControladorVisita.apuntaCliente(id, dni);}
 }
