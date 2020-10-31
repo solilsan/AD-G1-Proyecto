@@ -77,17 +77,17 @@ public class ControladorVisita extends Conexion{
         return false;
     }
 
-    public static ArrayList<Visita> selectWhere(/*String parametro,*/ String tiene) {
+    public static ArrayList<Visita> selectWhere(int id) {
         Connection conn = conn();
         ArrayList<Visita> listaVisitas = new ArrayList<>();
         //String query = "SELECT * FROM VISITAS WHERE "+ parametro +" = ?";
-        String query = "SELECT * FROM VISITAS WHERE DNI = ?";
+        String query = "SELECT * FROM VISITAS WHERE ID = ?";
 
 
         try {
             PreparedStatement sentencia = conn.prepareStatement(query);
 
-            sentencia.setString(1, tiene);
+            sentencia.setInt(1, id);
 
             ResultSet rs = sentencia.executeQuery();
 
@@ -158,7 +158,7 @@ public class ControladorVisita extends Conexion{
         return false;
     }
 
-    public static boolean updateUnCampo(Visita objVisita){
+    public static boolean updateVisita(Visita objVisita){
         Connection conn = conn();
         String query = "UPDATE VISITAS SET NOMBRE = ?, N_MAX_CLI = ?, PUNTO_PARTIDA = ?, CURSO_ACADEMICO = ?, TEMATICA = ?, COSTE = ?, ESTADO = ?, DNI_EMPLEADO = ?, FECHA_HORA = ? WHERE ID = ?";
 
@@ -166,19 +166,19 @@ public class ControladorVisita extends Conexion{
             PreparedStatement sentencia = conn.prepareStatement(query);
 
             // Introducimos los datos
-            sentencia.setInt(1, objVisita.getId());
-            sentencia.setString(2, objVisita.getNombre());
-            sentencia.setInt(3, objVisita.getNmaxCli());
-            sentencia.setString(4, objVisita.getPuntoPartida());
-            sentencia.setString(5, objVisita.getCursoAcademico());
-            sentencia.setString(6, objVisita.getTematica());
-            sentencia.setFloat(7, objVisita.getCoste());
-            sentencia.setString(8, objVisita.getEstado());
-            sentencia.setString(9, objVisita.getEmpleado().getDni());
-            sentencia.setDate(10, formatearFechaDb(objVisita.getFecha_hora()));
+            sentencia.setString(1, objVisita.getNombre());
+            sentencia.setInt(2, objVisita.getNmaxCli());
+            sentencia.setString(3, objVisita.getPuntoPartida());
+            sentencia.setString(4, objVisita.getCursoAcademico());
+            sentencia.setString(5, objVisita.getTematica());
+            sentencia.setFloat(6, objVisita.getCoste());
+            sentencia.setString(7, objVisita.getEstado());
+            sentencia.setString(8, objVisita.getEmpleado().getDni());
+            sentencia.setDate(9, formatearFechaDb(objVisita.getFecha_hora()));
+            sentencia.setInt(10, objVisita.getId());
 
             // Ejecutamos la sentencia
-            Integer res = sentencia.executeUpdate();
+            int res = sentencia.executeUpdate();
 
             if (res > 0) {
                 return true;
