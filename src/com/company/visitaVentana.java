@@ -451,6 +451,7 @@ public class visitaVentana extends JFrame {
 
         //por defecto se deja el combo a la opcion vacio para que no salga por defecto la 1 opcion
         cbEmpleado.setSelectedItem(null);
+        
 
     }
 
