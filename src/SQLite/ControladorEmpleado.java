@@ -256,6 +256,34 @@ public class ControladorEmpleado extends Conexion{
         return false;
     }
 
+    public static ArrayList<Empleado> selectEmpActivo(){
+        Connection conn = conn();
+        ArrayList<Empleado> listaEmpleados = new ArrayList<>();
+        //String query = "SELECT * FROM EMPLEADOS WHERE "+ parametro +" = ?";
+        String query = "SELECT * FROM EMPLEADOS WHERE ESTADO = ?";
+
+
+        try {
+            PreparedStatement sentencia = conn.prepareStatement(query);
+
+            sentencia.setString(1, "alta");
+
+            ResultSet rs = sentencia.executeQuery();
+
+            while (rs.next()) {
+                listaEmpleados.add(new Empleado(rs.getString("DNI"), rs.getString("NOMBRE"),
+                        rs.getString("APELLIDO"), reformatearFechas(rs.getDate("FECHA_NAC").toString()),
+                        reformatearFechas(rs.getDate("F_CONTRATACION").toString()), rs.getString("NACIONALIDAD"),
+                        rs.getString("CARGO"), rs.getString("PASSWORD"), rs.getString("ESTADO")));
+            }
+
+            return listaEmpleados;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return listaEmpleados;
+    }
+
     private static String reformatearFechas(String fecha){
         String dia = fecha.substring(8, 10);
         String mes = fecha.substring(5, 7);

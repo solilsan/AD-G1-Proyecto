@@ -7,6 +7,7 @@ import DB4O.ModeloVisita;
 import MySql.MySqlConexion;
 import MySql.MySqlControladorEmpleado;
 import SQLite.ControladorEmpleado;
+import SQLite.ControladorVisita;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -74,6 +75,17 @@ public class visitaVentana extends JFrame {
           cbEmpleado.getSelectedIndex() < 0 ||
           tfFecha.getText().isEmpty()) {
 
+          /*System.out.println(tfId.getText() + "\n" +
+                  tfNombre.getText() + "\n" +
+                  tfAforo.getText() + "\n" +
+                  tfPartida.getText() + "\n" +
+                  tfCurso.getText() + "\n" +
+                  tfTematica.getText() + "\n" +
+                  tfCoste.getText() + "\n" +
+                  cbEmpleado.getSelectedIndex() + "\n" +
+                  tfFecha.getText());*/
+
+
           //error campos obligatorios no estan rellenos
           JOptionPane.showMessageDialog(null, "Faltan campos por rellenar.", "Informacion Guardado",
             JOptionPane.INFORMATION_MESSAGE);
@@ -124,7 +136,16 @@ public class visitaVentana extends JFrame {
                 break;
 
               case 2://OPCION SQLITE
-                //TODO Guarda visita SQLITE
+                Boolean exito = ControladorVisita.insertVisita(visita);
+
+                if (exito) {
+                  JOptionPane.showMessageDialog(null, "Visita Guardada con Exito.", "Informacion Guardada",
+                          JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                  JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
+                                  "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
+                          JOptionPane.WARNING_MESSAGE);
+                }
                 break;
 
               case 3://OPCION MYSQL
@@ -146,7 +167,87 @@ public class visitaVentana extends JFrame {
     eliminarButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
+        boolean error = false;
+        int idVisita = -1;
 
+        if (tfId.getText().isEmpty()){
+            error = true;
+        }else {
+          try {
+            idVisita = Integer.parseInt(tfId.getText());
+          } catch (NumberFormatException numberFormatException) {
+            error = true;
+          }
+        }
+
+        if (!error){
+
+          switch (opcion){
+
+            case 1:
+              // TODO: Añadir DB4O Eliminar Visita
+              break;
+
+            case 2:
+              Boolean exito = ControladorVisita.darBajaVisita(idVisita);
+
+              if (exito) {
+                JOptionPane.showMessageDialog(null, "Visita Eliminada con Exito.", "Informacion Guardada",
+                        JOptionPane.INFORMATION_MESSAGE);
+              } else {
+                JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
+                                "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
+                        JOptionPane.WARNING_MESSAGE);
+              }
+              break;
+
+            case 3:
+              // TODO: Añadir MYSQL Eliminar Visita
+              break;
+
+          }
+
+        }else {
+          JOptionPane.showMessageDialog(null, "Faltan campos por rellenar.", "Informacion Guardado",
+                  JOptionPane.INFORMATION_MESSAGE);
+        }
+
+      }
+    });
+
+    /**
+     *
+     * BOTON ACTUALIZAR VISITA
+     *
+     */
+    actualizarButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        // TODO: completar
+      }
+    });
+
+    /**
+     *
+     * BOTON LISTAR VISITAS
+     *
+     */
+    listadoButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        // TODO: completar
+      }
+    });
+
+    /**
+     *
+     * BOTON BUSCAR VISITA
+     *
+     */
+    buscarButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        // TODO: completar
       }
     });
 
@@ -177,7 +278,7 @@ public class visitaVentana extends JFrame {
         break;
 
       case 2://SQLITE
-        //TODO listado de empleados para el combobox sqlite
+        empleados = ControladorEmpleado.selectEmpActivo();
         break;
 
       case 3://MYSQL
