@@ -266,7 +266,7 @@ public class visitaVentana extends JFrame {
                                 boolean exito = ControladorVisita.updateVisita(visit);
 
                                 if (exito) {
-                                    JOptionPane.showMessageDialog(null, "Visita Eliminada con Exito.", "Informacion Guardada",
+                                    JOptionPane.showMessageDialog(null, "Visita Actualizada con Exito.", "Informacion Guardada",
                                             JOptionPane.INFORMATION_MESSAGE);
                                 } else {
                                     JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
@@ -383,7 +383,24 @@ public class visitaVentana extends JFrame {
                                 break;
 
                             case 2:
-                                // TODO: SQLite
+                                ArrayList<Visita> visit = ControladorVisita.selectWhere(idVisita);
+
+                                if (visit.size() > 0){
+                                    Visita vi = visit.get(0);
+
+                                    tfId.setText(String.valueOf(vi.getId()));
+                                    tfNombre.setText(vi.getNombre());
+                                    tfAforo.setText(String.valueOf(vi.getNmaxCli()));
+                                    tfPartida.setText(vi.getPuntoPartida());
+                                    tfCurso.setText(vi.getCursoAcademico());
+                                    tfTematica.setText(vi.getTematica());
+                                    tfCoste.setText(String.valueOf(vi.getCoste()));
+                                    tfFecha.setText(vi.getFecha_hora());
+
+                                }else {
+                                    JOptionPane.showMessageDialog(null, "No se ha encontrado el empleado", "Error",
+                                            JOptionPane.WARNING_MESSAGE);
+                                }
                                 break;
 
                             case 3:
