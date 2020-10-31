@@ -54,7 +54,7 @@ public class clienteVentana extends JFrame {
       @Override
       public void actionPerformed(ActionEvent e) {
 
-        //todo validaciones
+        //validaciones
 
         if (tfDni.getText().isEmpty() || tfNombre.getText().isEmpty() || tfApellidos.getText().isEmpty() || tfNacimiento.getText().isEmpty() || tfProfesion.getText().isEmpty()) {
 
@@ -144,7 +144,7 @@ public class clienteVentana extends JFrame {
       @Override
       public void actionPerformed(ActionEvent e) {
 
-        //todo validaciones
+        //validaciones
 
         if (tfDni.getText().isEmpty()) {
 
@@ -231,7 +231,7 @@ public class clienteVentana extends JFrame {
       public void actionPerformed(ActionEvent e) {
 
 
-        //todo validaciones
+        //validaciones
 
         if (tfDni.getText().isEmpty() || tfNombre.getText().isEmpty() || tfApellidos.getText().isEmpty() || tfNacimiento.getText().isEmpty() || tfProfesion.getText().isEmpty()) {
 
@@ -316,7 +316,7 @@ public class clienteVentana extends JFrame {
     buscarButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        //todo validaciones
+        //validaciones
 
         if (tfDni.getText().isEmpty()) {
 
@@ -464,7 +464,7 @@ public class clienteVentana extends JFrame {
         switch (opcion) {
 
           case 1:
-            //todo opcion DB4O listado todos los clientes
+            //opcion DB4O listado todos los clientes
             List<Cliente> listadoClientes = ModeloCliente.mostrar();
 
             if (listadoClientes.size() > 0)
@@ -479,7 +479,6 @@ public class clienteVentana extends JFrame {
                   listadoCliente.getFechaNacimiento(),
                   listadoCliente.getProfesion(),
                   listadoCliente.getEstado()
-
 
               });
 
@@ -514,7 +513,7 @@ public class clienteVentana extends JFrame {
             break;
 
           case 3:
-            //todo opcion mysql listado todos los clientes
+            //opcion mysql listado todos los clientes
             Connection mysqlConn = MySqlConexion.connection();
 
             ArrayList<Cliente> listaClientesMysql = MySqlControladorCliente.selectAll(mysqlConn);
@@ -616,7 +615,7 @@ public class clienteVentana extends JFrame {
               break;
 
             case 3:
-              //TODO: Añadir peticion a la base de datos
+              //Añadir peticion a la base de datos
               Connection mysqlConn = MySqlConexion.connection();
 
               Cliente cliente = MySqlControladorCliente.selectWithDni(mysqlConn, dni);
