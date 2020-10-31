@@ -12,10 +12,10 @@ public class MySqlConexion {
 
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            //String sURL = "jdbc:mysql://127.0.0.1:3306/agencia_mysql?serverTimezone=UTC";
-            //conn = DriverManager.getConnection(sURL,"root","ascent");
-            String sURL = "jdbc:mysql://127.0.0.1:3307/agencia_mysql?serverTimezone=UTC";
-            conn = DriverManager.getConnection(sURL,"root","admin");
+            String sURL = "jdbc:mysql://127.0.0.1:3306/agencia_mysql?serverTimezone=UTC";
+            conn = DriverManager.getConnection(sURL,"root","ascent");
+            //String sURL = "jdbc:mysql://127.0.0.1:3307/agencia_mysql?serverTimezone=UTC";
+            //conn = DriverManager.getConnection(sURL,"root","admin");
 
             if(conn != null) {
 
