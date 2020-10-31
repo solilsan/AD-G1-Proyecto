@@ -40,6 +40,37 @@ public class ControladorCliente extends Conexion {
         return resultado;
     }
 
+    public static ArrayList<Cliente> selectActivos() {
+        Connection conn = conn();
+        ArrayList<Cliente> resultado = new ArrayList<>();
+
+        // Comprobamos que la conexion haya tenido exito.
+        // Si sale null es que ha habido un error.
+        if (conn != null) {
+            String query = "SELECT * FROM CLIENTES WHERE ESTADO = 'alta'";
+
+            try {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(query);
+
+                while (rs.next()) {
+                    resultado.add(new Cliente(rs.getString("DNI"), rs.getString("NOMBRE"),
+                            rs.getString("APELLIDO"), reformatearFechas(rs.getDate("FECHA_NAC").toString()),
+                            rs.getString("PROFESION"), rs.getString("ESTADO"), null));
+                }
+
+                conn.close();
+            } catch (SQLException throwables) {
+                System.out.println("[SQLite - ControladorCliente] Error: \n " +
+                        throwables.getMessage());
+            }
+        }
+
+
+        // Devolvemos el resultado
+        return resultado;
+    }
+
     public static Boolean insertCliente(Cliente objCliente) {
         Connection conn = conn();
         String query = "INSERT INTO CLIENTES (DNI, NOMBRE, APELLIDO, FECHA_NAC, PROFESION, ESTADO) VALUES(?, ?, ?, ?, ?, ?)";
@@ -101,12 +132,12 @@ public class ControladorCliente extends Conexion {
      * ESTA FUNCION, Y LA DE ALTA, SE PODRIAN FUSIONAR EN UNA
      * TODO: POSIBLE OPTIMIZACION.
      */
-    public static boolean darBajaCliente(Cliente objCliente){
+    public static boolean darBajaCliente(Cliente objCliente) {
         Connection conn = conn();
         String query = "UPDATE CLIENTES SET ESTADO = 'baja' WHERE DNI = ?";
 
         // Comprobamos que el DNI del objeto no este vacio
-        if (objCliente.getDni().equals("") || objCliente.getDni() == null){
+        if (objCliente.getDni().equals("") || objCliente.getDni() == null) {
             // No se puede seguir sin un DNI
             System.out.println("[SQLite - ControladorCliente] Se ha intentado dar de baja un cliente, pero se ha\n" +
                     "pasado un objeto cliente sin DNI.");
@@ -133,12 +164,12 @@ public class ControladorCliente extends Conexion {
         return false;
     }
 
-    public static boolean darAltaCliente(Cliente objCliente){
+    public static boolean darAltaCliente(Cliente objCliente) {
         Connection conn = conn();
         String query = "UPDATE CLIENTES SET ESTADO = 'alta' WHERE DNI = ?";
 
         // Comprobamos que el DNI del objeto no este vacio
-        if (objCliente.getDni().equals("") || objCliente.getDni() == null){
+        if (objCliente.getDni().equals("") || objCliente.getDni() == null) {
             // No se puede seguir sin un DNI
             System.out.println("[SQLite - ControladorCliente] Se ha intentado dar de alta un cliente, pero se ha\n" +
                     "pasado un objeto cliente sin DNI.");
@@ -165,12 +196,12 @@ public class ControladorCliente extends Conexion {
         return false;
     }
 
-    public static boolean updateCliente(Cliente objCliente){
+    public static boolean updateCliente(Cliente objCliente) {
         Connection conn = conn();
         String query = "UPDATE CLIENTES SET NOMBRE = ?, APELLIDO = ?, FECHA_NAC = ?, PROFESION = ?, ESTADO = ? WHERE DNI = ?";
 
         // Comprobamos que el DNI del objeto no este vacio
-        if (objCliente.getDni() == ""){
+        if (objCliente.getDni() == "") {
             // No se puede seguir sin un DNI
             System.out.println("[SQLite - ControladorCliente] Se ha intentado alterar un campo del cliente, pero el parametro es\n" +
                     "nulo, o esta vacio.");
@@ -202,7 +233,7 @@ public class ControladorCliente extends Conexion {
         return false;
     }
 
-    private static String reformatearFechas(String fecha){
+    private static String reformatearFechas(String fecha) {
         String dia = fecha.substring(8, 10);
         String mes = fecha.substring(5, 7);
         String anio = fecha.substring(0, 4);
@@ -210,7 +241,7 @@ public class ControladorCliente extends Conexion {
         return (dia + "/" + mes + "/" + anio);
     }
 
-    private static Date formatearFechaDb(String fecha){
+    private static Date formatearFechaDb(String fecha) {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
         java.util.Date fecha_nac = null;
