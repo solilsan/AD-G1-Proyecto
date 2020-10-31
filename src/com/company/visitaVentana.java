@@ -238,23 +238,53 @@ public class visitaVentana extends JFrame {
                             JOptionPane.INFORMATION_MESSAGE);
 
                 } else {
-                    // Se guarda el objeto del empleado seleccinado
-                    Empleado emple = empleados.get(cbEmpleado.getSelectedIndex());
+                    Boolean error = false;
+                    int idVisita = -999;
+                    int aforo = -999;
+                    float coste = -999;
 
-
-                    switch (opcion) {
-                        case 1:
-                            // TODO: Añadir actualizar DB4O
-                            break;
-
-                        case 2:
-                            // TODO: Añadir actualizar SQLite
-                            break;
-
-                        case 3:
-                            // TODO: Añadir actualizar MYSQL
-                            break;
+                    try {
+                        idVisita = Integer.parseInt(tfId.getText());
+                        aforo = Integer.parseInt(tfAforo.getText());
+                        coste = Float.parseFloat(tfCoste.getText());
+                    } catch (NumberFormatException numberFormatException) {
+                        error = true;
                     }
+
+                    if (!error){
+                        Visita visit = new Visita(idVisita,tfNombre.getText(),
+                                aforo,tfPartida.getText(),tfCurso.getText(),tfTematica.getText(),coste,
+                                "alta", tfFecha.getText(), empleados.get(cbEmpleado.getSelectedIndex()-1));
+
+
+                        switch (opcion) {
+                            case 1:
+                                // TODO: Añadir actualizar DB4O
+                                break;
+
+                            case 2:
+                                boolean exito = ControladorVisita.updateVisita(visit);
+
+                                if (exito) {
+                                    JOptionPane.showMessageDialog(null, "Visita Eliminada con Exito.", "Informacion Guardada",
+                                            JOptionPane.INFORMATION_MESSAGE);
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
+                                                    "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
+                                            JOptionPane.WARNING_MESSAGE);
+                                }
+                                break;
+
+                            case 3:
+                                // TODO: Añadir actualizar MYSQL
+                                break;
+                        }
+                    }else {
+                        //error campos obligatorios no estan rellenos
+                        JOptionPane.showMessageDialog(null, "Faltan campos por rellenar.", "Informacion Guardado",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+
                 }
 
 
