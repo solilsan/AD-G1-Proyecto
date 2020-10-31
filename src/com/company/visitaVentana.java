@@ -320,8 +320,28 @@ public class visitaVentana extends JFrame {
 
         switch (opcion) {
 
-          case 1:
-            // TODO: Implementar BD4O
+          case 1://BD4O
+            List<Visita> listVisitas = ModeloVisita.mostrar();
+
+            for (Visita listadoVisita : listVisitas) {
+
+              modeloTablaVisita.addRow(new Object[]{
+                  listadoVisita.getId(),
+                  listadoVisita.getNombre(),
+                  listadoVisita.getNmaxCli(),
+                  listadoVisita.getPuntoPartida(),
+                  listadoVisita.getCursoAcademico(),
+                  listadoVisita.getTematica(),
+                  listadoVisita.getCoste(),
+                  listadoVisita.getEstado(),
+                  listadoVisita.getFecha_hora(),
+                  listadoVisita.getEmpleado().getNombre()
+              });
+
+            }
+
+            table1.setModel(modeloTablaVisita);
+
             break;
 
           case 2:
@@ -381,8 +401,24 @@ public class visitaVentana extends JFrame {
 
           if (!error && idVisita != -999) {
             switch (opcion) {
-              case 1:
-                // TODO: DB4O
+              case 1://DB4O
+                Visita visita = ModeloVisita.buscar(idVisita);
+
+                if (visita != null) {
+                  tfId.setText(Integer.toString(visita.getId()));
+                  tfNombre.setText(visita.getNombre());
+                  tfAforo.setText(Integer.toString(visita.getNmaxCli()));
+                  tfPartida.setText(visita.getPuntoPartida());
+                  tfCurso.setText(visita.getCursoAcademico());
+                  tfTematica.setText(visita.getTematica());
+                  tfCoste.setText(Float.toString(visita.getCoste()));
+                  tfFecha.setText(visita.getFecha_hora());
+                  int pos = posicionEmpleadoCombo(visita.getEmpleado().getDni());
+                  cbEmpleado.setSelectedIndex(pos);
+
+                }
+
+                // TODO:
                 break;
 
               case 2:
@@ -406,6 +442,8 @@ public class visitaVentana extends JFrame {
       }
     });
   }
+
+
 
   /**
    * Funcion que se encarga de generar la lista para rellenar el desplegable
@@ -438,6 +476,22 @@ public class visitaVentana extends JFrame {
     //por defecto se deja el combo a la opcion vacio para que no salga por defecto la 1 opcion
     cbEmpleado.setSelectedItem(null);
 
+  }
+
+
+  /**
+   *
+   * @param dni recibe el dni String
+   * @return devuelve la posicion int de ese dni
+   */
+  public int posicionEmpleadoCombo(String dni) {
+
+    for (int i = 0; i < empleados.size(); i++) {
+      if (empleados.get(i).getDni().equals(dni))
+        return i+1;
+    }
+
+    return -1;
   }
 
 }
