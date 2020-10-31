@@ -552,6 +552,8 @@ public class clienteVentana extends JFrame {
             } catch (SQLException throwables) {
               throwables.printStackTrace();
             }
+
+            break;
         }
 
       }

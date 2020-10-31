@@ -97,7 +97,7 @@ public class MySqlControladorEmpleado {
                 return "Empleado eliminado";
             }
             else {
-                return "No existe un cliente con ese dni";
+                return "No existe un empleado con ese dni";
             }
 
         }
@@ -174,7 +174,8 @@ public class MySqlControladorEmpleado {
                 empleado.setNombre(rs.getString("NOMBRE"));
                 empleado.setApellidos(rs.getString("APELLIDO"));
                 empleado.setFechaNacimiento(rs.getDate("FECHA_NAC").toString());
-                empleado.setFechaContratacion(rs.getDate("F-CONTRATACION").toString());
+                empleado.setFechaContratacion(rs.getDate("F_CONTRATACION").toString());
+                empleado.setNacionalidad(rs.getString("NACIONALIDAD"));
                 empleado.setCargo(rs.getString("CARGO"));
                 empleado.setPassword(rs.getString("PASSWORD"));
                 empleado.setEstado(rs.getString("ESTADO"));
@@ -213,7 +214,8 @@ public class MySqlControladorEmpleado {
                 empleado.setNombre(rs.getString("NOMBRE"));
                 empleado.setApellidos(rs.getString("APELLIDO"));
                 empleado.setFechaNacimiento(rs.getDate("FECHA_NAC").toString());
-                empleado.setFechaContratacion(rs.getDate("F-CONTRATACION").toString());
+                empleado.setFechaContratacion(rs.getDate("F_CONTRATACION").toString());
+                empleado.setNacionalidad(rs.getString("NACIONALIDAD"));
                 empleado.setCargo(rs.getString("CARGO"));
                 empleado.setPassword(rs.getString("PASSWORD"));
                 empleado.setEstado(rs.getString("ESTADO"));
