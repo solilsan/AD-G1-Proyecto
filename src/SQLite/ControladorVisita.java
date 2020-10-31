@@ -43,6 +43,39 @@ public class ControladorVisita extends Conexion{
         return resultado;
     }
 
+    public static ArrayList<Visita> selectActivos(){
+        Connection conn = conn();
+        ArrayList<Visita> resultado = new ArrayList<>();
+
+        // Comprobamos que la conexion haya tenido exito.
+        // Si sale null es que ha habido un error.
+        if (conn != null) {
+            String query = "SELECT * FROM VISITAS WHERE ESTADO = 'alta'";
+
+            try {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(query);
+
+                while (rs.next()) {
+                    resultado.add(new Visita(rs.getInt("ID"), rs.getString("NOMBRE"),
+                            rs.getInt("N_MAX_CLI"), rs.getString("PUNTO_PARTIDA"),
+                            rs.getString("CURSO_ACADEMICO"), rs.getString("TEMATICA"),
+                            rs.getFloat("COSTE"), rs.getString("ESTADO"),
+                            reformatearFechas(rs.getDate("FECHA_HORA").toString()), ControladorEmpleado.selectByDni(rs.getString("DNI_EMPLEADO")).get(0)));
+                }
+
+                conn.close();
+            } catch (SQLException throwables) {
+                System.out.println("[SQLite - ControladorVisita] Error: \n " +
+                        throwables.getMessage());
+            }
+        }
+
+
+        // Devolvemos el resultado
+        return resultado;
+    }
+
     public static Boolean insertVisita(Visita objVisita) {
         Connection conn = conn();
         String query = "INSERT INTO VISITAS (ID, NOMBRE, N_MAX_CLI, PUNTO_PARTIDA, CURSO_ACADEMICO, TEMATICA, COSTE, ESTADO, DNI_EMPLEADO, FECHA_HORA) VALUES(?,?,?,?,?,?,?,?,?,?)";
