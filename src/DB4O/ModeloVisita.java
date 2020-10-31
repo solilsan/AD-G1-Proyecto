@@ -10,8 +10,8 @@ public class ModeloVisita {
         return ControladorVisita.guardaVisita(vis);
     }
 
-    public static String eliminar(Visita vis) {
-        return ControladorVisita.eliminaVisita(vis);
+    public static String eliminar(int idVisita) {
+        return ControladorVisita.eliminaVisita(idVisita);
     }
 
     public static String actualiza(Visita vis) {
