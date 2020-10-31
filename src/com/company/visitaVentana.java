@@ -10,6 +10,8 @@ import SQLite.ControladorEmpleado;
 import SQLite.ControladorVisita;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -186,6 +188,9 @@ public class visitaVentana extends JFrame {
 
                         case 1:
                             // TODO: Añadir DB4O Eliminar Visita
+                            String mensaje = ModeloVisita.eliminar(idVisita);
+                            JOptionPane.showMessageDialog(null, mensaje, "Informacion Eliminado",
+                                    JOptionPane.INFORMATION_MESSAGE);
                             break;
 
                         case 2:
@@ -251,10 +256,10 @@ public class visitaVentana extends JFrame {
                         error = true;
                     }
 
-                    if (!error){
-                        Visita visit = new Visita(idVisita,tfNombre.getText(),
-                                aforo,tfPartida.getText(),tfCurso.getText(),tfTematica.getText(),coste,
-                                "alta", tfFecha.getText(), empleados.get(cbEmpleado.getSelectedIndex()-1));
+                    if (!error) {
+                        Visita visit = new Visita(idVisita, tfNombre.getText(),
+                                aforo, tfPartida.getText(), tfCurso.getText(), tfTematica.getText(), coste,
+                                "alta", tfFecha.getText(), empleados.get(cbEmpleado.getSelectedIndex() - 1));
 
 
                         switch (opcion) {
@@ -266,7 +271,7 @@ public class visitaVentana extends JFrame {
                                 boolean exito = ControladorVisita.updateVisita(visit);
 
                                 if (exito) {
-                                    JOptionPane.showMessageDialog(null, "Visita Eliminada con Exito.", "Informacion Guardada",
+                                    JOptionPane.showMessageDialog(null, "Visita Actualizada con Exito.", "Informacion Guardada",
                                             JOptionPane.INFORMATION_MESSAGE);
                                 } else {
                                     JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
@@ -279,7 +284,7 @@ public class visitaVentana extends JFrame {
                                 // TODO: Añadir actualizar MYSQL
                                 break;
                         }
-                    }else {
+                    } else {
                         //error campos obligatorios no estan rellenos
                         JOptionPane.showMessageDialog(null, "Faltan campos por rellenar.", "Informacion Guardado",
                                 JOptionPane.INFORMATION_MESSAGE);
@@ -366,9 +371,9 @@ public class visitaVentana extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // TODO: completar
                 Boolean error = false;
-                if (tfId.getText().isEmpty()){
+                if (tfId.getText().isEmpty()) {
                     error = true;
-                }else {
+                } else {
                     int idVisita = -999;
                     try {
                         idVisita = Integer.parseInt(tfId.getText());
@@ -376,14 +381,31 @@ public class visitaVentana extends JFrame {
                         error = true;
                     }
 
-                    if (!error && idVisita != -999){
-                        switch (opcion){
+                    if (!error && idVisita != -999) {
+                        switch (opcion) {
                             case 1:
                                 // TODO: DB4O
                                 break;
 
                             case 2:
-                                // TODO: SQLite
+                                ArrayList<Visita> visit = ControladorVisita.selectWhere(idVisita);
+
+                                if (visit.size() > 0) {
+                                    Visita vi = visit.get(0);
+
+                                    tfId.setText(String.valueOf(vi.getId()));
+                                    tfNombre.setText(vi.getNombre());
+                                    tfAforo.setText(String.valueOf(vi.getNmaxCli()));
+                                    tfPartida.setText(vi.getPuntoPartida());
+                                    tfCurso.setText(vi.getCursoAcademico());
+                                    tfTematica.setText(vi.getTematica());
+                                    tfCoste.setText(String.valueOf(vi.getCoste()));
+                                    tfFecha.setText(vi.getFecha_hora());
+
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "No se ha encontrado el empleado", "Error",
+                                            JOptionPane.WARNING_MESSAGE);
+                                }
                                 break;
 
                             case 3:
@@ -394,10 +416,45 @@ public class visitaVentana extends JFrame {
                 }
 
                 // ERROR
-                if (error){
+                if (error) {
                     //error campos obligatorios no estan rellenos
                     JOptionPane.showMessageDialog(null, "Faltan campos por rellenar.", "Informacion Guardado",
                             JOptionPane.INFORMATION_MESSAGE);
+                }
+
+            }
+        });
+
+        table1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int idVisita = Integer.parseInt(table1.getValueAt(table1.getSelectedRow(), 0).toString());
+
+                switch (opcion) {
+                    case 1:
+
+                        break;
+
+                    case 2:
+                        ArrayList<Visita> visit = ControladorVisita.selectWhere(idVisita);
+
+                        if (visit.size() > 0) {
+                            Visita vi = visit.get(0);
+
+                            tfId.setText(String.valueOf(vi.getId()));
+                            tfNombre.setText(vi.getNombre());
+                            tfAforo.setText(String.valueOf(vi.getNmaxCli()));
+                            tfPartida.setText(vi.getPuntoPartida());
+                            tfCurso.setText(vi.getCursoAcademico());
+                            tfTematica.setText(vi.getTematica());
+                            tfCoste.setText(String.valueOf(vi.getCoste()));
+                            tfFecha.setText(vi.getFecha_hora());
+                        }
+                        break;
+
+                    case 3:
+                        //todo mysql
+                        break;
                 }
 
             }
@@ -435,6 +492,8 @@ public class visitaVentana extends JFrame {
         //por defecto se deja el combo a la opcion vacio para que no salga por defecto la 1 opcion
         cbEmpleado.setSelectedItem(null);
 
+
     }
+
 
 }

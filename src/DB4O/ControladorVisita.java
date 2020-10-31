@@ -37,29 +37,23 @@ public class ControladorVisita {
     return v.getNombre() + " Guardado!";
   }
 
-  public static String eliminaVisita(Visita v) {
+  public static String eliminaVisita(int idVisita) {
 
-    String mensaje = "Visita " + v.getNombre() + " Eliminada!";
+    String mensaje = "Visita Eliminada!";
 
     //Conexion con la base de datos
     ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), BD);
 
     //se obtienen todos los clientes que coincidan con los datos del objeto (deberia haber solo 1)
-    ObjectSet<Visita> resultado = db.queryByExample(new Visita(v.getId(), null, null,
+    ObjectSet<Visita> resultado = db.queryByExample(new Visita(idVisita, null, null,
         null, null, null, null, null, null, null));
 
-    //Se busca el cliente a eliminar, si existe marcamos atributo "baja" y lo volvemos a guardar
-    if (resultado.size() < 1)
-      mensaje = "Error Visita " + v.getNombre() + " No está en la base de datos";
-    else if (resultado.size() > 1)//Por si acaso
-      mensaje = "Error Visita " + v.getNombre() + " está Repetida en la base de datos";
-    else {
-      if (resultado.hasNext()) {
-        Visita visita = resultado.next();
-        visita.setEstado("baja");
-        db.store(visita);
-      }
+    if (resultado.hasNext()) {
+      Visita visita = resultado.next();
+      visita.setEstado("baja");
+      db.store(visita);
     }
+
     db.close();
     return mensaje;
   }
@@ -207,10 +201,8 @@ public class ControladorVisita {
     cli.getVisitas().add(vis);
 
 
-
     //Se guarda el empleado
     db.store(vis);
-
 
 
     //cierra conexion
