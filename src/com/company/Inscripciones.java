@@ -53,18 +53,21 @@ public class Inscripciones extends JFrame {
     visitasTabla.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
       @Override
       public void valueChanged(ListSelectionEvent e) {
+
         if (visitasTabla.getSelectedRow() >= 0) {
           String id = visitasTabla.getValueAt(visitasTabla.getSelectedRow(), 0).toString();
 
-          DefaultTableModel modeloTablaClientes = new DefaultTableModel();
+          DefaultTableModel modeloTinscritos = new DefaultTableModel();
 
-          modeloTablaClientes.setColumnIdentifiers(new Object[]{
+          modeloTinscritos.setColumnIdentifiers(new Object[]{
               "Dni",
               "Nombre",
               "Apellidos",
               "Fecha de Nacimiento",
               "Profesion"
           });
+
+
 
           switch (opcion) {
 
@@ -85,7 +88,7 @@ public class Inscripciones extends JFrame {
 
                 for (Cliente cliente : v.getClientes()) {
 
-                  modeloTablaClientes.addRow(new Object[]{
+                  modeloTinscritos.addRow(new Object[]{
                       cliente.getDni(),
                       cliente.getNombre(),
                       cliente.getApellidos(),
@@ -93,7 +96,7 @@ public class Inscripciones extends JFrame {
                       cliente.getProfesion()
                   });
 
-                  disponiblesTabla.setModel(modeloTablaClientes);
+                  inscritosTabla.setModel(modeloTinscritos);
                 }
 
               } else {
@@ -134,6 +137,14 @@ public class Inscripciones extends JFrame {
 
           DefaultTableModel modeloTablaClientes = new DefaultTableModel();
 
+          modeloTablaClientes.setColumnIdentifiers(new Object[]{
+              "Dni",
+              "Nombre",
+              "Apellidos",
+              "Fecha de Nacimiento",
+              "Profesion"
+          });
+
           switch (opcion) {
 
             case 1://DB4O
@@ -143,22 +154,34 @@ public class Inscripciones extends JFrame {
                 int identificador = Integer.parseInt(id);
 
                 //todo apuntar este cliente a la visita y actualizar la tabla apuntados
-                Cliente cliente = ModeloCliente.buscar(dni);
 
-                Visita visita = ModeloVisita.buscar(identificador);
+                Visita visitaGuardada = ModeloVisita.apuntar(identificador,dni);
 
-                //Se apunta el cliente a la visita
+
+                for (Cliente listadoCliente : visitaGuardada.getClientes()) {
+
+                  modeloTablaClientes.addRow(new Object[]{
+                      listadoCliente.getDni(),
+                      listadoCliente.getNombre(),
+                      listadoCliente.getApellidos(),
+                      listadoCliente.getFechaNacimiento(),
+                      listadoCliente.getProfesion()
+                  });
+
+                  inscritosTabla.setModel(modeloTablaClientes);
+                }
+                /*//Se apunta el cliente a la visita
                 visita.getClientes().add(cliente);
 
                 //Se regostra la visita en el cliente
-                cliente.getVisitas().add(visita);
+                cliente.getVisitas().add(visita);*/
 
-                ModeloVisita.guardar(visita);
 
-                ModeloCliente.guardar(cliente);
+
+                //ModeloCliente.guardar(cliente);
 
                 JOptionPane.showMessageDialog(null,
-                    cliente.getNombre() + " Apuntado a " + visita.getNombre(),
+                    "Apuntado!",
                     "Informacion Apuntado",
                     JOptionPane.INFORMATION_MESSAGE);
 
