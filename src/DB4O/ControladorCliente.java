@@ -1,5 +1,6 @@
 package DB4O;
 
+import Clases.Visita;
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import Clases.Cliente;
@@ -132,6 +133,7 @@ public class ControladorCliente {
         cliente.setFechaNacimiento(c.getFechaNacimiento());
         //Actualiza la profesion
         cliente.setProfesion(c.getProfesion());
+
 
         db.store(cliente);
       }

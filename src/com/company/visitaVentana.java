@@ -105,7 +105,6 @@ public class visitaVentana extends JFrame {
             falloTipoDato = false;
           }
 
-          //TODO validaciones
 
           if (!falloTipoDato){
 
