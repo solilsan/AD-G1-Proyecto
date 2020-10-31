@@ -186,6 +186,9 @@ public class visitaVentana extends JFrame {
 
                         case 1:
                             // TODO: Añadir DB4O Eliminar Visita
+                            String mensaje = ModeloVisita.eliminar(idVisita);
+                            JOptionPane.showMessageDialog(null, mensaje, "Informacion Eliminado",
+                                    JOptionPane.INFORMATION_MESSAGE);
                             break;
 
                         case 2:
@@ -451,6 +454,7 @@ public class visitaVentana extends JFrame {
 
         //por defecto se deja el combo a la opcion vacio para que no salga por defecto la 1 opcion
         cbEmpleado.setSelectedItem(null);
+
 
     }
 
