@@ -65,6 +65,7 @@ public class empleadoVentana extends JFrame {
       @Override
       public void actionPerformed(ActionEvent e) {
 
+        //validaciones
         if (tfDni.getText().isEmpty() || tfNombre.getText().isEmpty() || tfApellidos.getText().isEmpty() || tfNacimiento.getText().isEmpty() || tfContratacion.getText().isEmpty() || tfNacionalidad.getText().isEmpty() || tfCargo.getText().isEmpty() || jfContrasinal.getText().isEmpty()) {
 
           JOptionPane.showMessageDialog(null, "Faltan campos por rellenar.", "Informacion Guardado",
@@ -81,7 +82,6 @@ public class empleadoVentana extends JFrame {
           String nacionalidad = tfNacionalidad.getText();
           String cargo = tfCargo.getText();
           String contrasinal = new String(jfContrasinal.getPassword());
-          //todo validaciones
 
           //Se crea el objeto para enviar a guardar
           Empleado empleado = new Empleado(dni, nombre, apellidos, nacimiento, contratacion,
@@ -156,7 +156,6 @@ public class empleadoVentana extends JFrame {
 
         //Se recogen los datos de los input para posible validación
         String dni = tfDni.getText();
-        //todo validaciones
 
         //Se crea el objeto para enviar a eliminar
         Empleado empleado = new Empleado(dni, null, null, null,
@@ -199,6 +198,7 @@ public class empleadoVentana extends JFrame {
       @Override
       public void actionPerformed(ActionEvent e) {
 
+        //validaciones
         if (tfDni.getText().isEmpty() ||
           tfNombre.getText().isEmpty() ||
           tfApellidos.getText().isEmpty() ||
@@ -222,7 +222,6 @@ public class empleadoVentana extends JFrame {
           String nacionalidad = tfNacionalidad.getText();
           String cargo = tfCargo.getText();
           String contrasinal = new String(jfContrasinal.getPassword());
-          //todo validaciones
 
           //Se crea el objeto para enviar a actulizar
           Empleado empleado = new Empleado(dni, nombre, apellidos, nacimiento, contratacion,
@@ -346,8 +345,7 @@ public class empleadoVentana extends JFrame {
       @Override
       public void actionPerformed(ActionEvent e) {
 
-        //todo validaciones
-
+        //validaciones
         if (tfDni.getText().isEmpty()) {
 
           JOptionPane.showMessageDialog(null, "Introduce un DNI.", "Informacion Actualizado",
