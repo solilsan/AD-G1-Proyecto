@@ -2,6 +2,7 @@ package com.company;
 
 import Clases.Empleado;
 import Clases.Visita;
+import DB4O.ModeloCliente;
 import DB4O.ModeloEmpleado;
 import DB4O.ModeloVisita;
 import MySql.MySqlConexion;
@@ -40,6 +41,7 @@ public class visitaVentana extends JFrame {
   private JPanel formularioPanel;
   private JTextField tfId;
   private JComboBox<String> cbEmpleado;
+  private JButton limpiarButton;
 
 
   //variable global de lista de empleados
@@ -206,8 +208,7 @@ public class visitaVentana extends JFrame {
 
           switch (opcion) {
 
-            case 1:
-              // TODO: Añadir DB4O Eliminar Visita
+            case 1://DB4O
               String mensaje = ModeloVisita.eliminar(idVisita);
               JOptionPane.showMessageDialog(null, mensaje, "Informacion Eliminado",
                   JOptionPane.INFORMATION_MESSAGE);
@@ -302,11 +303,14 @@ public class visitaVentana extends JFrame {
 
 
             switch (opcion) {
-              case 1:
-                // TODO: Añadir actualizar DB4O
+              case 1://DB4O
+                String mensaje = ModeloVisita.actualiza(visit);
+
+                JOptionPane.showMessageDialog(null, mensaje, "Informacion Actualizado",
+                    JOptionPane.INFORMATION_MESSAGE);
                 break;
 
-              case 2:
+              case 2://SQLITE
                 boolean exito = ControladorVisita.updateVisita(visit);
 
                 if (exito) {
@@ -319,7 +323,7 @@ public class visitaVentana extends JFrame {
                 }
                 break;
 
-              case 3:
+              case 3://MYSQL
                 Connection mysqlConn = MySqlConexion.connection();
 
                 String mysqlMensaje = MySqlControladorVisita.updateWithId(mysqlConn, visit);
@@ -499,7 +503,8 @@ public class visitaVentana extends JFrame {
 
           if (!error && idVisita != -999) {
             switch (opcion) {
-              case 1:
+
+              case 1://DB4O
                 Visita visita = ModeloVisita.buscar(idVisita);
 
                 if (visita != null) {
@@ -513,13 +518,11 @@ public class visitaVentana extends JFrame {
                   tfFecha.setText(visita.getFecha_hora());
                   int pos = posicionEmpleadoCombo(visita.getEmpleado().getDni());
                   cbEmpleado.setSelectedIndex(pos);
-
                 }
 
-                // TODO:
                 break;
 
-              case 2:
+              case 2://SQLITE
                 ArrayList<Visita> visit = ControladorVisita.selectWhere(idVisita);
 
                 if (visit.size() > 0) {
@@ -541,7 +544,7 @@ public class visitaVentana extends JFrame {
                 }
                 break;
 
-              case 3:
+              case 3://MYSQL
                 Connection mysqlConn = MySqlConexion.connection();
 
                 Visita visitaMysql = MySqlControladorVisita.selectWithId(mysqlConn, idVisita);
@@ -590,6 +593,28 @@ public class visitaVentana extends JFrame {
 
     /**
      *
+     * BOTON QUE LIMPIA EL FORMULARIO
+     *
+     */
+    limpiarButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+
+        tfId.setText("");
+        tfNombre.setText("");
+        tfAforo.setText("");
+        tfPartida.setText("");
+        tfCurso.setText("");
+        tfTematica.setText("");
+        tfCoste.setText("");
+        tfFecha.setText("");
+        cbEmpleado.setSelectedIndex(0);
+
+      }
+    });
+
+    /**
+     *
      * RELLENAR FORMULARIO AL CLICKAR EN TABLA
      *
      */
@@ -599,11 +624,24 @@ public class visitaVentana extends JFrame {
         int idVisita = Integer.parseInt(table1.getValueAt(table1.getSelectedRow(), 0).toString());
 
         switch (opcion) {
-          case 1:
-            // TODO: DB4O
+          case 1://DB4O
+            Visita visitaDB4O = ModeloVisita.buscar(idVisita);
+
+            if (visitaDB4O != null){
+              tfId.setText(Integer.toString(visitaDB4O.getId()));
+              tfNombre.setText(visitaDB4O.getNombre());
+              tfAforo.setText(String.valueOf(visitaDB4O.getNmaxCli()));
+              tfPartida.setText(visitaDB4O.getPuntoPartida());
+              tfCurso.setText(visitaDB4O.getCursoAcademico());
+              tfTematica.setText(visitaDB4O.getTematica());
+              tfCoste.setText(String.valueOf(visitaDB4O.getCoste()));
+              tfFecha.setText(visitaDB4O.getFecha_hora());
+              cbEmpleado.setSelectedIndex(posicionEmpleadoCombo(visitaDB4O.getEmpleado().getDni()));
+            }
+
             break;
 
-          case 2:
+          case 2://SQLITE
             ArrayList<Visita> visit = ControladorVisita.selectWhere(idVisita);
 
             if (visit.size() > 0) {
@@ -621,7 +659,7 @@ public class visitaVentana extends JFrame {
             }
             break;
 
-          case 3:
+          case 3://MYSQL
             Connection mysqlConn = MySqlConexion.connection();
 
             Visita visitaMysql = MySqlControladorVisita.selectWithId(mysqlConn, idVisita);
@@ -664,6 +702,7 @@ public class visitaVentana extends JFrame {
 
     //por defecto se deja el combo a la opcion vacio para que no salga por defecto la 1 opcion
     cbEmpleado.setSelectedItem(null);
+
   }
 
   /**

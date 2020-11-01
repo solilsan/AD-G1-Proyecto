@@ -5,14 +5,12 @@ import DB4O.ModeloCliente;
 import MySql.MySqlConexion;
 import MySql.MySqlControladorCliente;
 import SQLite.ControladorCliente;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;

@@ -28,4 +28,8 @@ public class ModeloVisita {
 
 
     public static Visita apuntar(int id, String dni) {return ControladorVisita.apuntaCliente(id, dni);}
+
+    public static Visita desapuntar(int id, String dni) {
+        return ControladorVisita.desApuntar(id, dni);
+    }
 }
