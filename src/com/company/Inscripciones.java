@@ -115,7 +115,6 @@ public class Inscripciones extends JFrame {
               break;
 
             case 2://SQLITE
-              //TODO Se utiliza modeloTablaClientes para rellenar las filas de los apuntados a esa visita
               int idVisita = -1;
 
               try {
