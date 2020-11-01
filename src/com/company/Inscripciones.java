@@ -7,6 +7,8 @@ import Clases.Visita;
 import DB4O.ModeloCliente;
 import DB4O.ModeloEmpleado;
 import DB4O.ModeloVisita;
+import MySql.MySqlConexion;
+import MySql.MySqlControladorVisita;
 import SQLite.ControladorCliente;
 import SQLite.ControladorEmpleado;
 import SQLite.ControladorVisita;
@@ -18,6 +20,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -510,7 +514,41 @@ public class Inscripciones extends JFrame {
         break;
 
       case 3:
-        //todo opcion mysql listado todos los Visitas
+        Connection mysqlConn = MySqlConexion.connection();
+
+        ArrayList<Visita> listaVisitasMysql = MySqlControladorVisita.selectAllActivas(mysqlConn);
+
+        if (listaVisitasMysql != null) {
+
+          for (Visita listadoVisita : listaVisitasMysql) {
+
+            modeloTablaVisitas.addRow(new Object[]{
+                    listadoVisita.getId(),
+                    listadoVisita.getNombre(),
+                    listadoVisita.getNmaxCli(),
+                    listadoVisita.getPuntoPartida(),
+                    listadoVisita.getTematica(),
+                    listadoVisita.getCoste(),
+                    listadoVisita.getFecha_hora(),
+            });
+
+          }
+
+          visitasTabla.setModel(modeloTablaVisitas);
+
+        } else {
+
+          JOptionPane.showMessageDialog(null, "No existen visitas", "Información.",
+                  JOptionPane.INFORMATION_MESSAGE);
+
+        }
+
+        try {
+          assert mysqlConn != null;
+          mysqlConn.close();
+        } catch (SQLException throwables) {
+          throwables.printStackTrace();
+        }
         break;
     }
 
