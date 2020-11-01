@@ -277,6 +277,72 @@ public class Inscripciones extends JFrame {
         desapuntarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (inscritosTabla.getSelectedRow() >= 0 && visitasTabla.getSelectedRow() >= 0) {
+
+                    String dni = inscritosTabla.getValueAt(inscritosTabla.getSelectedRow(), 0).toString();
+                    String id = visitasTabla.getValueAt(visitasTabla.getSelectedRow(), 0).toString();
+
+                    DefaultTableModel modeloTablaClientes = new DefaultTableModel();
+
+                    modeloTablaClientes.setColumnIdentifiers(new Object[]{
+                            "Dni",
+                            "Nombre",
+                            "Apellidos",
+                            "Fecha de Nacimiento",
+                            "Profesion"
+                    });
+
+                    switch (opcion) {
+
+                        case 1://DB4O
+                            // TODO DB4O
+                            break;
+
+                        case 2://SQLITE
+                            int idVisita = Integer.parseInt(id);
+
+                            boolean exito = ControladorVisita.eliminaClienteVisita(dni, idVisita);
+
+                            if (exito) {
+                                JOptionPane.showMessageDialog(null, "Cliente Eliminado con Exito.", "Informacion Actualizada",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
+                                                "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
+                                        JOptionPane.WARNING_MESSAGE);
+                            }
+
+                            /// CODIGO DE SUPERVIVENCIA
+                            Visita vis = ControladorVisita.selectWhere(idVisita).get(0);
+
+
+                            for (Cliente listCliente : vis.getClientes()) {
+
+                                modeloTablaClientes.addRow(new Object[]{
+                                        listCliente.getDni(),
+                                        listCliente.getNombre(),
+                                        listCliente.getApellidos(),
+                                        listCliente.getFechaNacimiento(),
+                                        listCliente.getProfesion()
+                                });
+
+                                inscritosTabla.setModel(modeloTablaClientes);
+                            }
+
+                            break;
+
+                        case 3://MYSQL
+                            //todo apuntar este cliente a la visita y actualizar la tabla apuntados
+                            break;
+                    }
+
+
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "Debes seleccionar al menos una visita y un cliente para apuntarlo.",
+                            "Informacion Apuntado",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
 
             }
         });
