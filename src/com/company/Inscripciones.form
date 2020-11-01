@@ -18,14 +18,19 @@
         </properties>
         <border type="line" title="VISITAS DISPONIBLES" title-position="3"/>
         <children>
-          <component id="dd660" class="javax.swing.JTable" binding="visitasTabla">
+          <scrollpane id="d09de">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                <preferred-size width="214" height="50"/>
-              </grid>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
-          </component>
+            <border type="none"/>
+            <children>
+              <component id="dd660" class="javax.swing.JTable" binding="visitasTabla">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
         </children>
       </grid>
       <vspacer id="84a61">
@@ -58,14 +63,19 @@
             <properties/>
             <border type="line" title="CLIENTES APUNTADOS" title-position="3"/>
             <children>
-              <component id="2daf4" class="javax.swing.JTable" binding="inscritosTabla">
+              <scrollpane id="57046">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="50"/>
-                  </grid>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
-              </component>
+                <border type="none"/>
+                <children>
+                  <component id="2daf4" class="javax.swing.JTable" binding="inscritosTabla">
+                    <constraints/>
+                    <properties/>
+                  </component>
+                </children>
+              </scrollpane>
             </children>
           </grid>
           <grid id="24ab2" binding="jpDisponibles" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -76,14 +86,19 @@
             <properties/>
             <border type="line" title="CLIENTES DISPONIBLES" title-position="3"/>
             <children>
-              <component id="d5764" class="javax.swing.JTable" binding="disponiblesTabla">
+              <scrollpane id="8dd84">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="50"/>
-                  </grid>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
-              </component>
+                <border type="none"/>
+                <children>
+                  <component id="d5764" class="javax.swing.JTable" binding="disponiblesTabla">
+                    <constraints/>
+                    <properties/>
+                  </component>
+                </children>
+              </scrollpane>
             </children>
           </grid>
           <grid id="bfee7" binding="jpbotonera" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

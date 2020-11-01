@@ -1,6 +1,7 @@
 package com.company;
 
 import Clases.Cliente;
+import javax.swing.JScrollPane;
 import Clases.Empleado;
 import Clases.Visita;
 import DB4O.ModeloCliente;
@@ -47,7 +48,7 @@ public class Inscripciones extends JFrame {
 
     setTitle("Gestión de Empleados");
 
-    setSize(700, 500);
+    setSize(1000, 500);
 
     cargarVisitas(opcion);
     cargarClientes(opcion);
@@ -302,6 +303,11 @@ public class Inscripciones extends JFrame {
 
                 Visita visitasDB4O = ModeloVisita.desapuntar(identificador, dni);
 
+                //SI NO TIENE CLIENTES QUE CREE UNO VACIO PARA BORRAR LA TABLA
+                if (visitasDB4O.getClientes().size() < 1 ){
+                  visitasDB4O.getClientes().add(new Cliente());
+                }
+
                 for (Cliente listadoCliente : visitasDB4O.getClientes()) {
 
                   modeloTablaClientes.addRow(new Object[]{
@@ -499,6 +505,7 @@ public class Inscripciones extends JFrame {
         "Fecha",
         "Empleado"
     });
+
 
     switch (opcion) {
       case 1://DB4O
