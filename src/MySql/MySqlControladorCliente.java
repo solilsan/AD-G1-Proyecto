@@ -188,4 +188,44 @@ public class MySqlControladorCliente {
         return null;
     }
 
+    public static ArrayList<Cliente> selectAllActivos(Connection connection) {
+
+        try {
+
+            String sql = "SELECT * FROM CLIENTES WHERE ESTADO = ?;";
+
+            assert connection != null;
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, "alta");
+            ResultSet rs = pstmt.executeQuery();
+
+            ArrayList<Cliente> listaClientes = new ArrayList<>();
+
+            while (rs.next()) {
+
+                Cliente cliente = new Cliente();
+                cliente.setDni(rs.getString("DNI"));
+                cliente.setNombre(rs.getString("NOMBRE"));
+                cliente.setApellidos(rs.getString("APELLIDO"));
+                cliente.setFechaNacimiento(rs.getDate("FECHA_NAC").toString());
+                cliente.setProfesion(rs.getString("PROFESION"));
+                cliente.setEstado(rs.getString("ESTADO"));
+
+                listaClientes.add(cliente);
+
+            }
+
+            return listaClientes;
+
+        }
+        catch (java.sql.SQLException sqlException) {
+            System.out.println("Error de sql, " + sqlException.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Error general, " + e.getMessage());
+        }
+
+        return null;
+    }
+
 }

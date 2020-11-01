@@ -7,6 +7,7 @@ import DB4O.ModeloCliente;
 import DB4O.ModeloEmpleado;
 import DB4O.ModeloVisita;
 import MySql.MySqlConexion;
+import MySql.MySqlControladorCliente;
 import MySql.MySqlControladorVisita;
 import SQLite.ControladorCliente;
 import SQLite.ControladorEmpleado;
@@ -436,7 +437,45 @@ public class Inscripciones extends JFrame {
         break;
 
       case 3:
-        //todo opcion mysql listado todos los clientes de alta
+        Connection mysqlConn = MySqlConexion.connection();
+
+        ArrayList<Cliente> listaClientesMysql = MySqlControladorCliente.selectAll(mysqlConn);
+
+        if (listaClientesMysql != null) {
+
+          jpDisponibles.setVisible(true);
+
+          for (Cliente listadoCliente : listaClientesMysql) {
+
+            modeloTablaClientes.addRow(new Object[]{
+                    listadoCliente.getDni(),
+                    listadoCliente.getNombre(),
+                    listadoCliente.getApellidos(),
+                    listadoCliente.getFechaNacimiento(),
+                    listadoCliente.getProfesion(),
+                    listadoCliente.getEstado()
+
+
+            });
+
+            disponiblesTabla.setModel(modeloTablaClientes);
+
+          }
+
+        } else {
+
+          JOptionPane.showMessageDialog(null, "No existen clientes", "Información.",
+                  JOptionPane.INFORMATION_MESSAGE);
+
+        }
+
+        try {
+          assert mysqlConn != null;
+          mysqlConn.close();
+        } catch (SQLException throwables) {
+          throwables.printStackTrace();
+        }
+
         break;
     }
 
@@ -528,6 +567,7 @@ public class Inscripciones extends JFrame {
                     listadoVisita.getTematica(),
                     listadoVisita.getCoste(),
                     listadoVisita.getFecha_hora(),
+                    listadoVisita.getEmpleado().getNombre()
             });
 
           }
