@@ -40,8 +40,8 @@ public class clienteVentana extends JFrame {
     add(jpanel1);
 
     setTitle("Gestion de Clientes");
-    setSize(570, 300);
-    jpTabla.setVisible(false);
+    setSize(570, 400);
+    jpTabla.setVisible(true);
 
     /**
      *

@@ -1,6 +1,7 @@
 package com.company;
 
 import Clases.Cliente;
+import javax.swing.JScrollPane;
 import Clases.Empleado;
 import Clases.Visita;
 import DB4O.ModeloCliente;
@@ -46,7 +47,7 @@ public class Inscripciones extends JFrame {
 
     setTitle("Gestión de Empleados");
 
-    setSize(700, 500);
+    setSize(1000, 500);
 
     cargarVisitas(opcion);
     cargarClientes(opcion);
@@ -460,6 +461,7 @@ public class Inscripciones extends JFrame {
         "Fecha",
         "Empleado"
     });
+
 
     switch (opcion) {
       case 1://DB4O
