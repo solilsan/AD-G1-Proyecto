@@ -1,5 +1,6 @@
 package MySql;
 
+import Clases.Cliente;
 import Clases.Empleado;
 import Clases.Visita;
 
@@ -175,7 +176,7 @@ public class MySqlControladorVisita {
 
             ArrayList<Visita> listaVisitas = new ArrayList<>();
 
-            if (rs.next()) {
+            while (rs.next()) {
 
                 Visita visita = new Visita();
                 visita.setId(rs.getInt("ID"));
@@ -219,7 +220,7 @@ public class MySqlControladorVisita {
 
             ArrayList<Visita> listaVisitas = new ArrayList<>();
 
-            if (rs.next()) {
+            while (rs.next()) {
 
                 Visita visita = new Visita();
                 visita.setId(rs.getInt("ID"));
@@ -248,6 +249,135 @@ public class MySqlControladorVisita {
         }
 
         return null;
+    }
+
+    public static ArrayList<Cliente> selectAllClientesEnVisita(Connection connection, int idVisita) {
+
+        try {
+
+            String sql = "SELECT c.* FROM CLIENTES c, VISITAS v, V_GUIADA vg WHERE vg.DNI_CLI = c.DNI AND vg.ID_VISITA = v.ID AND v.ID = ?;";
+
+            assert connection != null;
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, idVisita);
+            ResultSet rs = pstmt.executeQuery();
+
+            ArrayList<Cliente> listaClientes = new ArrayList<>();
+
+            while (rs.next()) {
+
+                Cliente cliente = new Cliente();
+                cliente.setDni(rs.getString("DNI"));
+                cliente.setNombre(rs.getString("NOMBRE"));
+                cliente.setApellidos(rs.getString("APELLIDO"));
+                cliente.setFechaNacimiento(rs.getDate("FECHA_NAC").toString());
+                cliente.setProfesion(rs.getString("PROFESION"));
+                cliente.setEstado(rs.getString("ESTADO"));
+
+                listaClientes.add(cliente);
+
+            }
+
+            return listaClientes;
+
+        }
+        catch (java.sql.SQLException sqlException) {
+            System.out.println("Error de sql, " + sqlException.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Error general, " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    public static Boolean comprobarClienteEnVisita(Connection connection, int idVisita, String dniCliente) {
+
+        boolean existe = false;
+
+        try {
+
+            String sql = "SELECT c.* FROM CLIENTES c, VISITAS v, V_GUIADA vg WHERE vg.DNI_CLI = c.DNI AND vg.ID_VISITA = v.ID AND v.ID = ? AND c.DNI = ?;";
+
+            assert connection != null;
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, idVisita);
+            pstmt.setString(2, dniCliente);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+
+                existe = true;
+
+            }
+
+            return existe;
+
+        }
+        catch (java.sql.SQLException sqlException) {
+            System.out.println("Error de sql, " + sqlException.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Error general, " + e.getMessage());
+        }
+
+        return false;
+    }
+
+    public static String insertClienteVisita(Connection connection, int idVisita, String dniCliente) {
+
+        try {
+
+            String sql = "INSERT INTO V_GUIADA (ID_VISITA, DNI_CLI) VALUES(?,?);";
+
+            assert connection != null;
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, idVisita);
+            pstmt.setString(2, dniCliente);
+            pstmt.execute();
+
+            return "Cliente apuntado.";
+
+        } catch (java.sql.SQLException sqlException) {
+            return ("Error de sql, " + sqlException.getMessage());
+        }
+        catch (Exception e) {
+            return ("Error general, " + e.getMessage());
+        }
+
+    }
+
+    public static Boolean deleteClienteVisita(Connection connection, int idVisita, String dniCliente) {
+
+        boolean borrado = false;
+
+        try {
+
+            String sql = "DELETE FROM V_GUIADA WHERE ID_VISITA = ? AND DNI_CLI = ?;";
+
+            assert connection != null;
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, idVisita);
+            pstmt.setString(2, dniCliente);
+            int rs = pstmt.executeUpdate();
+
+            if (rs > 0) {
+
+                borrado = true;
+
+            }
+
+            return borrado;
+
+        }
+        catch (java.sql.SQLException sqlException) {
+            System.out.println("Error de sql, " + sqlException.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Error general, " + e.getMessage());
+        }
+
+        return false;
     }
 
 }
