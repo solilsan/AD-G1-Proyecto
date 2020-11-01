@@ -198,6 +198,13 @@ public class ControladorVisita {
 
     cli = resuladoCliente.next();
 
+    for (Cliente cliente : vis.getClientes()) {
+      if (cliente.getDni().equals(cli.getDni())){
+        db.close();
+        return vis;
+      }
+    }
+
     //Se apunta el cliente a la visita
     vis.getClientes().add(cli);
 
