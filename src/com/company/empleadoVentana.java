@@ -352,7 +352,7 @@ public class empleadoVentana extends JFrame {
             }
             break;
 
-          case 2:
+          case 2://SQLITE
             ArrayList<Empleado> listaEmpleados = ControladorEmpleado.selectAll();
 
 
@@ -377,8 +377,7 @@ public class empleadoVentana extends JFrame {
             }
             break;
 
-          case 3:
-            //todo opcion mysql listado todos los Empleados
+          case 3://MYSQL
             Connection mysqlConn = MySqlConexion.connection();
 
             ArrayList<Empleado> listaEmpleadosMysql = MySqlControladorEmpleado.selectAll(mysqlConn);
