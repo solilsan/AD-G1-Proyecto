@@ -8,6 +8,7 @@ import DB4O.ModeloCliente;
 import DB4O.ModeloEmpleado;
 import DB4O.ModeloVisita;
 import MySql.MySqlConexion;
+import MySql.MySqlControladorCliente;
 import MySql.MySqlControladorVisita;
 import SQLite.ControladorCliente;
 import SQLite.ControladorEmpleado;
@@ -144,7 +145,48 @@ public class Inscripciones extends JFrame {
               break;
 
             case 3://MYSQL
-              //TODO Se utiliza modeloTablaClientes para rellenar las filas de los apuntados a esa visita
+              Connection mysqlConn = MySqlConexion.connection();
+
+              int idVisitaMysql = -1;
+
+              try {
+                idVisitaMysql = Integer.parseInt(id);
+              } catch (NumberFormatException numberFormatException) {
+                numberFormatException.printStackTrace();
+              }
+
+              ArrayList<Cliente> listaClientesMysqlEnVisita = MySqlControladorVisita.selectAllClientesEnVisita(mysqlConn, idVisitaMysql);
+
+              if (listaClientesMysqlEnVisita != null && listaClientesMysqlEnVisita.size() != 0) {
+
+                for (Cliente cliente : listaClientesMysqlEnVisita) {
+
+                  modeloTinscritos.addRow(new Object[]{
+                          cliente.getDni(),
+                          cliente.getNombre(),
+                          cliente.getApellidos(),
+                          cliente.getFechaNacimiento(),
+                          cliente.getProfesion()
+                  });
+
+                  inscritosTabla.setModel(modeloTinscritos);
+                }
+              } else {
+
+                inscritosTabla.setModel(modeloTinscritos);
+
+                JOptionPane.showMessageDialog(null, "No existen clientes en esta visita", "Información.",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+              }
+
+              try {
+                assert mysqlConn != null;
+                mysqlConn.close();
+              } catch (SQLException throwables) {
+                throwables.printStackTrace();
+              }
+
               break;
 
           }
@@ -255,6 +297,53 @@ public class Inscripciones extends JFrame {
 
             case 3://MYSQL
               //todo apuntar este cliente a la visita y actualizar la tabla apuntados
+
+              Connection mysqlConn = MySqlConexion.connection();
+
+              int idVisitaMysql = Integer.parseInt(id);
+
+              boolean existe = MySqlControladorVisita.comprobarClienteEnVisita(mysqlConn, idVisitaMysql, dni);
+
+              if (existe) {
+
+                JOptionPane.showMessageDialog(null, "Este cliente ya esta apuntado.", "Información.",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+              }
+              else {
+
+                String mysqlMensaje = MySqlControladorVisita.insertClienteVisita(mysqlConn, idVisitaMysql, dni);
+
+                JOptionPane.showMessageDialog(null, mysqlMensaje, "Información.",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                ArrayList<Cliente> listaClientesMysqlEnVisita = MySqlControladorVisita.selectAllClientesEnVisita(mysqlConn, idVisitaMysql);
+
+                if (listaClientesMysqlEnVisita != null && listaClientesMysqlEnVisita.size() != 0) {
+
+                  for (Cliente cliente : listaClientesMysqlEnVisita) {
+
+                    modeloTablaClientes.addRow(new Object[]{
+                            cliente.getDni(),
+                            cliente.getNombre(),
+                            cliente.getApellidos(),
+                            cliente.getFechaNacimiento(),
+                            cliente.getProfesion()
+                    });
+
+                    inscritosTabla.setModel(modeloTablaClientes);
+                  }
+                }
+
+              }
+
+              try {
+                assert mysqlConn != null;
+                mysqlConn.close();
+              } catch (SQLException throwables) {
+                throwables.printStackTrace();
+              }
+
               break;
           }
 
@@ -367,7 +456,48 @@ public class Inscripciones extends JFrame {
               break;
 
             case 3://MYSQL
-              //todo apuntar este cliente a la visita y actualizar la tabla apuntados
+              Connection mysqlConn = MySqlConexion.connection();
+
+              int idVisitaMysql = Integer.parseInt(id);
+
+              boolean borrado = MySqlControladorVisita.deleteClienteVisita(mysqlConn, idVisitaMysql, dni);
+
+              if (borrado) {
+
+                JOptionPane.showMessageDialog(null, "Cliente Eliminado con Exito.", "Informacion Actualizada",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                ArrayList<Cliente> listaClientesMysqlEnVisita = MySqlControladorVisita.selectAllClientesEnVisita(mysqlConn, idVisitaMysql);
+
+                if (listaClientesMysqlEnVisita != null && listaClientesMysqlEnVisita.size() != 0) {
+
+                  for (Cliente cliente : listaClientesMysqlEnVisita) {
+
+                    modeloTablaClientes.addRow(new Object[]{
+                            cliente.getDni(),
+                            cliente.getNombre(),
+                            cliente.getApellidos(),
+                            cliente.getFechaNacimiento(),
+                            cliente.getProfesion()
+                    });
+
+                    inscritosTabla.setModel(modeloTablaClientes);
+                  }
+                }
+                else {
+
+                  inscritosTabla.setModel(modeloTablaClientes);
+
+                }
+              }
+
+              try {
+                assert mysqlConn != null;
+                mysqlConn.close();
+              } catch (SQLException throwables) {
+                throwables.printStackTrace();
+              }
+
               break;
           }
 
@@ -442,7 +572,45 @@ public class Inscripciones extends JFrame {
         break;
 
       case 3:
-        //todo opcion mysql listado todos los clientes de alta
+        Connection mysqlConn = MySqlConexion.connection();
+
+        ArrayList<Cliente> listaClientesMysql = MySqlControladorCliente.selectAll(mysqlConn);
+
+        if (listaClientesMysql != null) {
+
+          jpDisponibles.setVisible(true);
+
+          for (Cliente listadoCliente : listaClientesMysql) {
+
+            modeloTablaClientes.addRow(new Object[]{
+                    listadoCliente.getDni(),
+                    listadoCliente.getNombre(),
+                    listadoCliente.getApellidos(),
+                    listadoCliente.getFechaNacimiento(),
+                    listadoCliente.getProfesion(),
+                    listadoCliente.getEstado()
+
+
+            });
+
+            disponiblesTabla.setModel(modeloTablaClientes);
+
+          }
+
+        } else {
+
+          JOptionPane.showMessageDialog(null, "No existen clientes", "Información.",
+                  JOptionPane.INFORMATION_MESSAGE);
+
+        }
+
+        try {
+          assert mysqlConn != null;
+          mysqlConn.close();
+        } catch (SQLException throwables) {
+          throwables.printStackTrace();
+        }
+
         break;
     }
 
@@ -535,6 +703,7 @@ public class Inscripciones extends JFrame {
                     listadoVisita.getTematica(),
                     listadoVisita.getCoste(),
                     listadoVisita.getFecha_hora(),
+                    listadoVisita.getEmpleado().getNombre()
             });
 
           }
