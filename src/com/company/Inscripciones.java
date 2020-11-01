@@ -110,6 +110,32 @@ public class Inscripciones extends JFrame {
 
                         case 2://SQLITE
                             //TODO Se utiliza modeloTablaClientes para rellenar las filas de los apuntados a esa visita
+                            int idVisita = -1;
+
+                            try {
+                                idVisita = Integer.parseInt(id);
+                            } catch (NumberFormatException numberFormatException) {
+                                numberFormatException.printStackTrace();
+                            }
+
+                            //peticion a la base de datos rellena datos DB4O
+                            ArrayList<Visita> visit = ControladorVisita.selectWhere(idVisita);
+
+                            if (visit.get(0).getClientes().size() > 0) {
+
+                                for (Cliente cliente : visit.get(0).getClientes()) {
+
+                                    modeloTinscritos.addRow(new Object[]{
+                                            cliente.getDni(),
+                                            cliente.getNombre(),
+                                            cliente.getApellidos(),
+                                            cliente.getFechaNacimiento(),
+                                            cliente.getProfesion()
+                                    });
+
+                                    inscritosTabla.setModel(modeloTinscritos);
+                                }
+                            }
                             break;
 
                         case 3://MYSQL
@@ -194,7 +220,36 @@ public class Inscripciones extends JFrame {
                             break;
 
                         case 2://SQLITE
-                            //todo apuntar este cliente a la visita y actualizar la tabla apuntados
+                            int idVisita = Integer.parseInt(id);
+
+                            boolean exito = ControladorVisita.addClienteVisita(dni, idVisita);
+
+                            if (exito) {
+                                JOptionPane.showMessageDialog(null, "Cliente Añadido con Exito.", "Informacion Actualizada",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
+                                                "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
+                                        JOptionPane.WARNING_MESSAGE);
+                            }
+
+                            /// CODIGO DE SUPERVIVENCIA
+                            Visita vis = ControladorVisita.selectWhere(idVisita).get(0);
+
+
+                            for (Cliente listCliente : vis.getClientes()) {
+
+                                modeloTablaClientes.addRow(new Object[]{
+                                        listCliente.getDni(),
+                                        listCliente.getNombre(),
+                                        listCliente.getApellidos(),
+                                        listCliente.getFechaNacimiento(),
+                                        listCliente.getProfesion()
+                                });
+
+                                inscritosTabla.setModel(modeloTablaClientes);
+                            }
+
                             break;
 
                         case 3://MYSQL
@@ -214,7 +269,83 @@ public class Inscripciones extends JFrame {
 
         });
 
+        /**
+         *
+         * BOTON DESAPUNTAR CLIENTE
+         *
+         */
+        desapuntarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (inscritosTabla.getSelectedRow() >= 0 && visitasTabla.getSelectedRow() >= 0) {
 
+                    String dni = inscritosTabla.getValueAt(inscritosTabla.getSelectedRow(), 0).toString();
+                    String id = visitasTabla.getValueAt(visitasTabla.getSelectedRow(), 0).toString();
+
+                    DefaultTableModel modeloTablaClientes = new DefaultTableModel();
+
+                    modeloTablaClientes.setColumnIdentifiers(new Object[]{
+                            "Dni",
+                            "Nombre",
+                            "Apellidos",
+                            "Fecha de Nacimiento",
+                            "Profesion"
+                    });
+
+                    switch (opcion) {
+
+                        case 1://DB4O
+                            // TODO DB4O
+                            break;
+
+                        case 2://SQLITE
+                            int idVisita = Integer.parseInt(id);
+
+                            boolean exito = ControladorVisita.eliminaClienteVisita(dni, idVisita);
+
+                            if (exito) {
+                                JOptionPane.showMessageDialog(null, "Cliente Eliminado con Exito.", "Informacion Actualizada",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
+                                                "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
+                                        JOptionPane.WARNING_MESSAGE);
+                            }
+
+                            /// CODIGO DE SUPERVIVENCIA
+                            Visita vis = ControladorVisita.selectWhere(idVisita).get(0);
+
+
+                            for (Cliente listCliente : vis.getClientes()) {
+
+                                modeloTablaClientes.addRow(new Object[]{
+                                        listCliente.getDni(),
+                                        listCliente.getNombre(),
+                                        listCliente.getApellidos(),
+                                        listCliente.getFechaNacimiento(),
+                                        listCliente.getProfesion()
+                                });
+
+                                inscritosTabla.setModel(modeloTablaClientes);
+                            }
+
+                            break;
+
+                        case 3://MYSQL
+                            //todo apuntar este cliente a la visita y actualizar la tabla apuntados
+                            break;
+                    }
+
+
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "Debes seleccionar al menos una visita y un cliente para apuntarlo.",
+                            "Informacion Apuntado",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+
+            }
+        });
     }//Fin del constructor
 
 

@@ -182,7 +182,26 @@ public class empleadoVentana extends JFrame {
             break;
 
           case 3://OPCION MYSQL
-            //todo opcion mysql borrado
+            Connection mysqlConn = MySqlConexion.connection();
+
+            String mysqlMensaje = MySqlControladorEmpleado.deleteWithDni(mysqlConn, empleado.getDni());
+
+            JOptionPane.showMessageDialog(null, mysqlMensaje, "Información.",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            if (mysqlMensaje.equals("Empleado eliminado")) {
+
+              tfDni.setText("");
+
+            }
+
+            try {
+              assert mysqlConn != null;
+              mysqlConn.close();
+            } catch (SQLException throwables) {
+              throwables.printStackTrace();
+            }
+
             break;
         }
 
@@ -249,7 +268,37 @@ public class empleadoVentana extends JFrame {
               break;
 
             case 3://OPCION MYSQL
-              //todo opcion mysql guardado
+
+              Connection mysqlConn = MySqlConexion.connection();
+
+              String mysqlMensaje = MySqlControladorEmpleado.updateWithDni(mysqlConn, empleado);
+
+              JOptionPane.showMessageDialog(null, mysqlMensaje, "Información.",
+                      JOptionPane.INFORMATION_MESSAGE);
+
+              if (mysqlMensaje.equals("Empleado actualizado")) {
+
+                tfDni.setText("");
+                tfNombre.setText("");
+                tfApellidos.setText("");
+                tfNacimiento.setText("");
+                tfContratacion.setText("");
+                tfNacionalidad.setText("");
+                tfCargo.setText("");
+                lEstado.setText("");
+                jfContrasinal.setText("");
+
+                actualizarButton.setEnabled(false);
+
+              }
+
+              try {
+                assert mysqlConn != null;
+                mysqlConn.close();
+              } catch (SQLException throwables) {
+                throwables.printStackTrace();
+              }
+
               break;
           }
         }
@@ -330,6 +379,44 @@ public class empleadoVentana extends JFrame {
 
           case 3:
             //todo opcion mysql listado todos los Empleados
+            Connection mysqlConn = MySqlConexion.connection();
+
+            ArrayList<Empleado> listaEmpleadosMysql = MySqlControladorEmpleado.selectAll(mysqlConn);
+
+            if (listaEmpleadosMysql != null) {
+
+              tablaPanel.setVisible(true);
+
+              for (Empleado listadoEmpleado : listaEmpleadosMysql) {
+
+                modeloTablaEmpleado.addRow(new Object[]{
+                        listadoEmpleado.getDni(),
+                        listadoEmpleado.getNombre(),
+                        listadoEmpleado.getApellidos(),
+                        listadoEmpleado.getFechaNacimiento(),
+                        listadoEmpleado.getFechaContratacion(),
+                        listadoEmpleado.getNacionalidad(),
+                        listadoEmpleado.getCargo(),
+                        listadoEmpleado.getEstado()
+                });
+
+                listado.setModel(modeloTablaEmpleado);
+
+              }
+
+            } else {
+
+              JOptionPane.showMessageDialog(null, "No existen empleados", "Información.",
+                      JOptionPane.INFORMATION_MESSAGE);
+
+            }
+
+            try {
+              assert mysqlConn != null;
+              mysqlConn.close();
+            } catch (SQLException throwables) {
+              throwables.printStackTrace();
+            }
             break;
         }
 
@@ -408,7 +495,39 @@ public class empleadoVentana extends JFrame {
               break;
 
             case 3://OPCION MYSQL
-              //todo Codigo MYSQL
+
+              Connection mysqlConn = MySqlConexion.connection();
+
+              Empleado empleado = MySqlControladorEmpleado.selectWithDni(mysqlConn, dni);
+
+              if (empleado != null) {
+
+                tfDni.setText(empleado.getDni());
+                tfNombre.setText(empleado.getNombre());
+                tfApellidos.setText(empleado.getApellidos());
+                tfNacimiento.setText(empleado.getFechaNacimiento().substring(8, 10) + "/" + empleado.getFechaNacimiento().substring(5, 7) + "/" + empleado.getFechaNacimiento().substring(0, 4));
+                tfContratacion.setText(empleado.getFechaContratacion().substring(8, 10) + "/" + empleado.getFechaContratacion().substring(5, 7) + "/" + empleado.getFechaContratacion().substring(0, 4));
+                tfNacionalidad.setText(empleado.getNacionalidad());
+                tfCargo.setText(empleado.getCargo());
+                jfContrasinal.setText(empleado.getPassword());
+                lEstado.setText(empleado.getEstado());
+
+                actualizarButton.setEnabled(true);
+
+              } else {
+
+                JOptionPane.showMessageDialog(null, "Empleado no encontrado", "Información.",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+              }
+
+              try {
+                assert mysqlConn != null;
+                mysqlConn.close();
+              } catch (SQLException throwables) {
+                throwables.printStackTrace();
+              }
+
               break;
           }
         }
@@ -496,7 +615,38 @@ public class empleadoVentana extends JFrame {
               break;
 
             case 3:
-              //TODO: Añadir peticion a la base de datos
+              Connection mysqlConn = MySqlConexion.connection();
+
+              Empleado empleado = MySqlControladorEmpleado.selectWithDni(mysqlConn, dni);
+
+              if (empleado != null) {
+
+                tfDni.setText(empleado.getDni());
+                tfNombre.setText(empleado.getNombre());
+                tfApellidos.setText(empleado.getApellidos());
+                tfNacimiento.setText(empleado.getFechaNacimiento().substring(8, 10) + "/" + empleado.getFechaNacimiento().substring(5, 7) + "/" + empleado.getFechaNacimiento().substring(0, 4));
+                tfContratacion.setText(empleado.getFechaContratacion().substring(8, 10) + "/" + empleado.getFechaContratacion().substring(5, 7) + "/" + empleado.getFechaContratacion().substring(0, 4));
+                tfNacionalidad.setText(empleado.getNacionalidad());
+                tfCargo.setText(empleado.getCargo());
+                jfContrasinal.setText(empleado.getPassword());
+                lEstado.setText(empleado.getEstado());
+
+                actualizarButton.setEnabled(true);
+
+              } else {
+
+                JOptionPane.showMessageDialog(null, "Empleado no encontrado", "Información.",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+              }
+
+              try {
+                assert mysqlConn != null;
+                mysqlConn.close();
+              } catch (SQLException throwables) {
+                throwables.printStackTrace();
+              }
+
               break;
           }
         }

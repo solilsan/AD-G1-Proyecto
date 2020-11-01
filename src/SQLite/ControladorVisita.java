@@ -1,5 +1,6 @@
 package SQLite;
 
+import Clases.Cliente;
 import Clases.Empleado;
 import Clases.Visita;
 
@@ -125,11 +126,20 @@ public class ControladorVisita extends Conexion{
             ResultSet rs = sentencia.executeQuery();
 
             while (rs.next()) {
-                listaVisitas.add(new Visita(rs.getInt("ID"), rs.getString("NOMBRE"),
+                Visita v = new Visita(rs.getInt("ID"), rs.getString("NOMBRE"),
                         rs.getInt("N_MAX_CLI"), rs.getString("PUNTO_PARTIDA"),
                         rs.getString("CURSO_ACADEMICO"), rs.getString("TEMATICA"),
                         rs.getFloat("COSTE"), rs.getString("ESTADO"),
-                        reformatearFechas(rs.getDate("FECHA_HORA").toString()), ControladorEmpleado.selectByDni(rs.getString("DNI_EMPLEADO")).get(0)));
+                        reformatearFechas(rs.getDate("FECHA_HORA").toString()), ControladorEmpleado.selectByDni(rs.getString("DNI_EMPLEADO")).get(0));
+
+                ArrayList<Cliente> clientes = ControladorCliente.selectWhereVisita(v.getId());
+
+                // TEMPORAL
+                for (int i = 0; i < clientes.size(); i++) {
+                    v.addCliente(clientes.get(i));
+                }
+
+                listaVisitas.add(v);
             }
 
             return listaVisitas;
@@ -137,6 +147,60 @@ public class ControladorVisita extends Conexion{
             throwables.printStackTrace();
         }
         return listaVisitas;
+    }
+
+    public static Boolean addClienteVisita(String dniCli, int idVisita){
+        Connection conn = conn();
+        String query = "INSERT INTO V_GUIADA (ID_VISITA, DNI_CLI) VALUES (?, ?)";
+
+
+        try {
+            PreparedStatement sentencia = conn.prepareStatement(query);
+
+            // Introducimos los datos
+            sentencia.setInt(1, idVisita);
+            sentencia.setString(2, dniCli);
+
+
+            // Ejecutamos la sentencia
+            Integer res = sentencia.executeUpdate();
+
+            if (res > 0) {
+                return true;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        // Si hemos llegado aqui, es que algo malo ha pasado.
+        return false;
+    }
+
+    public static boolean eliminaClienteVisita(String dniCli, int idVisita){
+        Connection conn = conn();
+        String query = "DELETE FROM V_GUIADA WHERE ID_VISITA = ? AND DNI_CLI = ?";
+
+
+        try {
+            PreparedStatement sentencia = conn.prepareStatement(query);
+
+            // Introducimos los datos
+            sentencia.setInt(1, idVisita);
+            sentencia.setString(2, dniCli);
+
+
+            // Ejecutamos la sentencia
+            Integer res = sentencia.executeUpdate();
+
+            if (res > 0) {
+                return true;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        // Si hemos llegado aqui, es que algo malo ha pasado.
+        return false;
     }
 
     /**
