@@ -122,4 +122,12 @@ public class Visita {
     public List<Cliente> getClientes() {
         return clientes;
     }
+
+    public void addCliente(Cliente cliente){
+        this.clientes.add(cliente);
+    }
+
+    /*public void setListaCliente(ArrayList<Cliente> listaCliente){
+        this.clientes = listaCliente;
+    }*/
 }

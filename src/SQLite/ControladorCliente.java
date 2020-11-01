@@ -71,6 +71,40 @@ public class ControladorCliente extends Conexion {
         return resultado;
     }
 
+    public static ArrayList<Cliente> selectWhereVisita(int idVisita){
+        Connection conn = conn();
+        ArrayList<Cliente> resultado = new ArrayList<>();
+
+        // Comprobamos que la conexion haya tenido exito.
+        // Si sale null es que ha habido un error.
+        if (conn != null) {
+            String query = "SELECT * FROM V_GUIADA LEFT JOIN CLIENTES ON CLIENTES.DNI = V_GUIADA.DNI_CLI WHERE ID_VISITA = ?";
+
+            try {
+                PreparedStatement sentencia = conn.prepareStatement(query);
+
+                sentencia.setInt(1, idVisita);
+
+                ResultSet rs = sentencia.executeQuery();
+
+                while (rs.next()) {
+                    resultado.add(new Cliente(rs.getString("DNI"), rs.getString("NOMBRE"),
+                            rs.getString("APELLIDO"), reformatearFechas(rs.getDate("FECHA_NAC").toString()),
+                            rs.getString("PROFESION"), rs.getString("ESTADO"), null));
+                }
+
+                conn.close();
+            } catch (SQLException throwables) {
+                System.out.println("[SQLite - ControladorCliente] Error: \n " +
+                        throwables.getMessage());
+            }
+        }
+
+
+        // Devolvemos el resultado
+        return resultado;
+    }
+
     public static Boolean insertCliente(Cliente objCliente) {
         Connection conn = conn();
         String query = "INSERT INTO CLIENTES (DNI, NOMBRE, APELLIDO, FECHA_NAC, PROFESION, ESTADO) VALUES(?, ?, ?, ?, ?, ?)";
