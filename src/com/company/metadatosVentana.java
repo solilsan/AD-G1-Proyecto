@@ -1,9 +1,13 @@
 package com.company;
 
+import MySql.MySqlConexion;
+import MySql.MySqlMetadatos;
 import SQLite.Metadatos;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class metadatosVentana extends JFrame {
     private JPanel metadatosJPanel;
@@ -34,7 +38,24 @@ public class metadatosVentana extends JFrame {
 
             case 3://MySQL
                 // TODO: Devolver los metadatos de la base de datos.
-                labelMetadatos.setText("");
+
+                Connection mysqlConn = MySqlConexion.connection();
+
+                Dimension screenSizeM = Toolkit.getDefaultToolkit().getScreenSize();
+                double widthM = screenSizeM.getWidth();
+                double heightM = screenSizeM.getHeight();
+
+                labelMetadatos.setFont(new Font("Arial", Font.PLAIN, (int)widthM/50));
+
+                assert mysqlConn != null;
+                labelMetadatos.setText(MySqlMetadatos.getMetadatos(mysqlConn));
+
+                try {
+                    mysqlConn.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+
                 return "MySQL";
 
             default:
