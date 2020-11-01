@@ -52,7 +52,7 @@ public class empleadoVentana extends JFrame {
 
     setSize(700, 500);
 
-    tablaPanel.setVisible(false);
+    tablaPanel.setVisible(true);
 
     actualizarButton.setEnabled(false);
 

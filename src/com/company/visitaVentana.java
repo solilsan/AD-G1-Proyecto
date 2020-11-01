@@ -53,7 +53,7 @@ public class visitaVentana extends JFrame {
 
     setTitle("Gestión de Visitas");
 
-    setSize(670, 500);
+    setSize(670, 600);
 
     rellenaEmpleados(opcion);
 
