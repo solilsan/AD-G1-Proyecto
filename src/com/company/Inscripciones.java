@@ -386,6 +386,7 @@ public class Inscripciones extends JFrame {
         "Apellidos",
         "Fecha de Nacimiento",
         "Profesion"
+
     });
 
     switch (opcion) {
@@ -452,7 +453,8 @@ public class Inscripciones extends JFrame {
         "Partida",
         "Temática",
         "Coste",
-        "Fecha"
+        "Fecha",
+        "Empleado"
     });
 
     switch (opcion) {
@@ -471,7 +473,8 @@ public class Inscripciones extends JFrame {
               listadoVisita.getPuntoPartida(),
               listadoVisita.getTematica(),
               listadoVisita.getCoste(),
-              listadoVisita.getFecha_hora()
+              listadoVisita.getFecha_hora(),
+              listadoVisita.getEmpleado().getNombre()
           });
 
           visitasTabla.setModel(modeloTablaVisitas);
@@ -495,7 +498,8 @@ public class Inscripciones extends JFrame {
               listadoVisita.getPuntoPartida(),
               listadoVisita.getTematica(),
               listadoVisita.getCoste(),
-              listadoVisita.getFecha_hora()
+              listadoVisita.getFecha_hora(),
+              listadoVisita.getEmpleado().getNombre()
           });
 
           visitasTabla.setModel(modeloTablaVisitas);
