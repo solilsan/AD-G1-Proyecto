@@ -41,6 +41,7 @@ public class visitaVentana extends JFrame {
   private JPanel formularioPanel;
   private JTextField tfId;
   private JComboBox<String> cbEmpleado;
+  private JButton limpiarButton;
 
 
   //variable global de lista de empleados
@@ -592,6 +593,28 @@ public class visitaVentana extends JFrame {
 
     /**
      *
+     * BOTON QUE LIMPIA EL FORMULARIO
+     *
+     */
+    limpiarButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+
+        tfId.setText("");
+        tfNombre.setText("");
+        tfAforo.setText("");
+        tfPartida.setText("");
+        tfCurso.setText("");
+        tfTematica.setText("");
+        tfCoste.setText("");
+        tfFecha.setText("");
+        cbEmpleado.setSelectedIndex(0);
+
+      }
+    });
+
+    /**
+     *
      * RELLENAR FORMULARIO AL CLICKAR EN TABLA
      *
      */
@@ -679,6 +702,7 @@ public class visitaVentana extends JFrame {
 
     //por defecto se deja el combo a la opcion vacio para que no salga por defecto la 1 opcion
     cbEmpleado.setSelectedItem(null);
+
   }
 
   /**
