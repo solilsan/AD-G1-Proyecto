@@ -176,6 +176,33 @@ public class ControladorVisita extends Conexion{
         return false;
     }
 
+    public static boolean eliminaClienteVisita(String dniCli, int idVisita){
+        Connection conn = conn();
+        String query = "DELETE FROM V_GUIADA WHERE ID_VISITA = ? AND DNI_CLI = ?";
+
+
+        try {
+            PreparedStatement sentencia = conn.prepareStatement(query);
+
+            // Introducimos los datos
+            sentencia.setInt(1, idVisita);
+            sentencia.setString(2, dniCli);
+
+
+            // Ejecutamos la sentencia
+            Integer res = sentencia.executeUpdate();
+
+            if (res > 0) {
+                return true;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        // Si hemos llegado aqui, es que algo malo ha pasado.
+        return false;
+    }
+
     /**
      * ESTA FUNCION, Y LA DE ALTA, SE PODRIAN FUSIONAR EN UNA
      * TODO: POSIBLE OPTIMIZACION.
