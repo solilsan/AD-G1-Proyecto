@@ -302,6 +302,11 @@ public class Inscripciones extends JFrame {
 
                 Visita visitasDB4O = ModeloVisita.desapuntar(identificador, dni);
 
+                //SI NO TIENE CLIENTES QUE CREE UNO VACIO PARA BORRAR LA TABLA
+                if (visitasDB4O.getClientes().size() < 1 ){
+                  visitasDB4O.getClientes().add(new Cliente());
+                }
+
                 for (Cliente listadoCliente : visitasDB4O.getClientes()) {
 
                   modeloTablaClientes.addRow(new Object[]{
