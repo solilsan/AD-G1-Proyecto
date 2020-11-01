@@ -473,10 +473,7 @@ public class visitaVentana extends JFrame {
               throwables.printStackTrace();
             }
             break;
-
-
         }
-
 
       }
     });
