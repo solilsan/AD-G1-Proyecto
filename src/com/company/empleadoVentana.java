@@ -314,7 +314,12 @@ public class empleadoVentana extends JFrame {
       @Override
       public void actionPerformed(ActionEvent e) {
 
-        DefaultTableModel modeloTablaEmpleado = new DefaultTableModel();
+        DefaultTableModel modeloTablaEmpleado = new DefaultTableModel(){
+          @Override
+          public boolean isCellEditable(int row, int column) {
+            return false;
+          }
+        };
 
         modeloTablaEmpleado.setColumnIdentifiers(new Object[]{
           "Dni",

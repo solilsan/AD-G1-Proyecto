@@ -11,7 +11,7 @@ public class MySqlMetadatos {
 
         String resultado = "<html><body style='font-size: 10px; padding-left: 50px;'>";
 
-        String sql = "SHOW TABLE STATUS FROM agencia_mysql;";
+        String sql = "SHOW TABLE STATUS FROM sql7373975;";
 
         try {
             assert connection != null;

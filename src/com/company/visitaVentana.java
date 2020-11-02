@@ -1,8 +1,8 @@
 package com.company;
 
+import Clases.Cliente;
 import Clases.Empleado;
 import Clases.Visita;
-import DB4O.ModeloCliente;
 import DB4O.ModeloEmpleado;
 import DB4O.ModeloVisita;
 import MySql.MySqlConexion;
@@ -15,8 +15,11 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -367,7 +370,12 @@ public class visitaVentana extends JFrame {
       @Override
       public void actionPerformed(ActionEvent e) {
         // TODO: completar
-        DefaultTableModel modeloTablaVisita = new DefaultTableModel();
+        DefaultTableModel modeloTablaVisita = new DefaultTableModel(){
+          @Override
+          public boolean isCellEditable(int row, int column) {
+            return false;
+          }
+        };
 
         modeloTablaVisita.setColumnIdentifiers(new Object[]{
             "Id",
@@ -685,6 +693,44 @@ public class visitaVentana extends JFrame {
             break;
         }
 
+      }
+    });
+
+
+    table1.addMouseListener(new MouseAdapter() {
+      public void mousePressed(MouseEvent mouseEvent) {
+        JTable table =(JTable) mouseEvent.getSource();
+        Point point = mouseEvent.getPoint();
+        int row = table.rowAtPoint(point);
+        if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
+
+          int idVisita = Integer.parseInt(table1.getValueAt(table1.getSelectedRow(), 0).toString());
+
+          Connection mysqlConn = MySqlConexion.connection();
+
+          ArrayList<Cliente> listaClientesMysql = MySqlControladorVisita.selectAllCliApuntadas(mysqlConn, idVisita);
+
+          if (listaClientesMysql != null && listaClientesMysql.size() > 0) {
+
+            visitaClientes ventana = new visitaClientes(listaClientesMysql);
+            ventana.setLocationRelativeTo(null);
+            ventana.setVisible(true);
+
+          } else {
+
+            JOptionPane.showMessageDialog(null, "Esta visita no tiene ningun cliente.", "Información.",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+          }
+
+          try {
+            assert mysqlConn != null;
+            mysqlConn.close();
+          } catch (SQLException throwables) {
+            throwables.printStackTrace();
+          }
+
+        }
       }
     });
 
