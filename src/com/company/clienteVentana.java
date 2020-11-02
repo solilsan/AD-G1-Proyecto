@@ -1,18 +1,20 @@
 package com.company;
 
 import Clases.Cliente;
+import Clases.Visita;
 import DB4O.ModeloCliente;
 import MySql.MySqlConexion;
 import MySql.MySqlControladorCliente;
 import SQLite.ControladorCliente;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Array;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -42,8 +44,8 @@ public class clienteVentana extends JFrame {
     add(jpanel1);
 
     setTitle("Gestion de Clientes");
-    setSize(570, 300);
-    jpTabla.setVisible(false);
+    setSize(570, 400);
+    jpTabla.setVisible(true);
 
     /**
      *
@@ -450,7 +452,12 @@ public class clienteVentana extends JFrame {
 
         Cliente cli = new Cliente(dni, nombre, apellidos, nacimiento, profesion, null);
 
-        DefaultTableModel modeloTablaCliente = new DefaultTableModel();
+        DefaultTableModel modeloTablaCliente = new DefaultTableModel(){
+          @Override
+          public boolean isCellEditable(int row, int column) {
+            return false;
+          }
+        };
 
         modeloTablaCliente.setColumnIdentifiers(new Object[]{
           "Dni",
@@ -552,6 +559,8 @@ public class clienteVentana extends JFrame {
             } catch (SQLException throwables) {
               throwables.printStackTrace();
             }
+
+            break;
         }
 
       }
@@ -650,6 +659,43 @@ public class clienteVentana extends JFrame {
               } catch (SQLException throwables) {
                 throwables.printStackTrace();
               }
+          }
+
+        }
+      }
+    });
+
+    tablaClientes.addMouseListener(new MouseAdapter() {
+      public void mousePressed(MouseEvent mouseEvent) {
+        JTable table =(JTable) mouseEvent.getSource();
+        Point point = mouseEvent.getPoint();
+        int row = table.rowAtPoint(point);
+        if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
+
+          String dni = tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 0).toString();
+
+          Connection mysqlConn = MySqlConexion.connection();
+
+          ArrayList<Visita> listaVisitasMysql = MySqlControladorCliente.selectAllApuntadas(mysqlConn, dni);
+
+          if (listaVisitasMysql != null && listaVisitasMysql.size() > 0) {
+
+            clienteVisitas ventana = new clienteVisitas(listaVisitasMysql);
+            ventana.setLocationRelativeTo(null);
+            ventana.setVisible(true);
+
+          } else {
+
+            JOptionPane.showMessageDialog(null, "Este cliente no esta en ninguna visita.", "Información.",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+          }
+
+          try {
+            assert mysqlConn != null;
+            mysqlConn.close();
+          } catch (SQLException throwables) {
+            throwables.printStackTrace();
           }
 
         }

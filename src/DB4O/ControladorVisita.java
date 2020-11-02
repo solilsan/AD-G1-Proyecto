@@ -130,8 +130,12 @@ public class ControladorVisita {
 
     String mensaje = "Visita " + v.getNombre() + "Actualizada!";
 
+    EmbeddedConfiguration config = Db4oEmbedded.newConfiguration();
+
+    config.common().objectClass("Clases.Visita").cascadeOnUpdate(true);
+
     //Conexion con la base de datos
-    ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), BD);
+    ObjectContainer db = Db4oEmbedded.openFile(config, BD);
 
     //se obtienen todos los clientes que coincidan con los datos del objeto (deberia haber solo 1)
     ObjectSet<Visita> resultado = db.queryByExample(new Visita(v.getId(), null, null,
@@ -172,7 +176,6 @@ public class ControladorVisita {
 
   public static Visita apuntaCliente(int id, String dni) {
 
-    String mensaje = "";
     Visita vis;
     Cliente cli;
 
@@ -195,10 +198,58 @@ public class ControladorVisita {
 
     cli = resuladoCliente.next();
 
+    for (Cliente cliente : vis.getClientes()) {
+      if (cliente.getDni().equals(cli.getDni())){
+        db.close();
+        return vis;
+      }
+    }
+
     //Se apunta el cliente a la visita
     vis.getClientes().add(cli);
 
     cli.getVisitas().add(vis);
+
+
+    //Se guarda el empleado
+    db.store(vis);
+
+
+    //cierra conexion
+    db.close();
+
+    return vis;
+
+  }
+
+  public static Visita desApuntar(int id, String dni) {
+
+    Visita vis;
+    Cliente cli;
+
+    EmbeddedConfiguration config = Db4oEmbedded.newConfiguration();
+
+    config.common().objectClass("Clases.Visita").cascadeOnUpdate(true);
+
+    //Conexion con la base de datos
+    ObjectContainer db = Db4oEmbedded.openFile(config, BD);
+
+    //se obtiene la visita que coincidan con los datos del objeto (deberian ser todos)
+    ObjectSet<Visita> resultadoVisita = db.queryByExample(new Visita(id, null, null,
+        null, null, null, null, null, null, null));
+
+    vis = resultadoVisita.next();
+
+    //se obtiene el cliente que coincidan con los datos del objeto (deberian ser todos)
+    ObjectSet<Cliente> resuladoCliente = db.queryByExample(new Cliente(dni, null, null, null,
+        null, null, null));
+
+    cli = resuladoCliente.next();
+
+    //Se desapunta el cliente a la visita
+    vis.getClientes().remove(cli);
+
+    cli.getVisitas().remove(vis);
 
 
     //Se guarda el empleado

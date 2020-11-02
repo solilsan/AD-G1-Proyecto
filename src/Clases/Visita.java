@@ -34,6 +34,10 @@ public class Visita {
         this.empleado = empleado;
     }
 
+    public Visita() {
+
+    }
+
 
     public int getId() {
         return id;

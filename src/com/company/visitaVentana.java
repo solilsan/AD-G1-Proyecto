@@ -1,11 +1,13 @@
 package com.company;
 
+import Clases.Cliente;
 import Clases.Empleado;
 import Clases.Visita;
 import DB4O.ModeloEmpleado;
 import DB4O.ModeloVisita;
 import MySql.MySqlConexion;
 import MySql.MySqlControladorEmpleado;
+import MySql.MySqlControladorVisita;
 import SQLite.ControladorEmpleado;
 import SQLite.ControladorVisita;
 
@@ -13,8 +15,11 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -39,6 +44,7 @@ public class visitaVentana extends JFrame {
   private JPanel formularioPanel;
   private JTextField tfId;
   private JComboBox<String> cbEmpleado;
+  private JButton limpiarButton;
 
 
   //variable global de lista de empleados
@@ -50,7 +56,7 @@ public class visitaVentana extends JFrame {
 
     setTitle("Gestión de Visitas");
 
-    setSize(670, 500);
+    setSize(670, 600);
 
     rellenaEmpleados(opcion);
 
@@ -151,7 +157,26 @@ public class visitaVentana extends JFrame {
                 break;
 
               case 3://OPCION MYSQL
-                //TODO Guarda visita MYSQL
+                Connection mysqlConn = MySqlConexion.connection();
+
+                String mysqlMensaje = MySqlControladorVisita.insert(mysqlConn, visita);
+
+                JOptionPane.showMessageDialog(null, mysqlMensaje, "Información.",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                if (mysqlMensaje.equals("Visita guardada")) {
+
+
+
+                }
+
+                try {
+                  assert mysqlConn != null;
+                  mysqlConn.close();
+                } catch (SQLException throwables) {
+                  throwables.printStackTrace();
+                }
+
                 break;
             }
 
@@ -186,8 +211,7 @@ public class visitaVentana extends JFrame {
 
           switch (opcion) {
 
-            case 1:
-              // TODO: Añadir DB4O Eliminar Visita
+            case 1://DB4O
               String mensaje = ModeloVisita.eliminar(idVisita);
               JOptionPane.showMessageDialog(null, mensaje, "Informacion Eliminado",
                   JOptionPane.INFORMATION_MESSAGE);
@@ -207,7 +231,26 @@ public class visitaVentana extends JFrame {
               break;
 
             case 3:
-              // TODO: Añadir MYSQL Eliminar Visita
+              Connection mysqlConn = MySqlConexion.connection();
+
+              String mysqlMensaje = MySqlControladorVisita.deleteWithDni(mysqlConn, idVisita);
+
+              JOptionPane.showMessageDialog(null, mysqlMensaje, "Información.",
+                      JOptionPane.INFORMATION_MESSAGE);
+
+              if (mysqlMensaje.equals("Visita eliminada")) {
+
+                tfId.setText("");
+
+              }
+
+              try {
+                assert mysqlConn != null;
+                mysqlConn.close();
+              } catch (SQLException throwables) {
+                throwables.printStackTrace();
+              }
+
               break;
 
           }
@@ -263,11 +306,14 @@ public class visitaVentana extends JFrame {
 
 
             switch (opcion) {
-              case 1:
-                // TODO: Añadir actualizar DB4O
+              case 1://DB4O
+                String mensaje = ModeloVisita.actualiza(visit);
+
+                JOptionPane.showMessageDialog(null, mensaje, "Informacion Actualizado",
+                    JOptionPane.INFORMATION_MESSAGE);
                 break;
 
-              case 2:
+              case 2://SQLITE
                 boolean exito = ControladorVisita.updateVisita(visit);
 
                 if (exito) {
@@ -280,8 +326,27 @@ public class visitaVentana extends JFrame {
                 }
                 break;
 
-              case 3:
-                // TODO: Añadir actualizar MYSQL
+              case 3://MYSQL
+                Connection mysqlConn = MySqlConexion.connection();
+
+                String mysqlMensaje = MySqlControladorVisita.updateWithId(mysqlConn, visit);
+
+                JOptionPane.showMessageDialog(null, mysqlMensaje, "Información.",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                if (mysqlMensaje.equals("Visita actualizado")) {
+
+                  actualizarButton.setEnabled(false);
+
+                }
+
+                try {
+                  assert mysqlConn != null;
+                  mysqlConn.close();
+                } catch (SQLException throwables) {
+                  throwables.printStackTrace();
+                }
+
                 break;
             }
           } else {
@@ -305,7 +370,12 @@ public class visitaVentana extends JFrame {
       @Override
       public void actionPerformed(ActionEvent e) {
         // TODO: completar
-        DefaultTableModel modeloTablaVisita = new DefaultTableModel();
+        DefaultTableModel modeloTablaVisita = new DefaultTableModel(){
+          @Override
+          public boolean isCellEditable(int row, int column) {
+            return false;
+          }
+        };
 
         modeloTablaVisita.setColumnIdentifiers(new Object[]{
             "Id",
@@ -372,12 +442,46 @@ public class visitaVentana extends JFrame {
             break;
 
           case 3:
-            // TODO: Implementar MYSQL
+            Connection mysqlConn = MySqlConexion.connection();
+
+            ArrayList<Visita> listaVisitasMysql = MySqlControladorVisita.selectAll(mysqlConn);
+
+            if (listaVisitasMysql != null) {
+
+              for (Visita listadoVisita : listaVisitasMysql) {
+
+                modeloTablaVisita.addRow(new Object[]{
+                        listadoVisita.getId(),
+                        listadoVisita.getNombre(),
+                        listadoVisita.getNmaxCli(),
+                        listadoVisita.getPuntoPartida(),
+                        listadoVisita.getCursoAcademico(),
+                        listadoVisita.getTematica(),
+                        listadoVisita.getCoste(),
+                        listadoVisita.getEstado(),
+                        listadoVisita.getFecha_hora(),
+                        listadoVisita.getEmpleado().getNombre()
+                });
+
+              }
+
+              table1.setModel(modeloTablaVisita);
+
+            } else {
+
+              JOptionPane.showMessageDialog(null, "No existen visitas", "Información.",
+                      JOptionPane.INFORMATION_MESSAGE);
+
+            }
+
+            try {
+              assert mysqlConn != null;
+              mysqlConn.close();
+            } catch (SQLException throwables) {
+              throwables.printStackTrace();
+            }
             break;
-
-
         }
-
 
       }
     });
@@ -404,7 +508,8 @@ public class visitaVentana extends JFrame {
 
           if (!error && idVisita != -999) {
             switch (opcion) {
-              case 1:
+
+              case 1://DB4O
                 Visita visita = ModeloVisita.buscar(idVisita);
 
                 if (visita != null) {
@@ -418,13 +523,11 @@ public class visitaVentana extends JFrame {
                   tfFecha.setText(visita.getFecha_hora());
                   int pos = posicionEmpleadoCombo(visita.getEmpleado().getDni());
                   cbEmpleado.setSelectedIndex(pos);
-
                 }
 
-                // TODO:
                 break;
 
-              case 2:
+              case 2://SQLITE
                 ArrayList<Visita> visit = ControladorVisita.selectWhere(idVisita);
 
                 if (visit.size() > 0) {
@@ -446,8 +549,38 @@ public class visitaVentana extends JFrame {
                 }
                 break;
 
-              case 3:
-                // TODO: MYSQL
+              case 3://MYSQL
+                Connection mysqlConn = MySqlConexion.connection();
+
+                Visita visitaMysql = MySqlControladorVisita.selectWithId(mysqlConn, idVisita);
+
+                if (visitaMysql != null) {
+
+                  tfNombre.setText(visitaMysql.getNombre());
+                  tfAforo.setText(String.valueOf(visitaMysql.getNmaxCli()));
+                  tfPartida.setText(visitaMysql.getPuntoPartida());
+                  tfCurso.setText(visitaMysql.getCursoAcademico());
+                  tfTematica.setText(visitaMysql.getTematica());
+                  tfCoste.setText(String.valueOf(visitaMysql.getCoste()));
+                  tfFecha.setText(visitaMysql.getFecha_hora().substring(8, 10) + "/" + visitaMysql.getFecha_hora().substring(5, 7) + "/" + visitaMysql.getFecha_hora().substring(0, 4) + " " + visitaMysql.getFecha_hora().substring(11, 16));
+                  cbEmpleado.setSelectedIndex(posicionEmpleadoCombo(visitaMysql.getEmpleado().getDni()));
+
+                  actualizarButton.setEnabled(true);
+
+                } else {
+
+                  JOptionPane.showMessageDialog(null, "Visita no encontrada", "Información.",
+                          JOptionPane.INFORMATION_MESSAGE);
+
+                }
+
+                try {
+                  assert mysqlConn != null;
+                  mysqlConn.close();
+                } catch (SQLException throwables) {
+                  throwables.printStackTrace();
+                }
+
                 break;
             }
           }
@@ -463,17 +596,57 @@ public class visitaVentana extends JFrame {
       }
     });
 
+    /**
+     *
+     * BOTON QUE LIMPIA EL FORMULARIO
+     *
+     */
+    limpiarButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+
+        tfId.setText("");
+        tfNombre.setText("");
+        tfAforo.setText("");
+        tfPartida.setText("");
+        tfCurso.setText("");
+        tfTematica.setText("");
+        tfCoste.setText("");
+        tfFecha.setText("");
+        cbEmpleado.setSelectedIndex(0);
+
+      }
+    });
+
+    /**
+     *
+     * RELLENAR FORMULARIO AL CLICKAR EN TABLA
+     *
+     */
     table1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
       @Override
       public void valueChanged(ListSelectionEvent e) {
         int idVisita = Integer.parseInt(table1.getValueAt(table1.getSelectedRow(), 0).toString());
 
         switch (opcion) {
-          case 1:
-            // TODO: DB4O
+          case 1://DB4O
+            Visita visitaDB4O = ModeloVisita.buscar(idVisita);
+
+            if (visitaDB4O != null){
+              tfId.setText(Integer.toString(visitaDB4O.getId()));
+              tfNombre.setText(visitaDB4O.getNombre());
+              tfAforo.setText(String.valueOf(visitaDB4O.getNmaxCli()));
+              tfPartida.setText(visitaDB4O.getPuntoPartida());
+              tfCurso.setText(visitaDB4O.getCursoAcademico());
+              tfTematica.setText(visitaDB4O.getTematica());
+              tfCoste.setText(String.valueOf(visitaDB4O.getCoste()));
+              tfFecha.setText(visitaDB4O.getFecha_hora());
+              cbEmpleado.setSelectedIndex(posicionEmpleadoCombo(visitaDB4O.getEmpleado().getDni()));
+            }
+
             break;
 
-          case 2:
+          case 2://SQLITE
             ArrayList<Visita> visit = ControladorVisita.selectWhere(idVisita);
 
             if (visit.size() > 0) {
@@ -491,11 +664,73 @@ public class visitaVentana extends JFrame {
             }
             break;
 
-          case 3:
-            //todo mysql
+          case 3://MYSQL
+            Connection mysqlConn = MySqlConexion.connection();
+
+            Visita visitaMysql = MySqlControladorVisita.selectWithId(mysqlConn, idVisita);
+
+            if (visitaMysql != null) {
+
+              tfId.setText(String.valueOf(visitaMysql.getId()));
+              tfNombre.setText(visitaMysql.getNombre());
+              tfAforo.setText(String.valueOf(visitaMysql.getNmaxCli()));
+              tfPartida.setText(visitaMysql.getPuntoPartida());
+              tfCurso.setText(visitaMysql.getCursoAcademico());
+              tfTematica.setText(visitaMysql.getTematica());
+              tfCoste.setText(String.valueOf(visitaMysql.getCoste()));
+              tfFecha.setText(visitaMysql.getFecha_hora().substring(8, 10) + "/" + visitaMysql.getFecha_hora().substring(5, 7) + "/" + visitaMysql.getFecha_hora().substring(0, 4) + " " + visitaMysql.getFecha_hora().substring(11, 16));
+              cbEmpleado.setSelectedIndex(posicionEmpleadoCombo(visitaMysql.getEmpleado().getDni()));
+
+            }
+
+            try {
+              assert mysqlConn != null;
+              mysqlConn.close();
+            } catch (SQLException throwables) {
+              throwables.printStackTrace();
+            }
+
             break;
         }
 
+      }
+    });
+
+
+    table1.addMouseListener(new MouseAdapter() {
+      public void mousePressed(MouseEvent mouseEvent) {
+        JTable table =(JTable) mouseEvent.getSource();
+        Point point = mouseEvent.getPoint();
+        int row = table.rowAtPoint(point);
+        if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
+
+          int idVisita = Integer.parseInt(table1.getValueAt(table1.getSelectedRow(), 0).toString());
+
+          Connection mysqlConn = MySqlConexion.connection();
+
+          ArrayList<Cliente> listaClientesMysql = MySqlControladorVisita.selectAllCliApuntadas(mysqlConn, idVisita);
+
+          if (listaClientesMysql != null && listaClientesMysql.size() > 0) {
+
+            visitaClientes ventana = new visitaClientes(listaClientesMysql);
+            ventana.setLocationRelativeTo(null);
+            ventana.setVisible(true);
+
+          } else {
+
+            JOptionPane.showMessageDialog(null, "Esta visita no tiene ningun cliente.", "Información.",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+          }
+
+          try {
+            assert mysqlConn != null;
+            mysqlConn.close();
+          } catch (SQLException throwables) {
+            throwables.printStackTrace();
+          }
+
+        }
       }
     });
 
@@ -510,6 +745,7 @@ public class visitaVentana extends JFrame {
 
     //por defecto se deja el combo a la opcion vacio para que no salga por defecto la 1 opcion
     cbEmpleado.setSelectedItem(null);
+
   }
 
   /**
@@ -529,7 +765,16 @@ public class visitaVentana extends JFrame {
         break;
 
       case 3://MYSQL
-        //TODO listado de empleados para el combobox de mysql
+        Connection mysqlConn = MySqlConexion.connection();
+
+        empleados = MySqlControladorEmpleado.selectAll(mysqlConn);
+
+        try {
+          assert mysqlConn != null;
+          mysqlConn.close();
+        } catch (SQLException throwables) {
+          throwables.printStackTrace();
+        }
         break;
     }
 
