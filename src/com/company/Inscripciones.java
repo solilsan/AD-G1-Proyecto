@@ -48,7 +48,7 @@ public class Inscripciones extends JFrame {
 
     setTitle("Gestión de Empleados");
 
-    setSize(1000, 500);
+    setSize(1000,500);
 
     cargarVisitas(opcion);
     cargarClientes(opcion);
@@ -65,7 +65,12 @@ public class Inscripciones extends JFrame {
         if (visitasTabla.getSelectedRow() >= 0) {
           String id = visitasTabla.getValueAt(visitasTabla.getSelectedRow(), 0).toString();
 
-          DefaultTableModel modeloTinscritos = new DefaultTableModel();
+          DefaultTableModel modeloTinscritos = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+              return false;
+            }
+          };
 
           modeloTinscritos.setColumnIdentifiers(new Object[]{
               "Dni",
@@ -208,7 +213,12 @@ public class Inscripciones extends JFrame {
           String dni = disponiblesTabla.getValueAt(disponiblesTabla.getSelectedRow(), 0).toString();
           String id = visitasTabla.getValueAt(visitasTabla.getSelectedRow(), 0).toString();
 
-          DefaultTableModel modeloTablaClientes = new DefaultTableModel();
+          DefaultTableModel modeloTablaClientes = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+              return false;
+            }
+          };
 
           modeloTablaClientes.setColumnIdentifiers(new Object[]{
               "Dni",
@@ -231,11 +241,11 @@ public class Inscripciones extends JFrame {
                 for (Cliente listadoCliente : visitaGuardada.getClientes()) {
 
                   modeloTablaClientes.addRow(new Object[]{
-                      listadoCliente.getDni(),
-                      listadoCliente.getNombre(),
-                      listadoCliente.getApellidos(),
-                      listadoCliente.getFechaNacimiento(),
-                      listadoCliente.getProfesion()
+                          listadoCliente.getDni(),
+                          listadoCliente.getNombre(),
+                          listadoCliente.getApellidos(),
+                          listadoCliente.getFechaNacimiento(),
+                          listadoCliente.getProfesion()
                   });
 
                   inscritosTabla.setModel(modeloTablaClientes);
@@ -250,9 +260,9 @@ public class Inscripciones extends JFrame {
                 //ModeloCliente.guardar(cliente);
 
                 JOptionPane.showMessageDialog(null,
-                    "Apuntado!",
-                    "Informacion Apuntado",
-                    JOptionPane.INFORMATION_MESSAGE);
+                        "Apuntado!",
+                        "Informacion Apuntado",
+                        JOptionPane.INFORMATION_MESSAGE);
 
 
               } catch (NumberFormatException numberFormatException) {
@@ -268,11 +278,11 @@ public class Inscripciones extends JFrame {
 
               if (exito) {
                 JOptionPane.showMessageDialog(null, "Cliente Añadido con Exito.", "Informacion Actualizada",
-                    JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.INFORMATION_MESSAGE);
               } else {
                 JOptionPane.showMessageDialog(null, "No se ha guardado la Informacion.\n" +
-                        "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
-                    JOptionPane.WARNING_MESSAGE);
+                                "Revisa que los datos tengan el formato adecuado", "Informacion Guardado",
+                        JOptionPane.WARNING_MESSAGE);
               }
 
               /// CODIGO DE SUPERVIVENCIA
@@ -282,11 +292,11 @@ public class Inscripciones extends JFrame {
               for (Cliente listCliente : vis.getClientes()) {
 
                 modeloTablaClientes.addRow(new Object[]{
-                    listCliente.getDni(),
-                    listCliente.getNombre(),
-                    listCliente.getApellidos(),
-                    listCliente.getFechaNacimiento(),
-                    listCliente.getProfesion()
+                        listCliente.getDni(),
+                        listCliente.getNombre(),
+                        listCliente.getApellidos(),
+                        listCliente.getFechaNacimiento(),
+                        listCliente.getProfesion()
                 });
 
                 inscritosTabla.setModel(modeloTablaClientes);
@@ -301,39 +311,48 @@ public class Inscripciones extends JFrame {
 
               int idVisitaMysql = Integer.parseInt(id);
 
+              boolean completa = MySqlControladorVisita.nTotalCliVisita(mysqlConn, idVisitaMysql);
+
               boolean existe = MySqlControladorVisita.comprobarClienteEnVisita(mysqlConn, idVisitaMysql, dni);
 
-              if (existe) {
+              if (!completa) {
 
-                JOptionPane.showMessageDialog(null, "Este cliente ya esta apuntado.", "Información.",
-                        JOptionPane.INFORMATION_MESSAGE);
+                if (existe) {
+
+                  JOptionPane.showMessageDialog(null, "Este cliente ya esta apuntado.", "Información.",
+                          JOptionPane.INFORMATION_MESSAGE);
+
+                } else {
+
+                  String mysqlMensaje = MySqlControladorVisita.insertClienteVisita(mysqlConn, idVisitaMysql, dni);
+
+                  JOptionPane.showMessageDialog(null, mysqlMensaje, "Información.",
+                          JOptionPane.INFORMATION_MESSAGE);
+
+                  ArrayList<Cliente> listaClientesMysqlEnVisita = MySqlControladorVisita.selectAllClientesEnVisita(mysqlConn, idVisitaMysql);
+
+                  if (listaClientesMysqlEnVisita != null && listaClientesMysqlEnVisita.size() != 0) {
+
+                    for (Cliente cliente : listaClientesMysqlEnVisita) {
+
+                      modeloTablaClientes.addRow(new Object[]{
+                              cliente.getDni(),
+                              cliente.getNombre(),
+                              cliente.getApellidos(),
+                              cliente.getFechaNacimiento(),
+                              cliente.getProfesion()
+                      });
+
+                      inscritosTabla.setModel(modeloTablaClientes);
+                    }
+                  }
+
+                }
 
               }
               else {
-
-                String mysqlMensaje = MySqlControladorVisita.insertClienteVisita(mysqlConn, idVisitaMysql, dni);
-
-                JOptionPane.showMessageDialog(null, mysqlMensaje, "Información.",
+                JOptionPane.showMessageDialog(null, "Visita completa, no se admiten mas clientes.", "Información.",
                         JOptionPane.INFORMATION_MESSAGE);
-
-                ArrayList<Cliente> listaClientesMysqlEnVisita = MySqlControladorVisita.selectAllClientesEnVisita(mysqlConn, idVisitaMysql);
-
-                if (listaClientesMysqlEnVisita != null && listaClientesMysqlEnVisita.size() != 0) {
-
-                  for (Cliente cliente : listaClientesMysqlEnVisita) {
-
-                    modeloTablaClientes.addRow(new Object[]{
-                            cliente.getDni(),
-                            cliente.getNombre(),
-                            cliente.getApellidos(),
-                            cliente.getFechaNacimiento(),
-                            cliente.getProfesion()
-                    });
-
-                    inscritosTabla.setModel(modeloTablaClientes);
-                  }
-                }
-
               }
 
               try {
@@ -371,7 +390,12 @@ public class Inscripciones extends JFrame {
           String dni = inscritosTabla.getValueAt(inscritosTabla.getSelectedRow(), 0).toString();
           String id = visitasTabla.getValueAt(visitasTabla.getSelectedRow(), 0).toString();
 
-          DefaultTableModel modeloTablaClientes = new DefaultTableModel();
+          DefaultTableModel modeloTablaClientes = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+              return false;
+            }
+          };
 
           modeloTablaClientes.setColumnIdentifiers(new Object[]{
               "Dni",
@@ -517,7 +541,12 @@ public class Inscripciones extends JFrame {
    * Función que carga la lista de clientes activas en la tabla (TABLA ABAJO DERECHA)
    */
   private void cargarClientes(int opcion) {
-    DefaultTableModel modeloTablaClientes = new DefaultTableModel();
+    DefaultTableModel modeloTablaClientes = new DefaultTableModel(){
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
+      }
+    };
 
     modeloTablaClientes.setColumnIdentifiers(new Object[]{
         "Dni",
@@ -573,7 +602,7 @@ public class Inscripciones extends JFrame {
       case 3:
         Connection mysqlConn = MySqlConexion.connection();
 
-        ArrayList<Cliente> listaClientesMysql = MySqlControladorCliente.selectAll(mysqlConn);
+        ArrayList<Cliente> listaClientesMysql = MySqlControladorCliente.selectAllActivos(mysqlConn);
 
         if (listaClientesMysql != null) {
 
@@ -621,7 +650,12 @@ public class Inscripciones extends JFrame {
    */
   private void cargarVisitas(int opcion) {
 
-    DefaultTableModel modeloTablaVisitas = new DefaultTableModel();
+    DefaultTableModel modeloTablaVisitas = new DefaultTableModel(){
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
+      }
+    };
 
     modeloTablaVisitas.setColumnIdentifiers(new Object[]{
         "Id",

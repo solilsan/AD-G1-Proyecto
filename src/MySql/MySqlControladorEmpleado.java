@@ -18,12 +18,13 @@ public class MySqlControladorEmpleado {
 
         try {
 
-            String sql = "SELECT DNI FROM EMPLEADOS WHERE dni = ? AND PASSWORD = ?;";
+            String sql = "SELECT DNI FROM EMPLEADOS WHERE ESTADO = ? AND dni = ? AND PASSWORD = ?;";
 
             assert connection != null;
             PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setString(1, dni);
-            pstmt.setString(2, password);
+            pstmt.setString(1, "alta");
+            pstmt.setString(2, dni);
+            pstmt.setString(3, password);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {

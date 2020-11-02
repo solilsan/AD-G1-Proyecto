@@ -1,6 +1,7 @@
 package MySql;
 
 import Clases.Cliente;
+import Clases.Visita;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -216,6 +217,50 @@ public class MySqlControladorCliente {
             }
 
             return listaClientes;
+
+        }
+        catch (java.sql.SQLException sqlException) {
+            System.out.println("Error de sql, " + sqlException.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Error general, " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    public static ArrayList<Visita> selectAllApuntadas(Connection connection, String dniCliente) {
+
+        try {
+
+            String sql = "SELECT v.* FROM CLIENTES c, VISITAS v, V_GUIADA vg WHERE vg.DNI_CLI = c.DNI AND vg.ID_VISITA = v.ID AND c.DNI = ?;";
+
+            assert connection != null;
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, dniCliente);
+            ResultSet rs = pstmt.executeQuery();
+
+            ArrayList<Visita> listaVisitas = new ArrayList<>();
+
+            while (rs.next()) {
+
+                Visita visita = new Visita();
+                visita.setId(rs.getInt("ID"));
+                visita.setNombre(rs.getString("NOMBRE"));
+                visita.setNmaxCli(rs.getInt("N_MAX_CLI"));
+                visita.setPuntoPartida(rs.getString("PUNTO_PARTIDA"));
+                visita.setCursoAcademico(rs.getString("CURSO_ACADEMICO"));
+                visita.setTematica(rs.getString("TEMATICA"));
+                visita.setCoste(rs.getFloat("COSTE"));
+                visita.setEstado(rs.getString("ESTADO"));
+                visita.setEmpleado(MySqlControladorEmpleado.selectWithDni(connection, rs.getString("DNI_EMPLEADO")));
+                visita.setFecha_hora(rs.getTimestamp("FECHA_HORA").toString());
+
+                listaVisitas.add(visita);
+
+            }
+
+            return listaVisitas;
 
         }
         catch (java.sql.SQLException sqlException) {
