@@ -626,7 +626,15 @@ public class visitaVentana extends JFrame {
     table1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
       @Override
       public void valueChanged(ListSelectionEvent e) {
-        int idVisita = Integer.parseInt(table1.getValueAt(table1.getSelectedRow(), 0).toString());
+
+        int idVisita = 0;
+
+        try {
+
+          idVisita = Integer.parseInt(table1.getValueAt(table1.getSelectedRow(), 0).toString());
+
+        }
+        catch (Exception ex) {}
 
         switch (opcion) {
           case 1://DB4O
