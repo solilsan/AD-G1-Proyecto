@@ -4,6 +4,7 @@ import Clases.Cliente;
 import Clases.Empleado;
 import Clases.Visita;
 
+import javax.print.attribute.HashAttributeSet;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -149,10 +150,39 @@ public class ControladorVisita extends Conexion{
         return listaVisitas;
     }
 
+    public static  Boolean getNCliVisita(int idVisita){
+        Connection conn = conn();
+        String query = "SELECT COUNT(*) AS NCLI FROM V_GUIADA WHERE ID_VISITA = ?";
+        boolean hayEspacio = false;
+
+        try {
+            PreparedStatement sentencia = conn.prepareStatement(query);
+
+            // Introducimos los datos
+            sentencia.setInt(1, idVisita);
+
+            // Ejecutamos la sentencia
+            ResultSet rs = sentencia.executeQuery();
+
+            while (rs.next()) {
+                if (rs.getInt("NCLI") < selectWhere(idVisita).get(0).getNmaxCli()){
+                    hayEspacio = true;
+                }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return hayEspacio;
+    }
+
     public static Boolean addClienteVisita(String dniCli, int idVisita){
         Connection conn = conn();
         String query = "INSERT INTO V_GUIADA (ID_VISITA, DNI_CLI) VALUES (?, ?)";
 
+        if (!getNCliVisita(idVisita)){
+            return false;
+        }
 
         try {
             PreparedStatement sentencia = conn.prepareStatement(query);
