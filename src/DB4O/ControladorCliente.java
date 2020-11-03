@@ -6,6 +6,7 @@ import com.db4o.ObjectContainer;
 import Clases.Cliente;
 import com.db4o.ObjectSet;
 
+import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
 import java.util.List;
 
