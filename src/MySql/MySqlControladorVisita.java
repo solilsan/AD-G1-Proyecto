@@ -380,4 +380,121 @@ public class MySqlControladorVisita {
         return false;
     }
 
+    public static Integer nMaxCliVisita(Connection connection, int idVisita) {
+
+        int nMaxCli = 0;
+
+        try {
+
+            String sql = "SELECT N_MAX_CLI FROM VISITAS WHERE ID = ?;";
+
+            assert connection != null;
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, idVisita);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+
+                nMaxCli = rs.getInt("N_MAX_CLI");
+
+            }
+
+            pstmt.close();
+            rs.close();
+
+            return nMaxCli;
+
+        }
+        catch (java.sql.SQLException sqlException) {
+            System.out.println("Error de sql, " + sqlException.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Error general, " + e.getMessage());
+        }
+
+        return nMaxCli;
+    }
+
+    public static Boolean nTotalCliVisita(Connection connection, int idVisita) {
+
+        boolean completa = false;
+
+        try {
+
+            int nMaxCli = nMaxCliVisita(connection, idVisita);
+            int nTotalCli = 0;
+
+            String sql = "SELECT COUNT(vg.ID_VISITA) AS TOTAL FROM CLIENTES c, VISITAS v, V_GUIADA vg WHERE vg.DNI_CLI = c.DNI AND vg.ID_VISITA = v.ID AND v.ID = ?;";
+
+            assert connection != null;
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, idVisita);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+
+                nTotalCli = rs.getInt("TOTAL");
+
+            }
+
+            if (nTotalCli >= nMaxCli) {
+                completa = true;
+            }
+
+            pstmt.close();
+            rs.close();
+
+            return completa;
+
+        }
+        catch (java.sql.SQLException sqlException) {
+            System.out.println("Error de sql, " + sqlException.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Error general, " + e.getMessage());
+        }
+
+        return false;
+    }
+
+    public static ArrayList<Cliente> selectAllCliApuntadas(Connection connection, int idVisita) {
+
+        try {
+
+            String sql = "SELECT c.* FROM CLIENTES c, VISITAS v, V_GUIADA vg WHERE vg.DNI_CLI = c.DNI AND vg.ID_VISITA = v.ID AND v.ID = ?;";
+
+            assert connection != null;
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, idVisita);
+            ResultSet rs = pstmt.executeQuery();
+
+            ArrayList<Cliente> listaClientes = new ArrayList<>();
+
+            while (rs.next()) {
+
+                Cliente cliente = new Cliente();
+                cliente.setDni(rs.getString("DNI"));
+                cliente.setNombre(rs.getString("NOMBRE"));
+                cliente.setApellidos(rs.getString("APELLIDO"));
+                cliente.setFechaNacimiento(rs.getDate("FECHA_NAC").toString());
+                cliente.setProfesion(rs.getString("PROFESION"));
+                cliente.setEstado(rs.getString("ESTADO"));
+
+                listaClientes.add(cliente);
+
+            }
+
+            return listaClientes;
+
+        }
+        catch (java.sql.SQLException sqlException) {
+            System.out.println("Error de sql, " + sqlException.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Error general, " + e.getMessage());
+        }
+
+        return null;
+    }
+
 }

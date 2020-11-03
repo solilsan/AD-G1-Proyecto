@@ -2,6 +2,7 @@ package MySql;
 
 import Clases.Cliente;
 import Clases.Empleado;
+import Clases.Visita;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,12 +19,13 @@ public class MySqlControladorEmpleado {
 
         try {
 
-            String sql = "SELECT DNI FROM EMPLEADOS WHERE dni = ? AND PASSWORD = ?;";
+            String sql = "SELECT DNI FROM EMPLEADOS WHERE ESTADO = ? AND dni = ? AND PASSWORD = ?;";
 
             assert connection != null;
             PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setString(1, dni);
-            pstmt.setString(2, password);
+            pstmt.setString(1, "alta");
+            pstmt.setString(2, dni);
+            pstmt.setString(3, password);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
@@ -268,6 +270,50 @@ public class MySqlControladorEmpleado {
             }
 
             return listaEmpelados;
+
+        }
+        catch (java.sql.SQLException sqlException) {
+            System.out.println("Error de sql, " + sqlException.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("Error general, " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    public static ArrayList<Visita> selectAllApuntadas(Connection connection, String dniEmpleado) {
+
+        try {
+
+            String sql = "SELECT v.* FROM VISITAS v, EMPLEADOS e WHERE v.DNI_EMPLEADO = e.DNI AND e.DNI = ?;";
+
+            assert connection != null;
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, dniEmpleado);
+            ResultSet rs = pstmt.executeQuery();
+
+            ArrayList<Visita> listaVisitas = new ArrayList<>();
+
+            while (rs.next()) {
+
+                Visita visita = new Visita();
+                visita.setId(rs.getInt("ID"));
+                visita.setNombre(rs.getString("NOMBRE"));
+                visita.setNmaxCli(rs.getInt("N_MAX_CLI"));
+                visita.setPuntoPartida(rs.getString("PUNTO_PARTIDA"));
+                visita.setCursoAcademico(rs.getString("CURSO_ACADEMICO"));
+                visita.setTematica(rs.getString("TEMATICA"));
+                visita.setCoste(rs.getFloat("COSTE"));
+                visita.setEstado(rs.getString("ESTADO"));
+                visita.setEmpleado(MySqlControladorEmpleado.selectWithDni(connection, rs.getString("DNI_EMPLEADO")));
+                visita.setFecha_hora(rs.getTimestamp("FECHA_HORA").toString());
+
+                listaVisitas.add(visita);
+
+            }
+
+            return listaVisitas;
 
         }
         catch (java.sql.SQLException sqlException) {

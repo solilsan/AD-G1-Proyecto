@@ -2,10 +2,7 @@ package SQLite;
 
 import Clases.Visita;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class Metadatos extends Conexion {
@@ -21,6 +18,22 @@ public class Metadatos extends Conexion {
             try {
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(query);
+
+                DatabaseMetaData dbmd = conn.getMetaData();
+
+                String nombre = dbmd.getDatabaseProductName();
+
+                String driver = dbmd.getDriverName();
+
+                String url = dbmd.getURL();
+
+                String usuario = dbmd.getUserName();
+
+                resultado += "<h1>Información sobre la base de datos:</h1><br>";
+                resultado += "<h2>Nombre: " + nombre + "</h2><br>";
+                resultado += "<h2>Driver: " + driver + "</h2><br>";
+                resultado += "<h2>Url: " + url + "</h2><br>";
+                resultado += "<h2>Usuario: " + usuario + "</h2><br>";
 
                 while (rs.next()) {
 
