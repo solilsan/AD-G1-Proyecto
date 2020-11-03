@@ -1,13 +1,9 @@
 package com.company;
 
 import Clases.Visita;
-import MySql.MySqlConexion;
-import MySql.MySqlControladorCliente;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class clienteVisitas extends JFrame {
